@@ -46,8 +46,8 @@ function draw() {
   box(100, 100, 100);
   pop();
 
-  p = createVector(100, 0, 0);
-  a = new Stickers
+  
+
 
 
 
