@@ -1,14 +1,19 @@
 class Sticker{
-    constructor(pos, orientation, color){
+    /*
+    TO DO:
+        - Get pos of the father piece
+        - Get orientation of father key 
+    */ 
+    constructor(pos, orientation, c){
         this.pos = pos;
         this.orientation = orientation;
-        this.color = color;
+        this.c = (c)? c : color(colors[3]);
     }
     show(){
-        //x
         push();
-        fill(color);
-        translate(pos);
+        noStroke();
+        fill(this.c);
+        translate(this.pos);
         // rotate();
         plane(100);
         pop();
