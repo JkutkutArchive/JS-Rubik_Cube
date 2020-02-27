@@ -1,4 +1,4 @@
-function applyM(axis, angle){
+function applyM3D(axis, angle){
     let u = axis.copy().normalize();
   
     let c = Math.cos(angle);
