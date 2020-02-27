@@ -20,3 +20,27 @@ class matrix3D{
   }
 }
 
+class matrix2D{
+  constructor(nRows, nCols){
+    this.e = [];
+    for(i = 0; i < nRows; i++){
+      col = [];
+      for(j = 0; j < nCols; j++){
+        col.push(0);
+      }
+      this.e.push(col);
+    }
+  }
+  setC(x, y, v){
+    e[x][y] = v;
+  }
+  getC(x, y){
+    try{
+      return e[x][y];
+    }
+    catch(error){
+      console.log(error);
+      return null;
+    }
+  }
+}
