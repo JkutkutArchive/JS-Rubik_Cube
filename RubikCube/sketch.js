@@ -35,7 +35,22 @@ function draw() {
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);
   
   // angle = (-Math.PI / 4);
-  angle = (angle + Math.PI / 720);
+  w = Math.PI / 720
+  angle = (angle + w);
+
+
+  push();
+  stroke(0);
+  strokeWeight(3);
+  fill(100, 100, 100);
+  box(100, 100, 100);
+  pop();
+
+  p = createVector(100, 0, 0);
+  a = new Stickers
+
+
+
   
   // rubik.show();
   
@@ -46,5 +61,5 @@ function draw() {
   //   moves.splice(0,1);
   // }
 
-  noLoop();
+  // noLoop();
 }
