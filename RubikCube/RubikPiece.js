@@ -1,4 +1,10 @@
 class RubikPiece{
+  /*
+  TO DO:
+    - Enable rotations
+    - Use matrices
+    - Keep track of sticker's orientation
+  */
   constructor(pos){
     this.pos = pos;//the actual pos
     // this.moves = [];//[["x", 0.5]] -> rotateX(Math.PI / 2);
