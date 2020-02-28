@@ -2,7 +2,6 @@ function printMatrix_nD(m, delimeter){
     console.log(matrixToString(m, delimeter));
 }
 function matrixToString(m, delimeter){
-    console.log(delimeter);
     let d;
     let str = "[";
     for(let i = 0; i < m.length; i++){
