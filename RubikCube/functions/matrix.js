@@ -3,9 +3,7 @@ var matrix = {
   /*
   TO DO:
     - Rotation Matrices
-    - Matrix det
-    - Matrix transpose
-    - Matrix inverse
+    - Matrix inverse!!!
 
     - Check for let var
     - Implement throw exceptions 
