@@ -46,8 +46,8 @@ function draw() {
   box(100, 100, 100);
   pop();
 
-  // a = new Matrix2D(3,3);
-
+  a = matrix.make.identity(2);
+  b = [[1,2], [3,4]]
 
 
 
