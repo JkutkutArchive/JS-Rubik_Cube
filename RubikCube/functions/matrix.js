@@ -6,37 +6,43 @@ matrix = {
     - Matrix det
     - Matrix transpose
     - Matrix inverse
-    - 
+    -removeRow
+    -removeCol
+    -square matrix (m, dim, posI) 
+     
     - More Properties?
     - More Operations?
 
     -JS-DOC
   */
   make: { //2D square matrix
-    identity: function(range){
-      m = matrix.make.emptyMatrix(range);
-      for(let i = 0; i < range; i++){
-        for(let j = 0; j < range; j++){
+    identity: function(dimX, dimY){
+      dimY = (dimY)? dimY : dimX;
+      m = matrix.make.empty(dimX, dimY);
+      for(let i = 0; i < dimX; i++){
+        for(let j = 0; j < dimY; j++){
           m[i][j] = (i == j)? 1 : 0;
         }
       }
       return m;
     },
     
-    zeroMatrix: function(range){
-      m = matrix.make.emptyMatrix(range);
-      for(let i = 0; i < range; i++){
-        for(let j = 0; j < range; j++){
+    zero: function(dimX, dimY){
+      dimY = (dimY)? dimY : dimX;
+      m = matrix.make.empty(dimX, dimY);
+      for(let i = 0; i < dimX; i++){
+        for(let j = 0; j < dimY; j++){
           m[i][j] = 0;
         }
       }
       return m;
     },
     
-    emptyMatrix: function(range){
+    empty: function(dimX, dimY){
+      dimY = (dimY)? dimY : dimX;  
       m = [];
-      for(let i = 0; i < range; i++){
-        m.push(new Array(range));
+      for(let i = 0; i < dimX; i++){
+        m.push(new Array(dimY));
       }
       return m;
     }
@@ -61,7 +67,18 @@ matrix = {
       return r;
     },
     det: function(m){
-      
+      try{
+        if(m.length == 1){
+          return m[0][0];
+        }
+        d = 0;
+        for(let i = 0; i < m.length; i++){
+          //d += m[i][0] * matrix.p.det();
+        }
+      }
+      catch(e){
+        console.log(e);
+      }
     }
   },
 
@@ -117,6 +134,13 @@ matrix = {
         }
       }
       return m;
+    },
+    removeRow: function(m, row){
+      // n = emptyMatrix()
+
+    },
+    removeCol: function(m, col){
+
     }
     // transpose: function(){
 
