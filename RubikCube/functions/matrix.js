@@ -86,13 +86,15 @@ matrix = {
         dimSubMy = (dimSubMy)? dimSubMy : dimSubMx;
         n = matrix.make.empty(dimSubMx, dimSubMy);
         for(let i = 0; i < dimSubMx; i++){
-          for(let j = 0; j < dimSubMy; i++){
+          for(let j = 0; j < dimSubMy; j++){
             n[i][j] = m[posI.x + i][posI.y + j];
           }
         }
+        return n;
       }
       catch(error){
         console.log(error);
+        return null;
       }
     }
   },
@@ -121,7 +123,7 @@ matrix = {
           return matrix.operation.scalar(a, b);
         }
         let range = matrix.p.size(a).x;
-        let m = matrix.make.emptyMatrix(range);
+        let m = matrix.make.empty(range);
         for(let i = 0; i < range; i++){
           for(let j = 0; j < range; j++){
             m[i][j] = vector.escalar(matrix.p.getRow(a, i), matrix.p.getCol(b, j));
@@ -151,12 +153,32 @@ matrix = {
       return m;
     },
     removeRow: function(m, row){
-      // n = emptyMatrix()
-
+      size = matrix.p.size(m); 
+      n = matrix.make.empty(size.x - 1, size.y);
+      for(let i = 0, iN = 0; i < size.x; i++){
+        if(i != row){
+          for(let j = 0; j < size.y; j++){
+            n[iN][j] = m[i][j];
+          }
+          iN++;
+        }
+      }
+      return n;
     },
     removeCol: function(m, col){
-
+      size = matrix.p.size(m); 
+      n = matrix.make.empty(size.x, size.y - 1);
+      for(let i = 0; i < size.x; i++){
+        for(let j = 0, jN = 0; j < size.y; j++){
+          if(j != col){
+            n[i][jN] = m[i][j];
+            jN++;
+          }
+        }
+      }
+      return n;
     }
+    
     // transpose: function(){
 
     // },
