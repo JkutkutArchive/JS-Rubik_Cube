@@ -8,7 +8,7 @@ matrix = {
     - Matrix inverse
     -removeRow
     -removeCol
-    -square matrix (m, dim, posI) 
+    -square subMatrix (m, dim, posI) 
      
     - More Properties?
     - More Operations?
@@ -78,6 +78,21 @@ matrix = {
       }
       catch(e){
         console.log(e);
+      }
+    },
+    subMatrix(m, posI, dimSubMx, dimSubMy){
+      try{
+          
+        dimSubMy = (dimSubMy)? dimSubMy : dimSubMx;
+        n = matrix.make.empty(dimSubMx, dimSubMy);
+        for(let i = 0; i < dimSubMx; i++){
+          for(let j = 0; j < dimSubMy; i++){
+            n[i][j] = m[posI.x + i][posI.y + j];
+          }
+        }
+      }
+      catch(error){
+        console.log(error);
       }
     }
   },
