@@ -1,14 +1,14 @@
 /* MATRIX CREATION */
-matrix = {
+var matrix = {
   /*
   TO DO:
     - Rotation Matrices
     - Matrix det
     - Matrix transpose
     - Matrix inverse
-    -removeRow
-    -removeCol
-    -square subMatrix (m, dim, posI) 
+
+    - Check for let var
+    - Implement throw exceptions 
      
     - More Properties?
     - More Operations?
@@ -51,6 +51,10 @@ matrix = {
   p: {  //Properties
     size: function(m){
       return createVector(m.length, m[0].length);
+    },
+    isSquare: function(m){
+      let size = matrix.p.size(m);
+      return size.x == size.y;
     },
     getRow: function(m, row){
       let r = [];
@@ -177,14 +181,84 @@ matrix = {
         }
       }
       return n;
+    },
+    transpose: function(m){
+      let size = matrix.p.size(m);
+      let n = matrix.make.empty(size.x, size.y);
+      for(let i = 0; i < size.x; i++){
+        for(let j = 0; j < size.y; j++){
+          n[j][i] = m[i][j];
+        }
+      }
+      return n;
+    },
+    inverse: function(m){
+      try{
+        if(!matrix.p.isSquare(m)){
+          throw "Not square matrix";
+        }
+        let dim = m.length;
+        let C = m; //copy of the matrix
+        let I = matrix.make.identity(dim);
+        for(let i = 0; i < dim; i++){
+          let e = C[i][i]; //Get the element e on the diagonal
+          
+          if(e==0){// if we have a 0 on the diagonal (we'll need to swap with a lower row)
+            //look through every row below the i'th row
+            for(let ii=i+1; ii<dim; ii+=1){
+              if(C[ii][i] != 0){//if the ii'th row has a non-0 in the i'th col
+                //it would make the diagonal have a non-0 so swap it
+                for(j=0; j<dim; j++){
+                  e = C[i][j];       //temp store i'th row
+                  C[i][j] = C[ii][j];//replace i'th row by ii'th
+                  C[ii][j] = e;      //repace ii'th by temp
+                  e = I[i][j];       //temp store i'th row
+                  I[i][j] = I[ii][j];//replace i'th row by ii'th
+                  I[ii][j] = e;      //repace ii'th by temp
+                }
+                break;//don't bother checking other rows since we've swapped
+              }
+              
+            }
+
+            e = C[i][i]; //get the new diagonal            
+            if(e==0){//if it's still 0, not invertable (error)
+              throw "Not possible to invert this matrix";
+            }
+          }
+          
+          for(j=0; j<dim; j++){// Scale this row down by e (so we have a 1 on the diagonal)
+            C[i][j] = C[i][j] / e; //apply to original matrix
+            I[i][j] = I[i][j] / e; //apply to identity
+          }
+
+          // Subtract this row (scaled appropriately for each row) from ALL of
+          // the other rows so that there will be 0's in this column in the
+          // rows above and below this one
+          for(ii=0; ii<dim; ii++){
+            if(ii==i){continue;}// Only apply to other rows (we want a 1 on the diagonal)
+            e = C[ii][i];// We want to change this element to 0
+            
+            // Subtract (the row above(or below) scaled by e) from (the
+            // current row) but start at the i'th column and assume all the
+            // stuff left of diagonal is 0 (which it should be if we made this
+            // algorithm correctly)
+            for(j=0; j<dim; j++){
+                C[ii][j] -= e*C[i][j]; //apply to original matrix
+                I[ii][j] -= e*I[i][j]; //apply to identity
+            }
+          }
+        }
+        //we've done all operations, C should be the identity
+        //matrix I should be the inverse:
+        return I;
+        
+      }
+      catch(error){
+        print(error);
+        return null;
+      }
     }
-    
-    // transpose: function(){
-
-    // },
-    // inverse: function(){
-
-    // }
   }
 }
 
