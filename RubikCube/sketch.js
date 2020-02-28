@@ -46,10 +46,18 @@ function draw() {
   box(100, 100, 100);
   pop();
 
-  a = matrix.make.identity(2);
-  b = [[1,2], [3,4]]
+  a = matrix.make.identity(3);
+  b = [[1,2], [3,4]];
+  printMatrix_nD(b);
+  d = matrix.operation.inverse(b);
+  printMatrix_nD(d);
 
-
+  printMatrix_nD(matrix.operation.mult(b,d));
+  /*
+  sould be
+  [[-2 1]
+   [2/3 -0.5]]
+  */
 
 
   
@@ -62,5 +70,5 @@ function draw() {
   //   moves.splice(0,1);
   // }
 
-  // noLoop();
+  noLoop();
 }

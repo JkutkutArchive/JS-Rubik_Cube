@@ -126,7 +126,13 @@ var matrix = {
           console.log("Scalar detected, attempting scalar multiplication")
           return matrix.operation.scalar(a, b);
         }
-        let range = matrix.p.size(a).x;
+        let sizeA = matrix.p.size(a);
+        let sizeB = matrix.p.size(b);
+        if(sizeA.x != sizeB.x || sizeA.y != sizeB.y){
+          throw "not the same dimensions";
+        }
+
+        let range = sizeA.x;
         let m = matrix.make.empty(range);
         for(let i = 0; i < range; i++){
           for(let j = 0; j < range; j++){
@@ -271,7 +277,7 @@ vector = {
   escalar: function(u, v){
     try{
       let e = 0;
-      for(let i = 0; i < a.length; i++){
+      for(let i = 0; i < u.length; i++){
         e += u[i] * v[i];
       }
       return e;
