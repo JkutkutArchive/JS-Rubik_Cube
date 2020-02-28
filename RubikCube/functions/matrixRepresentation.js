@@ -1,11 +1,11 @@
-function printArray(m){
-    console.log(arrayToString(m));
+function printMatrix_nD(m){
+    console.log(matrixToString(m));
 }
-function arrayToString(m){
+function matrixToString(m){
     let str = "[";
     for(let i = 0; i < m.length; i++){
         if(Array.isArray(m[i])){
-            str += arrayToString(m[i]);
+            str += matrixToString(m[i]);
         }
         else{
             str += m[i];
