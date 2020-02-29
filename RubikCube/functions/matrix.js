@@ -3,8 +3,6 @@ var matrix = {
   /*
   TO DO:
     - Rotation Matrices
- 
-    - matrix.p.det
 
     - More Properties?
     - More Operations?
@@ -50,6 +48,16 @@ var matrix = {
           }
       }
       return c;
+    },
+    rotation(angle, axis){//3D matrix
+      switch(axis){
+        case "x":
+        case "X":
+        case "i":
+          console.log("hii");
+          break;        
+
+      }
     }
   },
 
@@ -80,8 +88,8 @@ var matrix = {
     getRow: function(m, row){
       try{
         let r = [];
-        for(let i = 0; i < m.length; i++){
-          r.push(m[i][row]);
+        for(let j = 0; j < m.length; j++){
+          r.push(m[row][j]);
         }
         return r;
       }
@@ -92,10 +100,9 @@ var matrix = {
     },
     getCol: function(m, col){
       try{
-          
         let r = [];
-        for(let j = 0; j < m.length; j++){
-          r.push(m[col][j]);
+        for(let i = 0; i < m.length; i++){
+          r.push(m[i][col]);
         }
         return r;
       }
@@ -104,22 +111,6 @@ var matrix = {
         return null;
       }
     },
-
-    det: function(m){
-      try{
-        if(m.length == 1){
-          return m[0][0];
-        }
-        d = 0;
-        for(let i = 0; i < m.length; i++){
-          //d += m[i][0] * matrix.p.det();
-        }
-      }
-      catch(e){
-        console.log(e);
-      }
-    },
-
     subMatrix(m, posI, dimSubMx, dimSubMy){
       try{ 
         dimSubMy = (dimSubMy)? dimSubMy : dimSubMx;
@@ -139,6 +130,35 @@ var matrix = {
   },
 
   o: {
+    det: function(m){
+      try{
+        let size = matrix.p.size(m);
+        if(!matrix.p.isSquare(m)){
+          throw "Not square matrix";
+        }
+        if(size.x == 2){
+          // console.log("det of: " + matrixToString(m, ",") +" is " + (m[0][0] * m[1][1] - m[0][1] * m[1][0]));
+          return m[0][0] * m[1][1] - m[0][1] * m[1][0];
+        }
+        else{
+          let row = matrix.p.getRow(m, 0);
+          let M = matrix.make.copy(m);
+          M = matrix.o.removeRow(M, 0);
+          let detValue = 0;
+          // console.log("Actual matrix: \n" + matrixToString(m, "\n"));
+          for(let i = 0; i < size.x; i++){
+            // console.log("That means: " + row[i] + "* det(" + matrixToString(matrix.o.removeCol(M, i), ",") + ")")
+            detValue += (Math.pow(-1, i)) * row[i] * det(matrix.o.removeCol(M, i));
+          }
+          return detValue;
+        }
+    
+      }
+      catch(error){
+        console.log(error);
+        return null;
+      }
+    },
     add: function(a,b){
       try{
         let range = matrix.p.size(a).x;
@@ -370,36 +390,3 @@ vector = {
     }
   }
 }
-// function det(m){
-//   try{
-//     let size = matrix.p.size(m);
-//     order = size.x;
-//     let matrix = matrix.make.empty(order);
-//     System.out.println("Enter the elements of 3x3 matrix");
-//     int i,j;
-//     for(i=0;i<matrix.length;i++){
-//         for(j=0;j<matrix[i].length;j++){
-//             try{
-//                 matrix[i][j]=Integer.parseInt(br.readLine());
-//             }
-//             catch(Exception e){
-//                 System.out.println("An error occured. Please retry");
-//                 return;
-//             }
-//         }
-//     }
-//     int determinant,x,y,z;
-//     x=(matrix[0][0] * (matrix[1][1] * matrix[2][2]
-//                     - matrix[1][2] * matrix[2][1]));
-//     y=(matrix[0][1] * (matrix[1][0] * matrix[2][2]
-//                     - matrix[1][2] * matrix[2][0]));
-//     z=(matrix[0][2] * (matrix[1][0] * matrix[2][1]
-//                     - matrix[1][1] * matrix[2][0]));
-//     determinant= x - y + z;
-//     System.out.println("The modulus of the given matrix is "+ determinant);
-//     }
-//     catch(error){
-//       console.log(error);
-//       return null;
-//     }
-// }

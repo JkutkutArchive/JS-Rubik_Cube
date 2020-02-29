@@ -9,6 +9,8 @@ var t = 0;
 
 var rubik;
 
+var a,b,c,d,e;//debug
+
 function setup() {
   createCanvas(600, 600, WEBGL);
   // console.log("hola");
@@ -46,19 +48,14 @@ function draw() {
   box(100, 100, 100);
   pop();
 
-  var a,b,c,d,e;
   
-  a = matrix.make.identity(3);
-  b = [[1,2], [3,4]];
-  printMatrix_nD(b);
+  
+  a = [
+    [1, 3, 4],
+    [0, -1, 2],
+    [2, 5, 10]];
+  console.log(matrix.o.det(a));
 
-
-  console.log("inverted")
-  e = matrix.o.inverse(b);
-  printMatrix_nD(e);
-
-  console.log("operations")
-  printMatrix_nD(matrix.o.mult(b,e));
 
   /*
   sould be
