@@ -46,13 +46,20 @@ function draw() {
   box(100, 100, 100);
   pop();
 
+  var a,b,c,d,e;
+  
   a = matrix.make.identity(3);
   b = [[1,2], [3,4]];
   printMatrix_nD(b);
-  d = matrix.operation.inverse(b);
-  printMatrix_nD(d);
 
-  printMatrix_nD(matrix.operation.mult(b,d));
+
+  console.log("inverted")
+  e = matrix.o.inverse(b);
+  printMatrix_nD(e);
+
+  console.log("operations")
+  printMatrix_nD(matrix.o.mult(b,e));
+
   /*
   sould be
   [[-2 1]
