@@ -1,15 +1,33 @@
-/* MATRIX CREATION */
+/**
+ * @typedef make
+ * (method) Dictionary with some functions to generate matrices.
+ *  
+ */
+
+
+
+/**
+ * 
+ * Matrix diccionary with multiple functionalities
+ * 
+ * @param make - Dictionary with some functions to generate matrices.
+ * 
+ */
 var matrix = {
-  /*
-  TO DO:
-    - Rotation Matrices
-
-    - More Properties?
-    - More Operations?
-
-    -JS-DOC
-  */
+  /**
+   * matrices generators.
+   * @property {function} identity - Indentity matrices
+   * @property {function} zero - Matrices filled with ceros
+   * @property {function} empty - Matrices filled with undefined values
+   * @property {function} copy - Copy of a matrix
+   */
   make: { //2D square matrix
+    /**
+     * Generates indentity matrices.
+     * @param {number} dimX 
+     * @param {number} dimY
+     * @returns {number[][]} indentity matrix of order dimX-dimY (if not square, the fist diagonal is filled with ones).
+     */
     identity: function(dimX, dimY){
       dimY = (dimY)? dimY : dimX;
       let m = matrix.make.empty(dimX, dimY);
@@ -20,6 +38,12 @@ var matrix = {
       }
       return m;
     },
+    /**
+     * Generates matrices filled with ceros.
+     * @param {number} dimX 
+     * @param {number} dimY
+     * @returns {number[][]} matrices filled with ceros of order dimX-dimY.
+     */
     zero: function(dimX, dimY){
       dimY = (dimY)? dimY : dimX;
       let m = matrix.make.empty(dimX, dimY);
@@ -30,6 +54,12 @@ var matrix = {
       }
       return m;
     },
+    /**
+     * Generates matrices filled with undefined values.
+     * @param {number} dimX 
+     * @param {number} dimY
+     * @returns {undefined[][]} matrices filled with undefined values of order dimX-dimY.
+     */
     empty: function(dimX, dimY){
       dimY = (dimY)? dimY : dimX;  
       let m = [];
@@ -38,6 +68,11 @@ var matrix = {
       }
       return m;
     },
+    /**
+     * Makes a copy of a matrix
+     * @param {any[][]} m 
+     * @returns {any[][]} copy of the matrix given.
+     */
     copy: function(m){
       let c = [];
       let dim = matrix.p.size(m);
@@ -49,6 +84,12 @@ var matrix = {
       }
       return c;
     },
+    /**
+     * Generates rotation matrices.
+     * @param {number} axis 
+     * @param {number} o
+     * @returns {number[][]} 3D rotation-matrix in order to rotate "o" radians on the "axis" axis.
+     */
     rotation(axis, o){//3D matrix
       switch(true){
         case /[xXi]/.test(axis):
@@ -74,8 +115,11 @@ var matrix = {
       }
     }
   },
-
-  p: {  //Properties
+  /**
+   * properties of matrices.
+   * @property {size}
+   */
+  p: {
     size: function(m){
       try{
         return createVector(m.length, m[0].length);
@@ -404,3 +448,13 @@ vector = {
     }
   }
 }
+Math.log(342);
+matrix.make.empty(3)
+
+/*
+  TO DO:
+    - More Properties?
+    - More Operations?
+    - Simplified syntax
+    -JS-DOC
+  */
