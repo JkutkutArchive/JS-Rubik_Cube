@@ -7,6 +7,8 @@ var matrix = {
     - Implement throw exceptions 
     - matrix.p.det
 
+    - console.log instead of print
+
     - More Properties?
     - More Operations?
 
@@ -56,26 +58,56 @@ var matrix = {
 
   p: {  //Properties
     size: function(m){
-      return createVector(m.length, m[0].length);
+      try{
+        return createVector(m.length, m[0].length);
+      }
+      catch(error){
+        console.log(error);
+        return createVector(undefined, undefined);
+      }
     },
     isSquare: function(m){
-      let size = matrix.p.size(m);
-      return size.x == size.y;
+      try{
+        let size = matrix.p.size(m);
+        if(size.x == undefined || size.y == undefined){
+          throw "Undefined size of matrix";
+        }
+        return size.x == size.y;
+      }
+      catch(error){
+        console.log(error);
+        return false;
+      }
+
     },
     getRow: function(m, row){
-      let r = [];
-      for(let i = 0; i < m.length; i++){
-        r.push(m[i][row]);
+      try{
+        let r = [];
+        for(let i = 0; i < m.length; i++){
+          r.push(m[i][row]);
+        }
+        return r;
       }
-      return r;
+      catch(error){
+        console.log(error);
+        return null;
+      }
     },
     getCol: function(m, col){
-      let r = [];
-      for(let j = 0; j < m.length; j++){
-        r.push(m[col][j]);
+      try{
+          
+        let r = [];
+        for(let j = 0; j < m.length; j++){
+          r.push(m[col][j]);
+        }
+        return r;
       }
-      return r;
+      catch(error){
+        console.log(error);
+        return null;
+      }
     },
+
     det: function(m){
       try{
         if(m.length == 1){
@@ -90,6 +122,7 @@ var matrix = {
         console.log(e);
       }
     },
+
     subMatrix(m, posI, dimSubMx, dimSubMy){
       try{ 
         dimSubMy = (dimSubMy)? dimSubMy : dimSubMx;
@@ -126,21 +159,21 @@ var matrix = {
       }
     },
     mult: function(a, b){
-      try{ // a and b with same dimensions or 1 matrix * scalar, else error
+      try{ // a and b with same dimensions or matrix * scalar, else error
         if(!Array.isArray(a) || !Array.isArray(b)){
           console.log("Scalar detected, attempting scalar multiplication")
           return matrix.o.scalar(a, b);
         }
         let sizeA = matrix.p.size(a);
         let sizeB = matrix.p.size(b);
-        if(sizeA.x != sizeB.x || sizeA.y != sizeB.y){
+        if(sizeA.x != sizeB.y){
           throw "not the same dimensions";
         }
 
-        let range = sizeA.x;
-        let m = matrix.make.empty(range);
-        for(let i = 0; i < range; i++){
-          for(let j = 0; j < range; j++){
+        //let range = sizeA.x;
+        let m = matrix.make.empty(sizeB.x, sizeA.y);
+        for(let i = 0; i < sizeB.x; i++){
+          for(let j = 0; j < sizeA.y; j++){
             m[i][j] = vector.escalar(matrix.p.getRow(a, i), matrix.p.getCol(b, j));
           }
         }
@@ -155,53 +188,74 @@ var matrix = {
       return matrix.o.add(a, matrix.o.scalar(b, -1));
     },
     scalar: function(n, o){
-      let a = (Array.isArray(n))? n : o; //matrix
-      let b = (Array.isArray(n))? o : n; //scalar
+      try{
+        let a = (Array.isArray(n))? n : o; //matrix
+        let b = (Array.isArray(n))? o : n; //scalar
 
-      let range = matrix.p.size(a).x;
-      let m = matrix.make.zeroMatrix(range);
-      for(let i = 0; i < range; i++){
-        for(let j = 0; j < range; j++){
-          m[i][j] = a[i][j] * b;
+        let range = matrix.p.size(a).x;
+        let m = matrix.make.zeroMatrix(range);
+        for(let i = 0; i < range; i++){
+          for(let j = 0; j < range; j++){
+            m[i][j] = a[i][j] * b;
+          }
         }
+        return m;
       }
-      return m;
+      catch(error){
+        console.log(error);
+        return null;
+      }
     },
     removeRow: function(m, row){
-      let size = matrix.p.size(m); 
-      let n = matrix.make.empty(size.x - 1, size.y);
-      for(let i = 0, iN = 0; i < size.x; i++){
-        if(i != row){
-          for(let j = 0; j < size.y; j++){
-            n[iN][j] = m[i][j];
+      try{
+        let size = matrix.p.size(m); 
+        let n = matrix.make.empty(size.x - 1, size.y);
+        for(let i = 0, iN = 0; i < size.x; i++){
+          if(i != row){
+            for(let j = 0; j < size.y; j++){
+              n[iN][j] = m[i][j];
+            }
+            iN++;
           }
-          iN++;
         }
+        return n;
       }
-      return n;
+      catch(error){
+        console.log(error);
+      }
     },
     removeCol: function(m, col){
-      let size = matrix.p.size(m); 
-      let n = matrix.make.empty(size.x, size.y - 1);
-      for(let i = 0; i < size.x; i++){
-        for(let j = 0, jN = 0; j < size.y; j++){
-          if(j != col){
-            n[i][jN] = m[i][j];
-            jN++;
+      try{
+        let size = matrix.p.size(m); 
+        let n = matrix.make.empty(size.x, size.y - 1);
+        for(let i = 0; i < size.x; i++){
+          for(let j = 0, jN = 0; j < size.y; j++){
+            if(j != col){
+              n[i][jN] = m[i][j];
+              jN++;
+            }
           }
         }
+        return n;
       }
-      return n;
+      catch(error){
+        console.log(error);
+      }
     },
     transpose: function(m){
-      let size = matrix.p.size(m);
-      let n = matrix.make.empty(size.x, size.y);
-      for(let i = 0; i < size.x; i++){
-        for(let j = 0; j < size.y; j++){
-          n[j][i] = m[i][j];
+      try{
+        let size = matrix.p.size(m);
+        let n = matrix.make.empty(size.y, size.x);
+        for(let i = 0; i < size.y; i++){
+          for(let j = 0; j < size.x; j++){
+            n[j][i] = m[i][j];
+          }
         }
+        return n;
       }
-      return n;
+      catch(error){
+        console.log(error);
+      }
     },
     inverse: function(m){
       //http://blog.acipo.com/matrix-inversion-in-javascript/
@@ -295,9 +349,15 @@ var matrix = {
 
 vector = {
   arrSum: function(arr){ //[1,3,3] -> 7
-    return arr.reduce(function(a,b){
-      return a + b;
-    }, 0);
+    try{
+      return arr.reduce(function(a,b){
+        return a + b;
+      }, 0);
+    }
+    catch(error){
+      console.log(error);
+      return null;
+    }
   },
   escalar: function(u, v){
     try{
@@ -309,6 +369,7 @@ vector = {
     }
     catch(error){
       console.log(error);
+      return null;
     }
   }
 }
