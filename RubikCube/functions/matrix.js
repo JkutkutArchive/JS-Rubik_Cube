@@ -24,8 +24,8 @@ var matrix = {
   make: { //2D square matrix
     /**
      * Generates indentity matrices.
-     * @param {number} dimX 
-     * @param {number} dimY
+     * @param {number} dimX - number of rows
+     * @param {number} dimY - number of cols
      * @returns {number[][]} indentity matrix of order dimX-dimY (if not square, the fist diagonal is filled with ones).
      */
     identity: function(dimX, dimY){
@@ -40,8 +40,8 @@ var matrix = {
     },
     /**
      * Generates matrices filled with ceros.
-     * @param {number} dimX 
-     * @param {number} dimY
+     * @param {number} dimX - number of rows
+     * @param {number} dimY - number of cols
      * @returns {number[][]} matrices filled with ceros of order dimX-dimY.
      */
     zero: function(dimX, dimY){
@@ -56,8 +56,8 @@ var matrix = {
     },
     /**
      * Generates matrices filled with undefined values.
-     * @param {number} dimX 
-     * @param {number} dimY
+     * @param {number} dimX - number of rows
+     * @param {number} dimY - number of cols
      * @returns {undefined[][]} matrices filled with undefined values of order dimX-dimY.
      */
     empty: function(dimX, dimY){
@@ -70,7 +70,7 @@ var matrix = {
     },
     /**
      * Makes a copy of a matrix
-     * @param {any[][]} m 
+     * @param {any[][]} m - matrix
      * @returns {any[][]} copy of the matrix given.
      */
     copy: function(m){
@@ -85,9 +85,9 @@ var matrix = {
       return c;
     },
     /**
-     * Generates rotation matrices.
-     * @param {number} axis 
-     * @param {number} o
+     * Generates rotation matrices on any of the 3 axis.
+     * @param {number} axis - The axis of rotation (Regex sensitive): X:[xXi], Y:[yYj], Z:[zZk]
+     * @param {number} o - Angle of rotation (radians)
      * @returns {number[][]} 3D rotation-matrix in order to rotate "o" radians on the "axis" axis.
      */
     rotation(axis, o){//3D matrix
@@ -116,10 +116,19 @@ var matrix = {
     }
   },
   /**
-   * properties of matrices.
-   * @property {size}
+   * Properties of matrices.
+   * @property {function} size - Size of the matrix.
+   * @property {function} isSquare - Checks if square matrix.
+   * @property {function} getRow - Returns selected row.
+   * @property {function} getCol - Returns selected col.
+   * @property {function} subMatrix - Returns the sub-matrix.
    */
   p: {
+    /**
+     * Gives the size of the matrix as a P5-Vector.
+     * @param {number[][]} m - matrix
+     * @returns {Object} P5-Vector with the size of the matrix
+     */
     size: function(m){
       try{
         return createVector(m.length, m[0].length);
@@ -129,6 +138,11 @@ var matrix = {
         return createVector(undefined, undefined);
       }
     },
+    /**
+     * Checks if same number of rows and cols.
+     * @param {number[][]} m - matrix
+     * @returns {boolean} if same number of rows and cols
+     */
     isSquare: function(m){
       try{
         let size = matrix.p.size(m);
@@ -143,6 +157,12 @@ var matrix = {
       }
 
     },
+    /**
+     * Returns the row selected as array.
+     * @param {number[][]} m - matrix
+     * @param {number} row - 0 based
+     * @returns {number[]} Array with the row selected.
+     */
     getRow: function(m, row){
       try{
         let r = [];
@@ -156,6 +176,12 @@ var matrix = {
         return null;
       }
     },
+    /**
+     * Returns the col selected as array.
+     * @param {number[][]} m - matrix
+     * @param {number} col - 0 based
+     * @returns {number[]} Array with the col selected.
+     */
     getCol: function(m, col){
       try{
         let r = [];
@@ -169,6 +195,14 @@ var matrix = {
         return null;
       }
     },
+    /**
+     * Returns the sub-matrix of order dimSubMx-dimSubMy starting at (posI.x, posI,y) of the matrix
+     * @param {any[][]} m - matrix 
+     * @param {Object} posI - P5 vector with the starting position (also works with diccionary {x: i, y: j}; i and j being numbers).
+     * @param {number} dimSubMx - nº of elements in a row 
+     * @param {number} dimSubMy - nº of elements in a col
+     * @return {any[][]} matrix of order dimSubMx-dimSubMy starting at (posI.x, posI,y) of the matrix
+     */
     subMatrix(m, posI, dimSubMx, dimSubMy){
       try{ 
         dimSubMy = (dimSubMy)? dimSubMy : dimSubMx;
@@ -186,8 +220,24 @@ var matrix = {
       }
     }
   },
-
+  /**
+   * operations
+   * @property {function} det - Determinant (recursive)
+   * @property {function} add - Addition
+   * @property {function} mult - Multiplication
+   * @property {function} sub - Substraction
+   * @property {function} scalar - Matrix * number
+   * @property {function} removeRow - Remove selected row
+   * @property {function} removeCol - Remove selected col
+   * @property {function} transpose - Transposed matrix
+   * @property {function} inverse - Inversed matrix (Guassian Elimination method)
+   */
   o: {
+    /**
+     * Determinant of the given matrix (recursive).
+     * @param {number[][]} m - matrix
+     * @returns {number} determinant of given matrix.
+     */
     det: function(m){
       try{
         let size = matrix.p.size(m);
@@ -217,6 +267,12 @@ var matrix = {
         return null;
       }
     },
+    /**
+     * Addition of two matrices.
+     * @param {number[][]} a - Matrix
+     * @param {number[][]} b - Matrix
+     * @return {number[][]} the result of "a + b".
+     */
     add: function(a,b){
       try{
         let range = matrix.p.size(a).x;
@@ -233,6 +289,12 @@ var matrix = {
         return null;
       }
     },
+    /**
+     * Multiplication of two matrices.
+     * @param {number[][]} a - Matrix
+     * @param {number[][]} b - Matrix
+     * @return {number[][]} the result of "a * b".
+     */
     mult: function(a, b){
       try{ // a and b with same dimensions or matrix * scalar, else error
         if(!Array.isArray(a) || !Array.isArray(b)){
@@ -259,9 +321,21 @@ var matrix = {
         return null;
       }
     },
+    /**
+     * Substraction of two matrices.
+     * @param {number[][]} a - Matrix
+     * @param {number[][]} b - Matrix
+     * @return {number[][]} the result of "a - b".
+     */
     sub: function(a, b){
       return matrix.o.add(a, matrix.o.scalar(b, -1));
     },
+    /**
+     * Matrix * number | number * Matrix.
+     * @param {(number[][]|number)} a - Matrix
+     * @param {(number[][]|number)} b - Matrix
+     * @return {number[][]} the result of "a * b".
+     */
     scalar: function(n, o){
       try{
         let a = (Array.isArray(n))? n : o; //matrix
@@ -422,7 +496,7 @@ var matrix = {
   }
 }
 
-vector = {
+var vector = {
   arrSum: function(arr){ //[1,3,3] -> 7
     try{
       return arr.reduce(function(a,b){
@@ -448,8 +522,6 @@ vector = {
     }
   }
 }
-Math.log(342);
-matrix.make.empty(3)
 
 /*
   TO DO:
@@ -457,4 +529,7 @@ matrix.make.empty(3)
     - More Operations?
     - Simplified syntax
     -JS-DOC
+      *Exceptions?
+      *Dot
+      *scalar on product
   */
