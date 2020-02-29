@@ -126,7 +126,7 @@ var matrix = {
   p: {
     /**
      * Gives the size of the matrix as a P5-Vector.
-     * @param {number[][]} m - matrix
+     * @param {any[][]} m - matrix
      * @returns {Object} P5-Vector with the size of the matrix
      */
     size: function(m){
@@ -140,7 +140,7 @@ var matrix = {
     },
     /**
      * Checks if same number of rows and cols.
-     * @param {number[][]} m - matrix
+     * @param {any[][]} m - matrix
      * @returns {boolean} if same number of rows and cols
      */
     isSquare: function(m){
@@ -159,9 +159,9 @@ var matrix = {
     },
     /**
      * Returns the row selected as array.
-     * @param {number[][]} m - matrix
+     * @param {any[][]} m - matrix
      * @param {number} row - 0 based
-     * @returns {number[]} Array with the row selected.
+     * @returns {any[]} Array with the row selected.
      */
     getRow: function(m, row){
       try{
@@ -178,9 +178,9 @@ var matrix = {
     },
     /**
      * Returns the col selected as array.
-     * @param {number[][]} m - matrix
+     * @param {any[][]} m - matrix
      * @param {number} col - 0 based
-     * @returns {number[]} Array with the col selected.
+     * @returns {any[]} Array with the col selected.
      */
     getCol: function(m, col){
       try{
@@ -332,9 +332,10 @@ var matrix = {
     },
     /**
      * Matrix * number | number * Matrix.
-     * @param {(number[][]|number)} a - Matrix
-     * @param {(number[][]|number)} b - Matrix
+     * @param {(number[][]|number)} a - Matrix or scalar.
+     * @param {(number[][]|number)} b - Matrix or scalar.
      * @return {number[][]} the result of "a * b".
+     * @throws error if both numbers or both matrices.
      */
     scalar: function(n, o){
       try{
@@ -355,6 +356,12 @@ var matrix = {
         return null;
       }
     },
+    /**
+     * Removes the selected row
+     * @param {any[][]} m - matrix
+     * @param {number} row - index of the row to remove
+     * @return {any[][]} New matrix without the row
+     */
     removeRow: function(m, row){
       try{
         let size = matrix.p.size(m); 
@@ -373,6 +380,12 @@ var matrix = {
         console.log(error);
       }
     },
+    /**
+     * Removes the selected col
+     * @param {any[][]} m - matrix
+     * @param {number} col - index of the col to remove
+     * @return {any[][]} New matrix without the col
+     */
     removeCol: function(m, col){
       try{
         let size = matrix.p.size(m); 
@@ -391,6 +404,11 @@ var matrix = {
         console.log(error);
       }
     },
+    /**
+     * Returns the transposed matrix
+     * @param {number[][]} m - matrix
+     * @returns {number[][]} Transposed matrix.
+     */
     transpose: function(m){
       try{
         let size = matrix.p.size(m);
@@ -406,6 +424,12 @@ var matrix = {
         console.log(error);
       }
     },
+    /**
+     * Returns the inverted matrix
+     * @param {number[][]} m - matrix
+     * @returns {number[][]} Inverted matrix.
+     * @throws error if not possible to invert or not square
+     */
     inverse: function(m){
       //http://blog.acipo.com/matrix-inversion-in-javascript/
       // I use Guassian Elimination to calculate the inverse:
@@ -420,7 +444,7 @@ var matrix = {
       try{
         let dim = matrix.p.size(m);    
         //if the matrix isn't square: exit (error)
-        if(dim.x !== dim.y){throw "Error, not same dimension";}
+        if(!matrix.p.isSquare(m)){throw "Error, not same dimension";}
 
         dim = dim.x;//square mtrix => dim.x == dim.y
         //create the identity matrix (I), and a copy (C) of the original
@@ -454,7 +478,7 @@ var matrix = {
                 //get the new diagonal
                 e = C[i][i];
                 //if it's still 0, not invertable (error)
-                if(e == 0){return}
+                if(e == 0){throw "Not possible to invert"}
             }
             
             // Scale this row down by e (so we have a 1 on the diagonal)
