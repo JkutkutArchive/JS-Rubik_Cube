@@ -1,17 +1,10 @@
 /**
- * @typedef make
- * (method) Dictionary with some functions to generate matrices.
- *  
- */
-
-
-
-/**
  * 
  * Matrix diccionary with multiple functionalities
  * 
- * @param make - Dictionary with some functions to generate matrices.
- * 
+ * @property make - Dictionary with some functions to generate matrices.
+ * @property p - Dictionary with some functions to get matrices' properties.
+ * @property o - Dictionary with some functions to operate matrices.
  */
 var matrix = {
   /**
@@ -293,7 +286,7 @@ var matrix = {
      * Multiplication of two matrices.
      * @param {number[][]} a - Matrix
      * @param {number[][]} b - Matrix
-     * @return {number[][]} the result of "a * b".
+     * @return {number[][]} the result of "a * b". If any of them is a number, it will try the scalar function.
      */
     mult: function(a, b){
       try{ // a and b with same dimensions or matrix * scalar, else error
@@ -520,40 +513,10 @@ var matrix = {
   }
 }
 
-var vector = {
-  arrSum: function(arr){ //[1,3,3] -> 7
-    try{
-      return arr.reduce(function(a,b){
-        return a + b;
-      }, 0);
-    }
-    catch(error){
-      console.log(error);
-      return null;
-    }
-  },
-  escalar: function(u, v){
-    try{
-      let e = 0;
-      for(let i = 0; i < u.length; i++){
-        e += u[i] * v[i];
-      }
-      return e;
-    }
-    catch(error){
-      console.log(error);
-      return null;
-    }
-  }
-}
-
 /*
   TO DO:
-    - More Properties?
-    - More Operations?
     - Simplified syntax
     -JS-DOC
-      *Exceptions?
+      
       *Dot
-      *scalar on product
   */
