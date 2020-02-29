@@ -49,14 +49,28 @@ var matrix = {
       }
       return c;
     },
-    rotation(angle, axis){//3D matrix
-      switch(axis){
-        case "x":
-        case "X":
-        case "i":
-          console.log("hii");
-          break;        
+    rotation(axis, o){//3D matrix
+      switch(true){
+        case /[xXi]/.test(axis):
+          return [
+            [           1,            0,            0],
+            [           0,  Math.cos(o), -Math.sin(o)],
+            [           0,  Math.sin(o), Math.cos(o)]];
 
+        case /[yYj]/.test(axis):
+          return [
+            [ Math.cos(o),            0,  Math.sin(o)], 
+            [           0,            1,            0], 
+            [-Math.sin(o),            0, Math.cos(o)]];
+
+        case /[zZk]/.test(axis):
+          return [
+            [ Math.cos(o), -Math.sin(o),            0],
+            [ Math.sin(o),  Math.cos(o),            0],
+            [           0,            0,            1]];      
+        case true:
+          console.log("Not correct axis");
+          return null;
       }
     }
   },
@@ -148,7 +162,7 @@ var matrix = {
           // console.log("Actual matrix: \n" + matrixToString(m, "\n"));
           for(let i = 0; i < size.x; i++){
             // console.log("That means: " + row[i] + "* det(" + matrixToString(matrix.o.removeCol(M, i), ",") + ")")
-            detValue += (Math.pow(-1, i)) * row[i] * det(matrix.o.removeCol(M, i));
+            detValue += (Math.pow(-1, i)) * row[i] * matrix.o.det(matrix.o.removeCol(M, i));
           }
           return detValue;
         }
