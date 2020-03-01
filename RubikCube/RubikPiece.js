@@ -5,20 +5,25 @@ class RubikPiece{
     - Use matrices
     - Keep track of sticker's orientation
   */
-  constructor(pos, width, c){
-    this.pos = pos;//the actual pos
-    this.width = (width)? width : cubeW;
-    // this.color = (c)? c : COLORS[COLORS.length - 1];
+  constructor(w, c){
     this.rMatrix = matrix.make.identity(4);
+    this.posM;//the actual pos (translation matrix)
+
+
+    this.width = (w)? w : cubeW;
+    this.color = (c)? c : COLORS[COLORS.length - 1];
     this.stickers = [];
   }
 
   show(){
-    // fill(this.color);
+    fill(this.color);
     push();
     strokeWeight(4)
     // resetMatrix();
-    applyMatrix(...this.applyRotation(this.rMatrix));
+    let m = matrix.o.mult(this.posM, this.rMatrix);
+
+    // applyMatrix(...matrix.p.applyRotation(this.rMatrix));
+    applyMatrix(...matrix.p.applyRotation(m));
     box(this.width);
     // translate(this.pos);
     
@@ -27,19 +32,21 @@ class RubikPiece{
     }
     pop();
   }
-  applyRotation(m){
-    return [m[0][0],m[0][1],m[0][2],0,m[1][0],m[1][1],m[1][2],0,m[2][0],m[2][1],m[2][2],0,0,0,0,1];
-  }
 
   rotate(axis, angle){
-    this.applyM(matrix.make.rotate(axis, angle));
+    this.applyM(matrix.make.rotation4D(axis, angle));
   }
   applyM(rM){ //rM = rotation matrix
-    this.rMatrix = matrix.o.mult(this.rMatrix, rM);
+    printMatrix_nD(rM);
+    printMatrix_nD(this.rMatrix);
+    this.rMatrix = matrix.o.mult(rM,this.rMatrix);
   }
   move(posi){
     //moves the piece to a new pos
     this.pos = posi.copy();
+  }
+  setPos(posi){
+    this.posM = matrix.make.translation(posi);
   }
 }
 
