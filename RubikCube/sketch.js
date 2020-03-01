@@ -56,6 +56,8 @@ function draw() {
     [2, 5, 10]];
   console.log(matrix.o.det(a));
 
+  //hfadsjkhkjfadshkjhsadkjlfasjksdhjkfs hsdkjfhla fa asd
+
 
   /*
   sould be
