@@ -2,7 +2,7 @@
 
 var cubeW = 100;
 var angle = 0;
-var colors = [];
+var COLORS = [];
 var moves = [];
 var delayMoves = 60;
 var t = 0;
@@ -15,7 +15,7 @@ function setup() {
   createCanvas(600, 600, WEBGL);
   // console.log("hola");
   frameRate(30);
-  colors = [
+  COLORS = [
     //x
     color(0, 144, 247),//blue
     color(0, 255, 0),//green
@@ -37,33 +37,20 @@ function draw() {
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);
   
   // angle = (-Math.PI / 4);
-  w = Math.PI / 720
-  angle = (angle + w);
+  w = Math.PI / 180
+  // w = Math.PI / 720
+  angle = (angle - w);
 
 
   push();
   stroke(0);
   strokeWeight(3);
   fill(100, 100, 100);
-  box(100, 100, 100);
+  // box(100, 100, 100);
   pop();
 
-  
-  
-  a = [
-    [1, 3, 4],
-    [0, -1, 2],
-    [2, 5, 10]];
-  console.log(matrix.o.det(a));
-
-
-
-  /*
-  sould be
-  [[-2 1]
-   [2/3 -0.5]]
-  */
-
+  let a = new RubikPiece(createVector(00,0,0), );
+  a.show();
 
   
   // rubik.show();
@@ -75,5 +62,5 @@ function draw() {
   //   moves.splice(0,1);
   // }
 
-  noLoop();
+  // noLoop();
 }
