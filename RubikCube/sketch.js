@@ -30,7 +30,7 @@ function setup() {
   
   // rubik = new RubikCube(3);
   a = new RubikPiece();
-  a.setPos(createVector(100, 0, 0));
+  a.setPos(createVector(100, 100, 0));
 }
 
 function draw() {
