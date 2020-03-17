@@ -33,14 +33,15 @@ class RubikPiece{
     pop();
   }
 
-  // rotatePiece(axis, angle){
-  //   this.applyM(matrix.make.rotation(axis, angle));
-  // }
+  rotatePiece(axis, angle){
+    let m = matrix.make.rotationOrigin(axis, angle);
+    this.rMatrix = matrix.o.mult(m,this.rMatrix);
+  }
 
   rotateOrigin(axis, angle){
 
     // this.applyM(matrix.make.rotationOrigin(axis, angle));
-    let m = matrix.make.rotationOrigin(axis, angle);
+    let m = matrix.make.rotationOrigin(axis, angle, this.rMatrix);
     // let M = matrix.o.mult(matrix.o.inverse(m), this.matrix);//M = m * This * m^-1
     // this.rMatrix = matrix.o.mult(M, m);
 

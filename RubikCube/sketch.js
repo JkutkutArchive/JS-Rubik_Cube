@@ -31,6 +31,9 @@ function setup() {
   // rubik = new RubikCube(3);
   a = new RubikPiece();
   a.setPos(createVector(100, 100, 0));
+  b = new RubikPiece();
+  b.color = COLORS[3];
+  b.setPos(createVector(100, 100, 0));
 }
 
 function draw() {
@@ -38,10 +41,10 @@ function draw() {
   camera(500 * Math.sin(-angle), 500 * Math.cos(angle), 500 , 0, 0, 0, 0, 0, -1);
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);
   
-  angle = (-Math.PI / 4);
-  // w = Math.PI / 180
+  // angle = (-Math.PI / 4);
+  w = Math.PI / 180
   // w = Math.PI / 720
-  // angle = (angle - w);
+  angle = (angle - w);
 
 
   push();
@@ -53,6 +56,7 @@ function draw() {
 
   
   a.show();
+  b.show();
 
   
   // rubik.show();
