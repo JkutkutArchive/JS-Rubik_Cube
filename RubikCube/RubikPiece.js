@@ -7,6 +7,7 @@ class RubikPiece{
   */
   constructor(w, c){
     this.matrix = matrix.make.identity(4);
+    this.rMatrix = matrix.make.identity(4);
     this.posM;//the actual pos (translation matrix)
 
     this.width = (w)? w : cubeW;
@@ -19,6 +20,7 @@ class RubikPiece{
     push();
     strokeWeight(4);
     applyMatrix(...matrix.p.applyRotation(this.matrix));
+    applyMatrix(...matrix.p.applyRotation(this.rMatrix));
     box(this.width,50,25);
     
     for(let i = 0; i < this.stickers.length; i++){
@@ -31,7 +33,11 @@ class RubikPiece{
     this.applyM(matrix.make.rotation(axis, angle));
   }
   rotateOrigin(axis, angle){
-    this.applyM(matrix.make.rotationOrigin(axis, angle));
+
+    // this.applyM(matrix.make.rotationOrigin(axis, angle));
+    let m = matrix.make.rotationOrigin(axis, angle);
+    this.rMatrix = matrix.o.mult(m,this.rMatrix);
+    
   }
   applyM(rM){ //rM = rotation matrix
     printMatrix_nD(rM);
