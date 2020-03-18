@@ -55,12 +55,11 @@ class RubikCube{
     ];
     for(let i = 0; i < 4; i++){
       this.pieces[cen[i][0]][cen[i][1]][cen[i][2]].rotateOrigin("x", Math.PI / 2 * i);
-      console.log(typeof(this.pieces[cen[i][0]][cen[i][1]][cen[i][2]]));
     }
     this.pieces[0][1][1].rotateOrigin("y", -Math.PI / 2);
     this.pieces[2][1][1].rotateOrigin("y", Math.PI / 2);
 
-    //  ~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~    
+    //  ~~~~~~~~~~~~~~~~~~~~~~~   Edges   ~~~~~~~~~~~~~~~~~~~~~~~    
     //green and blue
     let eG = [
       [1, 0],
@@ -147,13 +146,7 @@ class RubikCube{
     for(let i = 0; i < 3; i++){
       for(let j = 0; j < 3; j++){
         for(let k = 0; k < 3; k++){
-          if(RUBIKCOLOR[i][j][k].length > 0){
-
-            this.pieces[i][j][k].changeStickers(RUBIKCOLOR[i][j][k]);
-            // console.log(i + ", " + j + ", "+ k);
-            // console.log(RUBIKCOLOR[i][j][k]);
-            // console.log(this.pieces[i][j][k].getPos());
-          }
+          this.pieces[i][j][k].changeStickers(RUBIKCOLOR[i][j][k]);
         }
       }
     }

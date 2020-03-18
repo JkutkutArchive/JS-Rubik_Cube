@@ -55,6 +55,7 @@ class RubikPiece{
     // return createVector(v[0], v[1], v[2]);
     return v;
   }
+  changeStickers(colorArray){}
 }
 
 class Center extends RubikPiece{
