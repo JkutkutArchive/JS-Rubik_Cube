@@ -14,27 +14,50 @@ class RubikCube{
       this.pieces.push([]);
       for(let j = 0; j < 3; j++){
         this.pieces[i].push(matrix.make.empty(1,3));
-        this.pieces[i][j][0] = new Corner(this.color, this.width);
-        if(j == 1){
-          this.pieces[i][j][1] = new Center(this.color, this.width);
+        if(i % 2 == 0 && j % 2 == 0){
+          this.pieces[i][j][0] = new Corner(this.color, this.width);        
+          this.pieces[i][j][1] = new Edge(this.color, this.width);
+          this.pieces[i][j][2] = new Corner(this.color, this.width);  
         }
         else{
-          this.pieces[i][j][1] = new Edge(this.color, this.width);
+          if(i == 1 && j == 1){
+            this.pieces[i][j][0] = new Center(this.color, this.width);
+            this.pieces[i][j][1] = new RubikPiece(this.color, this.width);
+            this.pieces[i][j][2] = new Center(this.color, this.width);
+          }
+          else{
+            this.pieces[i][j][0] = new Edge(this.color, this.width);        
+            this.pieces[i][j][1] = new Center(this.color, this.width);
+            this.pieces[i][j][2] = new Edge(this.color, this.width);        
+          }
         }
-        this.pieces[i][j][2] = new Corner(this.color, this.width);
       }
     }
-    printMatrix_nD(this.pieces);
+    // printMatrix_nD(this.pieces);
 
     //  ~~~~~~~~~~~~~~~~~~~~~~~   Corners   ~~~~~~~~~~~~~~~~~~~~~~~
-    for(let k = 0; k < 3; k += 2){
+    for(let i = 0; i < 3; i += 2){
       for(let j = 0; j < 3; j += 2){ 
-        for(let i = 0; i < 3; i += 2){
-          this.pieces[i][j][k].rotateOrigin("z", Math.PI * 0.5 * (i / 2 + j));
-          this.pieces[i][j][k].rotateOrigin("x", Math.PI * 0.5 * k);
+        for(let k = 0; k < 3; k += 2){
+          this.pieces[i][j][k].rotateOrigin("x", Math.PI * 0.5 * (k / 2 + j) * (Math.pow(-1, i/2)));
+          this.pieces[i][j][k].rotateOrigin("z", Math.PI * 0.5 * i);
+          this.pieces[i][j][k].rotateOrigin("x", Math.PI * 0.5 * i / 2);
         }
       }
     }
+    let cen =  [
+      [1, 1, 0],
+      [1, 0, 1],
+      [1, 2, 1],
+      [1, 1, 2],
+    ];
+    for(let i = 0; i < 4; i++){
+      this.pieces[cen[i][0]][cen[i][1]][cen[i][2]].rotateOrigin("x", Math.PI / 2 * i);
+      console.log(typeof(this.pieces[cen[i][0]][cen[i][1]][cen[i][2]]));
+    }
+    this.pieces[0][1][1].rotateOrigin("y", -Math.PI / 2);
+    this.pieces[2][1][1].rotateOrigin("y", Math.PI / 2);
+
     
     
     
@@ -44,7 +67,7 @@ class RubikCube{
         [//Y = 0
           [COLORSDIC.WHITE, COLORSDIC.BLUE, COLORSDIC.ORANGE],//Z = 0
           [],//Z = 1
-          [],//Z = 2
+          [COLORSDIC.BLUE, COLORSDIC.YELLOW, COLORSDIC.ORANGE],//Z = 2
         ],
         [//Y = 1
           [],//Z = 0
@@ -52,9 +75,9 @@ class RubikCube{
           [],//Z = 2
         ],
         [//Y = 2
-          [],//Z = 0
+          [COLORSDIC.YELLOW, COLORSDIC.GREEN, COLORSDIC.ORANGE],//Z = 0
           [],//Z = 1
-          [],//Z = 2
+          [COLORSDIC.GREEN, COLORSDIC.WHITE, COLORSDIC.ORANGE],//Z = 2
         ],
       ],
       [//X = 1
@@ -76,9 +99,9 @@ class RubikCube{
       ],
       [//X = 2
         [//Y = 0
-          [],//Z = 0
+          [COLORSDIC.BLUE, COLORSDIC.WHITE, COLORSDIC.RED],//Z = 0
           [],//Z = 1
-          [],//Z = 2
+          [COLORSDIC.YELLOW, COLORSDIC.BLUE, COLORSDIC.RED],//Z = 2
         ],
         [//Y = 1
           [],//Z = 0
@@ -86,9 +109,9 @@ class RubikCube{
           [],//Z = 2
         ],
         [//Y = 2
-          [],//Z = 0
+          [COLORSDIC.GREEN, COLORSDIC.YELLOW, COLORSDIC.RED],//Z = 0
           [],//Z = 1
-          [],//Z = 2
+          [COLORSDIC.WHITE, COLORSDIC.GREEN, COLORSDIC.RED],//Z = 2
         ],
       ]
       
@@ -100,7 +123,9 @@ class RubikCube{
           if(RUBIKCOLOR[i][j][k].length > 1){
 
             this.pieces[i][j][k].changeStickers(RUBIKCOLOR[i][j][k]);
-            console.log(i + ", " + j + ", "+ k);
+            // console.log(i + ", " + j + ", "+ k);
+            // console.log(RUBIKCOLOR[i][j][k]);
+            // console.log(this.pieces[i][j][k].getPos());
           }
         }
       }

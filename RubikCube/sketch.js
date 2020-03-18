@@ -13,7 +13,7 @@ var rubik;
 var a,b,c,d,e;//debug
 
 function setup() {
-  createCanvas(400, 400, WEBGL);
+  createCanvas(1000, 1000, WEBGL);
   // console.log("hola");
   frameRate(30);
   COLORS = [
@@ -38,7 +38,9 @@ function setup() {
     //z
     WHITE: color(255),//white
     YELLOW: color(247, 239, 0), //yellow
-    CUBECOLOR: color(50)//cubeColor
+    CUBECOLOR: color(50),//cubeColor
+    NULL: color(100)
+    
   };
   
   rubik = new RubikCube(3);
@@ -51,10 +53,10 @@ function setup() {
 
 function draw() {
   background(220);
-  camera(500 * Math.sin(-angle), 500 * Math.cos(angle), 500 , 0, 0, 0, 0, 0, -1);
+  camera(500 * Math.sin(-angle), 500 * Math.cos(angle), 500 * Math.cos(angle), 0, 0, 0, 0, 0, -1);
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);
   
-  // angle = (-Math.PI / 4);
+  // angle = (Math.PI / 4);
   w = Math.PI / 180
   // w = Math.PI / 720
   angle = (angle - w);

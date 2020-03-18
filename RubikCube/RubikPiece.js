@@ -3,6 +3,7 @@ class RubikPiece{
     this.stickers = [];
     this.posMatrix = matrix.make.identity(4);//position matrix.
     this.rMatrix = matrix.make.identity(4);//rotation around origin matrix.
+    this.matrix = matrix.make.identity(4);
 
     this.color = (c)? c : COLORS[COLORS.length - 1];
     this.w = (w)? w : cubeW;
@@ -12,9 +13,9 @@ class RubikPiece{
     fill(this.color);
     push();
     strokeWeight(4);
-    let m = matrix.o.mult(this.posMatrix, this.rMatrix);
-    applyMatrix(...matrix.p.applyRotation(m));
-    box(this.w,50,25);
+    applyMatrix(...matrix.p.applyRotation(this.matrix));
+    box(this.w);
+    // box(this.w,50,25);
     
     for(let i = 0; i < this.stickers.length; i++){
       this.stickers[i].show();
@@ -25,17 +26,34 @@ class RubikPiece{
   rotatePiece(axis, angle){
     let m = matrix.make.rotationOrigin(axis, angle);
     this.rMatrix = matrix.o.mult(m,this.rMatrix);
+    this.updateMatrix();
   }
   rotateOrigin(axis, angle){
     let m = matrix.make.rotationOrigin(axis, angle, this.rMatrix);
     this.rMatrix = matrix.o.mult(m,this.rMatrix);
+    this.updateMatrix();
   }
   move(posiOrX, y, z){
     let rM = matrix.make.translation(posiOrX, y, z);
     this.posMatrix = matrix.o.mult(rM,this.posMatrix);
+    this.updateMatrix();
   }
   setPos(posi){
     this.posMatrix = matrix.make.translation(posi);
+    this.updateMatrix();
+  }
+  updateMatrix(){
+    this.matrix = matrix.o.mult(this.posMatrix, this.rMatrix);
+  }
+  getPos(){
+    let v = [0, 0, 0];
+    let vectors = matrix.make.identity(4);
+    let m = matrix.o.mult(this.posMatrix, this.rMatrix);
+    for(let i = 0; i < 3; i++){
+      v[i] = matrix.o.mult(m, matrix.o.transpose([vectors[i]]))[3][0];
+    }
+    // return createVector(v[0], v[1], v[2]);
+    return v;
   }
 }
 
@@ -43,7 +61,7 @@ class Center extends RubikPiece{
   constructor(c, w){
     super(c, w);
     this.setPos(createVector(0, 0, this.w));
-    this.stickers.push(new RubikSticker(0, 0, COLORS[4], this.w));
+    this.stickers.push(new RubikSticker(0, 0, COLORSDIC.NULL, this.w));
   }
   changeStickers(colorArray){
     try{
@@ -64,7 +82,7 @@ class Edge extends Center{
   constructor(c, w){
     super(c, w);
     this.setPos(createVector(0, this.w, this.w));
-    this.stickers.push(new RubikSticker(-1, 0, COLORS[0], this.w));
+    this.stickers.push(new RubikSticker(-1, 0, COLORSDIC.NULL, this.w));
   }
 }
 
@@ -72,6 +90,6 @@ class Corner extends Edge{
   constructor(c, w){
     super(c, w);
     this.setPos(createVector(this.w, this.w, this.w))
-    this.stickers.push(new RubikSticker(0, 1, COLORS[3], this.w));
+    this.stickers.push(new RubikSticker(0, 1, COLORSDIC.NULL, this.w));
   }
 }

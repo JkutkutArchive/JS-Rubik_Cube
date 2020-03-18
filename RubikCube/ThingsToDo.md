@@ -17,12 +17,14 @@
 ### RubikPiece:
     -Get pos metod
     -JSDOC
+    -Simp getPos
 
 ### RubikCube:
     -Colors
     -Cubes in order
     -JSDOC
-    -debug code
+    -Simp code
+    -Del center piece
 
 
 
