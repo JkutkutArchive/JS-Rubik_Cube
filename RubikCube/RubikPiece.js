@@ -12,7 +12,6 @@ class RubikPiece{
 
     this.width = (w)? w : cubeW;
     this.color = (c)? c : COLORS[COLORS.length - 1];
-    // this.stickers = [];
   }
 
   show(){
