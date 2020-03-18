@@ -71,7 +71,7 @@ class RubikCube{
         ],
         [//Y = 1
           [],//Z = 0
-          [],//Z = 1
+          [COLORSDIC.ORANGE],//Z = 1 (CENTER RIGHT = ORANGE)
           [],//Z = 2
         ],
         [//Y = 2
@@ -83,17 +83,17 @@ class RubikCube{
       [//X = 1
         [//Y = 0
           [],//Z = 0
-          [],//Z = 1
+          [COLORSDIC.BLUE],//Z = 1 (CENTER BLUE = FRONT)
           [],//Z = 2
         ],
         [//Y = 1
-          [],//Z = 0
+          [COLORSDIC.WHITE],//Z = 0 (CENTER TOP = WHITE)
           [],//Z = 1
-          [],//Z = 2
+          [COLORSDIC.GREEN],//Z = 2 (CENTER BACK = GREEN)
         ],
         [//Y = 2
           [],//Z = 0
-          [],//Z = 1
+          [COLORSDIC.YELLOW],//Z = 1 (CENTER BOTTOM = YELLOW)
           [],//Z = 2
         ],
       ],
@@ -105,7 +105,7 @@ class RubikCube{
         ],
         [//Y = 1
           [],//Z = 0
-          [],//Z = 1
+          [COLORSDIC.RED],//Z = 1 (CENTER LEFT = RED)
           [],//Z = 2
         ],
         [//Y = 2
@@ -120,7 +120,7 @@ class RubikCube{
     for(let i = 0; i < 3; i++){
       for(let j = 0; j < 3; j++){
         for(let k = 0; k < 3; k++){
-          if(RUBIKCOLOR[i][j][k].length > 1){
+          if(RUBIKCOLOR[i][j][k].length > 0){
 
             this.pieces[i][j][k].changeStickers(RUBIKCOLOR[i][j][k]);
             // console.log(i + ", " + j + ", "+ k);
