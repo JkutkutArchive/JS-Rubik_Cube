@@ -1,11 +1,28 @@
 # Things to do:
 
+
+
+
+
 ## JS-RubikCube:
+
+### GENERAL
+    -Use colordic instead of arrray
+
 
 ### RubikSticker:
     -JSDOC
     -Sticker margin
-    -
+
+### RubikPiece:
+    -Get pos metod
+    -JSDOC
+
+### RubikCube:
+    -Colors
+    -Cubes in order
+    -JSDOC
+    -debug code
 
 
 
