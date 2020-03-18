@@ -45,6 +45,8 @@ class RubikCube{
         }
       }
     }
+
+    //  ~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~
     let cen =  [
       [1, 1, 0],
       [1, 0, 1],
@@ -58,33 +60,58 @@ class RubikCube{
     this.pieces[0][1][1].rotateOrigin("y", -Math.PI / 2);
     this.pieces[2][1][1].rotateOrigin("y", Math.PI / 2);
 
-    
-    
+    //  ~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~    
+    //green and blue
+    let eG = [
+      [1, 0],
+      [2, 1],
+      [1, 2],
+      [0, 1]
+    ];
+    for(let i = 0; i < 4; i++){
+      this.pieces[eG[i][0]][2][eG[i][1]].rotateOrigin("z", Math.PI);
+      this.pieces[eG[i][0]][2][eG[i][1]].rotateOrigin("y", Math.PI / 2 * i);
+      this.pieces[eG[i][0]][0][eG[i][1]].rotateOrigin("y", Math.PI / 2 * i);
+    }
+    //orange and red 
+    let edge = [
+      [0, 1, 0],
+      [0, 1, 2],
+      [2, 1, 0],
+      [2, 1, 2]
+    ];
+    for(let i = 0; i < 4; i++){
+      this.pieces[edge[i][0]][edge[i][1]][edge[i][2]].rotateOrigin("z", Math.PI / 2 * ((i > 1)? -1 : 1));
+      if(i % 2 == 1){
+        this.pieces[edge[i][0]][edge[i][1]][edge[i][2]].rotateOrigin("y", Math.PI / 2 * ((i > 1)? 1 : -1));
+      }
+    }
+
     
     //color
     let RUBIKCOLOR = [
       [//X = 0
         [//Y = 0
           [COLORSDIC.WHITE, COLORSDIC.BLUE, COLORSDIC.ORANGE],//Z = 0
-          [],//Z = 1
+          [COLORSDIC.ORANGE, COLORSDIC.BLUE],//Z = 1
           [COLORSDIC.BLUE, COLORSDIC.YELLOW, COLORSDIC.ORANGE],//Z = 2
         ],
         [//Y = 1
-          [],//Z = 0
+          [COLORSDIC.WHITE, COLORSDIC.ORANGE],//Z = 0 (EDGE RIGHT TOP = ORANGE TOP)
           [COLORSDIC.ORANGE],//Z = 1 (CENTER RIGHT = ORANGE)
-          [],//Z = 2
+          [COLORSDIC.ORANGE, COLORSDIC.YELLOW],//Z = 2 (EDGE RIGHT BOTTOM = ORANGE BOTTOM)
         ],
         [//Y = 2
           [COLORSDIC.YELLOW, COLORSDIC.GREEN, COLORSDIC.ORANGE],//Z = 0
-          [],//Z = 1
+          [COLORSDIC.ORANGE, COLORSDIC.GREEN],//Z = 1
           [COLORSDIC.GREEN, COLORSDIC.WHITE, COLORSDIC.ORANGE],//Z = 2
         ],
       ],
       [//X = 1
         [//Y = 0
-          [],//Z = 0
+          [COLORSDIC.WHITE, COLORSDIC.BLUE],//Z = 0
           [COLORSDIC.BLUE],//Z = 1 (CENTER BLUE = FRONT)
-          [],//Z = 2
+          [COLORSDIC.YELLOW, COLORSDIC.BLUE],//Z = 2
         ],
         [//Y = 1
           [COLORSDIC.WHITE],//Z = 0 (CENTER TOP = WHITE)
@@ -92,25 +119,25 @@ class RubikCube{
           [COLORSDIC.GREEN],//Z = 2 (CENTER BACK = GREEN)
         ],
         [//Y = 2
-          [],//Z = 0
+          [COLORSDIC.WHITE, COLORSDIC.GREEN],//Z = 0
           [COLORSDIC.YELLOW],//Z = 1 (CENTER BOTTOM = YELLOW)
-          [],//Z = 2
+          [COLORSDIC.YELLOW, COLORSDIC.GREEN],//Z = 2
         ],
       ],
       [//X = 2
         [//Y = 0
           [COLORSDIC.BLUE, COLORSDIC.WHITE, COLORSDIC.RED],//Z = 0
-          [],//Z = 1
+          [COLORSDIC.RED, COLORSDIC.BLUE],//Z = 1
           [COLORSDIC.YELLOW, COLORSDIC.BLUE, COLORSDIC.RED],//Z = 2
         ],
         [//Y = 1
-          [],//Z = 0
+          [COLORSDIC.WHITE, COLORSDIC.RED],//Z = 0 (EDGE LEFT TOP = RED TOP)
           [COLORSDIC.RED],//Z = 1 (CENTER LEFT = RED)
-          [],//Z = 2
+          [COLORSDIC.RED, COLORSDIC.YELLOW],//Z = 2 (EDGE LEFT BOTTOM = RED BOTTOM)
         ],
         [//Y = 2
           [COLORSDIC.GREEN, COLORSDIC.YELLOW, COLORSDIC.RED],//Z = 0
-          [],//Z = 1
+          [COLORSDIC.RED, COLORSDIC.GREEN],//Z = 1
           [COLORSDIC.WHITE, COLORSDIC.GREEN, COLORSDIC.RED],//Z = 2
         ],
       ]
