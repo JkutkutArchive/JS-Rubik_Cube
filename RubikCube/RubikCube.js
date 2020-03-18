@@ -1,26 +1,107 @@
 class RubikCube{
-  constructor(pos, dim){
+  constructor(pos, dim, w, c){
 
     this.pos = (pos)? pos : createVector(0, 0, 0);
     this.dim = (dim)? dim : 3;
+
+    this.color = (c)? c : COLORS[COLORS.length - 1];
+    this.w = (w)? w : cubeW;
     
     this.pieces = [];
     
-    // for(let i = 0; i < 3; i++){
-    //     this.pieces.push([]);
-    //   for(let j = 0; j < 3; j++){
-    //     this.pieces[i].push([]);
-    //     for(let k = 0; k < 3; k++){
-    //       this.pieces[i][j].push(new RubikPiece(createVector(i, j, k)));
-    //     }
-    //   }
-    // }
+ 
     for(let i = 0; i < 3; i++){
       this.pieces.push([]);
       for(let j = 0; j < 3; j++){
-        this.pieces[i].push([]);
+        this.pieces[i].push(matrix.make.empty(1,3));
+        this.pieces[i][j][0] = new Corner(this.color, this.width);
+        if(j == 1){
+          this.pieces[i][j][1] = new Center(this.color, this.width);
+        }
+        else{
+          this.pieces[i][j][1] = new Edge(this.color, this.width);
+        }
+        this.pieces[i][j][2] = new Corner(this.color, this.width);
+      }
+    }
+    printMatrix_nD(this.pieces);
+
+    //  ~~~~~~~~~~~~~~~~~~~~~~~   Corners   ~~~~~~~~~~~~~~~~~~~~~~~
+    for(let k = 0; k < 3; k += 2){
+      for(let j = 0; j < 3; j += 2){ 
+        for(let i = 0; i < 3; i += 2){
+          this.pieces[i][j][k].rotateOrigin("z", Math.PI * 0.5 * (i / 2 + j));
+          this.pieces[i][j][k].rotateOrigin("x", Math.PI * 0.5 * k);
+        }
+      }
+    }
+    
+    
+    
+    //color
+    let RUBIKCOLOR = [
+      [//X = 0
+        [//Y = 0
+          [COLORSDIC.WHITE, COLORSDIC.BLUE, COLORSDIC.ORANGE],//Z = 0
+          [],//Z = 1
+          [],//Z = 2
+        ],
+        [//Y = 1
+          [],//Z = 0
+          [],//Z = 1
+          [],//Z = 2
+        ],
+        [//Y = 2
+          [],//Z = 0
+          [],//Z = 1
+          [],//Z = 2
+        ],
+      ],
+      [//X = 1
+        [//Y = 0
+          [],//Z = 0
+          [],//Z = 1
+          [],//Z = 2
+        ],
+        [//Y = 1
+          [],//Z = 0
+          [],//Z = 1
+          [],//Z = 2
+        ],
+        [//Y = 2
+          [],//Z = 0
+          [],//Z = 1
+          [],//Z = 2
+        ],
+      ],
+      [//X = 2
+        [//Y = 0
+          [],//Z = 0
+          [],//Z = 1
+          [],//Z = 2
+        ],
+        [//Y = 1
+          [],//Z = 0
+          [],//Z = 1
+          [],//Z = 2
+        ],
+        [//Y = 2
+          [],//Z = 0
+          [],//Z = 1
+          [],//Z = 2
+        ],
+      ]
+      
+    ];
+
+    for(let i = 0; i < 3; i++){
+      for(let j = 0; j < 3; j++){
         for(let k = 0; k < 3; k++){
-          this.pieces[i][j].push(new RubikPiece(createVector(i, j, k)));
+          if(RUBIKCOLOR[i][j][k].length > 1){
+
+            this.pieces[i][j][k].changeStickers(RUBIKCOLOR[i][j][k]);
+            console.log(i + ", " + j + ", "+ k);
+          }
         }
       }
     }
@@ -28,15 +109,13 @@ class RubikCube{
   }
   
   show(){
-    // for(let i = 0; i < 3; i++){
-    //   for(let j = 0; j < 3; j++){
-    //     for(let k = 0; k < 3; k++){
-    //       this.pieces[i][j][k].show(); 
-    //     }
-    //   }
-    // }
-    // this.pieces[0][0][2].show();
-    // this.pieces[1][1][1].show();
+    for(let i = 0; i < 3; i++){
+      for(let j = 0; j < 3; j++){
+        for(let k = 0; k < 3; k++){
+          this.pieces[i][j][k].show(); 
+        }
+      }
+    }
   }
   
   // m(move){

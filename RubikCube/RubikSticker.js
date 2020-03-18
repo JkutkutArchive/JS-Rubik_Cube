@@ -17,11 +17,7 @@ class RubikSticker{
         plane(this.width * 0.9);
         pop();
     }
-    // move(posi){
-    //     let rM = matrix.make.translation(posi);
-    //     this.posMatrix = matrix.o.mult(rM,this.posMatrix);
-    // }
-    // setPos(posMatrix){
-    //     this.posMatrix = posMatrix;
-    // }
+    setColor(color){
+        this.c = color;
+    }
 }
