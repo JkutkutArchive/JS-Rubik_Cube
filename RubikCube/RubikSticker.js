@@ -1,21 +1,27 @@
-class Sticker{
-    /*
-    TO DO:
-        - Get pos of the father piece
-        - Get orientation of father key 
-    */ 
-    constructor(pos, orientation, c){
-        this.pos = pos;
-        this.orientation = orientation;
-        this.c = (c)? c : color(colors[3]);
+class RubikSticker{
+    constructor(rX, rY, c, w){
+        this.rX = rX * Math.PI / 2;
+        this.rY = rY * Math.PI / 2;
+
+        this.width = (w)? w : cubeW;
+        this.c = (c)? c : COLORS[3];
     }
     show(){
         push();
         noStroke();
         fill(this.c);
-        translate(this.pos);
-        // rotate();
-        plane(100);
+        rotateX(this.rX);
+        rotateY(this.rY);
+        translate(0,0, this.width * 0.52);
+        
+        plane(this.width * 0.9);
         pop();
     }
+    // move(posi){
+    //     let rM = matrix.make.translation(posi);
+    //     this.posMatrix = matrix.o.mult(rM,this.posMatrix);
+    // }
+    // setPos(posMatrix){
+    //     this.posMatrix = posMatrix;
+    // }
 }

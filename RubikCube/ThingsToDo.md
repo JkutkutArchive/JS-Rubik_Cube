@@ -1,12 +1,37 @@
 # Things to do:
 
+## JS-RubikCube:
+
+### RubikSticker:
+    -JSDOC
+    -Sticker margin
+    -
+
+
+
+
+-------------------------------------------------------------------------------------
 ## JS-Tools:
 
+### Matrix Representation:
+    - JS DOC
+
 ### Matrix:
+    - Simplified syntax
+    - translation matrix
+    - scale matrix
+    - reflexion + jsdoc
+    - translation jsdoc
 
--Seems like the rotation 3D is useless.
--Seems like the rotation Origin = rotation normal.
+    - JS-doc:
+        · optional parameters: @param {string} [somebody] - Somebody's name
 
-· IDEA: TRY TO DO REFLEXIONS IN ORDER TO ROTATE FROM ORIGIN
+    - Rotation matrix
+        -errors
+        -JSDOC
+        X = arr.length
+        Y = arr[0].length
+    
 
-· IDEA: WHAT IF I MAKE A FUNCTION TO MAKE A ROTATION MATRIX THAT HAS THE OLD ROTATION MATRIX. CHECKS A VECTOR (0,0,1) WITH THE OLD ROTATION AND DETECTS THE NEW AXIS REQUIRED??
+### Functions:
+    -Add JSDOC

@@ -29,11 +29,11 @@ function setup() {
   ];
   
   // rubik = new RubikCube(3);
-  a = new RubikPiece();
-  a.setPos(createVector(100, 100, 0));
-  b = new RubikPiece();
+  a = new Edge();
+  a.setPos(createVector(0, 100, 100));
+  b = new Corner();
   b.color = COLORS[3];
-  b.setPos(createVector(100, 100, 0));
+  b.setPos(createVector(100, 100, 100));
 }
 
 function draw() {
