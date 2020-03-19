@@ -163,6 +163,34 @@ class RubikCube{
     }
   }
   
+  move(move){
+    let angleOri = 1;
+    if(/\'/.test(move)){
+      angleOri = -1;
+    }
+
+    switch(true){
+      case /^[uU]p?$/.test(move):
+        
+        break;
+      case /^[dD](own)?$/.test(move):
+        
+        break;
+      case /^[rR](ight)?$/.test(move):
+        
+        break;
+      case /^[lL](eft)?$/.test(move):
+      
+        break;
+      case /^[fF](ront)?$/.test(move):
+      
+        break;
+      case /^[bB](ack)?$/.test(move):
+    
+        break;
+    }
+  }
+
   // m(move){
   //   let copy = [[], [], []];//make a copy;
     

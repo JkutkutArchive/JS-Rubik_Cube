@@ -14,7 +14,7 @@ class RubikSticker{
         rotateY(this.rY);
         translate(0,0, this.width * 0.52);
         
-        plane(this.width * 0.9);
+        plane(this.width * 0.88);
         pop();
     }
     setColor(color){

@@ -27,6 +27,8 @@ README.MD
     -Simp code
     -Del center piece
 
+    apply rotation to slice of pieces.
+
 
 
 
@@ -37,6 +39,8 @@ README.MD
     - JS DOC
 
 ### Matrix:
+
+    -base methods on array_nD
     - Simplified syntax
     - translation matrix
     - scale matrix
@@ -55,3 +59,11 @@ README.MD
 
 ### Functions:
     -Add JSDOC
+
+### array_nD:
+    -JSDOC
+    -finish methods (setSlice, permutation_3D)
+    -getSlice may need to transpose the slice
+    -Copy unfinish
+    -size does not work
+

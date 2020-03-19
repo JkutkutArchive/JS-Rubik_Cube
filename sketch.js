@@ -49,11 +49,27 @@ function setup() {
   // b = new Corner();
   // b.color = COLORS[3];
   // b.setPos(createVector(100, 100, 100));
+
+
+  a = array_nD.make.empty(3,3,3);
+  b = 1;
+  for(let i = 0; i < 3; i++){
+    for(let j = 0; j < 3; j++){
+      for(let k = 0; k < 3; k++){
+        a[i][j][k] = b++;
+      }
+    }
+  }
+  printMatrix_nD(a);
+
+  // array_nD.o.set3DSlice(y, "x", 1, array_nD.o.get3DSlice(y, "x", 0));
+  // array_nD.o.set3DSlice(y, "x", 2, array_nD.o.get3DSlice(y, "x", 0));
+
 }
 
 function draw() {
   background(220);
-  camera(600 * Math.sin(-angle), 600 * Math.cos(angle), -500 * Math.sin(angle) + 100, 0, 0, 0, 0, 0, -1);
+  camera(600 * Math.sin(angle), 600, 600, 0, 0, 0, 0, 0, -1);
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);
   
   // angle = (Math.PI / 4);
