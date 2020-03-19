@@ -36,14 +36,17 @@ class RubikCube{
     // printMatrix_nD(this.pieces);
 
     //  ~~~~~~~~~~~~~~~~~~~~~~~   Corners   ~~~~~~~~~~~~~~~~~~~~~~~
-    for(let i = 0; i < 3; i += 2){
-      for(let j = 0; j < 3; j += 2){ 
-        for(let k = 0; k < 3; k += 2){
-          this.pieces[i][j][k].rotateOrigin("x", Math.PI * 0.5 * (k / 2 + j) * (Math.pow(-1, i/2)));
-          this.pieces[i][j][k].rotateOrigin("z", Math.PI * 0.5 * i);
-          this.pieces[i][j][k].rotateOrigin("x", Math.PI * 0.5 * i / 2);
-        }
-      }
+    let coV = [ //corner vectors
+      [0, 0],
+      [2, 0],
+      [2, 2],
+      [0, 2],
+    ];
+    //front => y = 0
+    for(let i = 0; i < 4; i++){
+      this.pieces[coV[i][0]][0][coV[i][1]].rotateOrigin("y", Math.PI * 0.5 * i);
+      this.pieces[coV[i][0]][2][coV[i][1]].rotateOrigin("z", Math.PI);
+      this.pieces[coV[i][0]][2][coV[i][1]].rotateOrigin("y", Math.PI * 0.5 * (i-1));
     }
 
     //  ~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,7 +96,7 @@ class RubikCube{
         [//Y = 0
           [COLORSDIC.WHITE, COLORSDIC.BLUE, COLORSDIC.ORANGE],//Z = 0
           [COLORSDIC.ORANGE, COLORSDIC.BLUE],//Z = 1
-          [COLORSDIC.BLUE, COLORSDIC.YELLOW, COLORSDIC.ORANGE],//Z = 2
+          [COLORSDIC.ORANGE, COLORSDIC.BLUE, COLORSDIC.YELLOW],//Z = 2
         ],
         [//Y = 1
           [COLORSDIC.WHITE, COLORSDIC.ORANGE],//Z = 0 (EDGE RIGHT TOP = ORANGE TOP)
@@ -101,9 +104,9 @@ class RubikCube{
           [COLORSDIC.ORANGE, COLORSDIC.YELLOW],//Z = 2 (EDGE RIGHT BOTTOM = ORANGE BOTTOM)
         ],
         [//Y = 2
-          [COLORSDIC.YELLOW, COLORSDIC.GREEN, COLORSDIC.ORANGE],//Z = 0
+          [COLORSDIC.ORANGE, COLORSDIC.GREEN, COLORSDIC.WHITE],//Z = 0
           [COLORSDIC.ORANGE, COLORSDIC.GREEN],//Z = 1
-          [COLORSDIC.GREEN, COLORSDIC.WHITE, COLORSDIC.ORANGE],//Z = 2
+          [COLORSDIC.YELLOW, COLORSDIC.GREEN, COLORSDIC.ORANGE],//Z = 2
         ],
       ],
       [//X = 1
@@ -125,7 +128,7 @@ class RubikCube{
       ],
       [//X = 2
         [//Y = 0
-          [COLORSDIC.BLUE, COLORSDIC.WHITE, COLORSDIC.RED],//Z = 0
+          [COLORSDIC.RED, COLORSDIC.BLUE, COLORSDIC.WHITE],//Z = 0
           [COLORSDIC.RED, COLORSDIC.BLUE],//Z = 1
           [COLORSDIC.YELLOW, COLORSDIC.BLUE, COLORSDIC.RED],//Z = 2
         ],
@@ -135,9 +138,9 @@ class RubikCube{
           [COLORSDIC.RED, COLORSDIC.YELLOW],//Z = 2 (EDGE LEFT BOTTOM = RED BOTTOM)
         ],
         [//Y = 2
-          [COLORSDIC.GREEN, COLORSDIC.YELLOW, COLORSDIC.RED],//Z = 0
+          [COLORSDIC.WHITE, COLORSDIC.GREEN, COLORSDIC.RED],//Z = 0
           [COLORSDIC.RED, COLORSDIC.GREEN],//Z = 1
-          [COLORSDIC.WHITE, COLORSDIC.GREEN, COLORSDIC.RED],//Z = 2
+          [COLORSDIC.RED, COLORSDIC.GREEN, COLORSDIC.YELLOW],//Z = 2
         ],
       ]
       
@@ -168,71 +171,46 @@ class RubikCube{
     if(/\'/.test(move)){
       angleOri = -1;
     }
-
+    let axis, h;
     switch(true){
       case /^[uU]p?$/.test(move):
-        
+        axis = "z";
+        h = 0;
         break;
       case /^[dD](own)?$/.test(move):
-        
+        axis = "z";
+        h = 2;
         break;
       case /^[rR](ight)?$/.test(move):
-        
+        axis = "x";
+        h = 0;
         break;
       case /^[lL](eft)?$/.test(move):
-      
+        axis = "x";
+        h = 2;
         break;
       case /^[fF](ront)?$/.test(move):
-      
+        axis = "y";
+        h = 0;
         break;
       case /^[bB](ack)?$/.test(move):
-    
+        axis = "y";
+        h = 2;
         break;
     }
+    //reversed not implemented
+    let movedPieces = array_nD.o.permutation_3D(this.pieces, axis, h);
+    // printMatrix_nD(movedPieces);
+    this.rotatePieces(axis, Math.PI/2 * angleOri, movedPieces);
+
   }
 
-  // m(move){
-  //   let copy = [[], [], []];//make a copy;
-    
-  //   switch(move){
-  //     case "U":
-  //       //same z
-  //       for(let n = 0; n < 3; n++){
-  //         for(let m = 0; m < 3; m++){
-  //           copy[n].push(this.pieces[-(m - 1) + 1][n][2]);//copy
-  //         }
-  //       }
-  //       let w = 0;
-  //       for(let n = 0; n < 3; n++){
-  //         for(let m = 0; m < 3; m++){
-  //           this.pieces[n][m][2] = copy[n][m];//move the pieces in the array
-            
-  //           let p = this.pieces[n][m][2];
-  //           p.moves.push(["U", 0.5]);
-            
-            
-  //           // p.pos.z = cubeW + 0.1 * w++ * cubeW;
-            
-  //         }
-  //       }
-  //       break;
-  //     case "R":
-  //       //same x
-  //       for(let n = 0; n < 3; n++){
-  //         for(let m = 0; m < 3; m++){
-  //           copy[n].push(this.pieces[2][m][-(n - 1) + 1]);
-  //         }
-  //       }
-  //       for(let n = 0; n < 3; n++){
-  //         for(let m = 0; m < 3; m++){
-  //           this.pieces[2][n][m] = copy[n][m];//move the pieces in the array
-            
-  //           let p = this.pieces[2][n][m];
-  //           p.moves.push(["R", 0.5]);
-  //           // p.pos.z += 3 * cubeW;
-  //         }
-  //       }     
-  //       break;
-  //   }
-  // }
+  rotatePieces(axis, angle, slice){
+    for(let i = 0; i < 3; i++){
+      for(let j = 0; j < 3; j++){
+        slice[i][j].w = 107;
+        // slice[i][j].rotateOrigin(axis, angle);
+      }
+    }
+  }
 }
