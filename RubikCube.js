@@ -52,12 +52,13 @@ class RubikCube{
     //  ~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~
     let cen =  [
       [1, 1, 0],
-      [1, 0, 1],
       [1, 2, 1],
       [1, 1, 2],
+      [1, 0, 1],
+      
     ];
     for(let i = 0; i < 4; i++){
-      this.pieces[cen[i][0]][cen[i][1]][cen[i][2]].rotateOrigin("x", Math.PI / 2 * i);
+      this.pieces[cen[i][0]][cen[i][1]][cen[i][2]].rotateOrigin("x", -Math.PI / 2 * i);
     }
     this.pieces[0][1][1].rotateOrigin("y", -Math.PI / 2);
     this.pieces[2][1][1].rotateOrigin("y", Math.PI / 2);
@@ -118,11 +119,11 @@ class RubikCube{
         [//Y = 1
           [COLORSDIC.WHITE],//Z = 0 (CENTER TOP = WHITE)
           [],//Z = 1
-          [COLORSDIC.GREEN],//Z = 2 (CENTER BACK = GREEN)
+          [COLORSDIC.YELLOW],//Z = 2 (CENTER BOTTOM = YELLOW)
         ],
         [//Y = 2
           [COLORSDIC.WHITE, COLORSDIC.GREEN],//Z = 0
-          [COLORSDIC.YELLOW],//Z = 1 (CENTER BOTTOM = YELLOW)
+          [COLORSDIC.GREEN],//Z = 1 (CENTER BACK = GREEN)
           [COLORSDIC.YELLOW, COLORSDIC.GREEN],//Z = 2
         ],
       ],
@@ -180,6 +181,7 @@ class RubikCube{
       case /^[dD](own)?$/.test(move):
         axis = "z";
         h = 2;
+        angleOri *= -1;
         break;
       case /^[rR](ight)?$/.test(move):
         axis = "x";
@@ -188,6 +190,7 @@ class RubikCube{
       case /^[lL](eft)?$/.test(move):
         axis = "x";
         h = 2;
+        angleOri *= -1;
         break;
       case /^[fF](ront)?$/.test(move):
         axis = "y";
