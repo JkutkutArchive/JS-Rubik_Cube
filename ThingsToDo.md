@@ -29,6 +29,8 @@ README.MD
 
     apply rotation to slice of pieces.
 
+    lleft rotation inverted
+
 
 
 
@@ -64,6 +66,4 @@ README.MD
     -JSDOC
     -finish methods (setSlice, permutation_3D)
     -getSlice may need to transpose the slice
-    -Copy unfinish
-    -size does not work
 

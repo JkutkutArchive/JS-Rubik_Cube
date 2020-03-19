@@ -69,7 +69,8 @@ function setup() {
 
 function draw() {
   background(220);
-  camera(600 * Math.sin(angle), 600, 600, 0, 0, 0, 0, 0, -1);
+  // camera(600 * Math.sin(angle), 600 * Math.cos(angle), 600 * Math.cos(angle), 0, 0, 0, 0, 0, -1);
+  camera(-600, -600, 600  * Math.cos(angle), 0, 0, 0, 0, 0, -1);
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);
   
   // angle = (Math.PI / 4);

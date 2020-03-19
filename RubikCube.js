@@ -208,8 +208,8 @@ class RubikCube{
   rotatePieces(axis, angle, slice){
     for(let i = 0; i < 3; i++){
       for(let j = 0; j < 3; j++){
-        slice[i][j].w = 107;
-        // slice[i][j].rotateOrigin(axis, angle);
+        // slice[i][j].w = 107;
+        slice[i][j].rotateOrigin(axis, angle);
       }
     }
   }
