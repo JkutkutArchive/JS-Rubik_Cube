@@ -14,7 +14,7 @@ class RubikPiece{
     this.matrix = matrix.make.identity(4); //result of posMatrix * rMatrix
 
     this.color = (c)? c : COLORSDIC.NULL; //P5color of the piece
-    this.w = (w)? w : cubeW; 
+    this.w = (w)? w : RubikCube.cubeW; 
   }
 
   /**

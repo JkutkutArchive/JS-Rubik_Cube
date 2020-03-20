@@ -1,11 +1,10 @@
 class RubikCube{
   constructor(dim, w, c){
-    
     // this.pos = (pos)? pos : createVector(0, 0, 0);
     this.dim = (dim)? dim : 3;
 
     this.color = (c)? c : COLORSDIC.CUBECOLOR;
-    this.w = (w)? w : cubeW;
+    this.w = (w)? w : this.cubeW;
     
     this.pieces = [];
     
@@ -250,4 +249,7 @@ class RubikCube{
       }
     }
   }
+
+
+  static get cubeW(){ return 100;};
 }

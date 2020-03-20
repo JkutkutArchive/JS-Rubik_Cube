@@ -13,7 +13,7 @@ class RubikSticker{
     constructor(rX, rY, c, w){
         this.rX = rX * Math.PI / 2;
         this.rY = rY * Math.PI / 2;
-        this.width = (w)? w : cubeW;
+        this.width = (w)? w : RubikCube.cubeW;
         this.c = (c)? c : COLORSDIC.NULL;
     }
     /**
