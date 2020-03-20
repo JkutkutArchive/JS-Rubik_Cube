@@ -1,14 +1,89 @@
+/**
+ * @class This class generates the base to generate all pieces of the rubik's cube
+ */
 class RubikPiece{
+  /**
+   * Initialize and store all properties
+   * @param {P5Color} [c=COLORSDIC.NULL] - Color of the piece (P5Color) 
+   * @param {number} [w=cubeW] - Size of the piece
+   */
   constructor(c, w){
-    this.stickers = [];
-    this.posMatrix = matrix.make.identity(4);//position matrix.
-    this.rMatrix = matrix.make.identity(4);//rotation around origin matrix.
-    this.matrix = matrix.make.identity(4);
+    this.stickers = []; //array to keep track of the stickers
+    this.posMatrix = matrix.make.identity(4); //position matrix.
+    this.rMatrix = matrix.make.identity(4); //rotation around origin matrix.
+    this.matrix = matrix.make.identity(4); //result of posMatrix * rMatrix
 
-    this.color = (c)? c : COLORS[COLORS.length - 1];
-    this.w = (w)? w : cubeW;
+    this.color = (c)? c : COLORSDIC.NULL; //P5color of the piece
+    this.w = (w)? w : cubeW; 
   }
 
+  /**
+   * Shows on screen the piece with all of the stickers asociated to this piece
+   */
+  show(){};
+  /**
+   * Changes the color of the stickers.
+   * @param {P5color[]} colorArray - array of colors to the stickers.
+   * @throws error if not correct lenght of array (number of stickers). 
+   */
+  changeStickers(colorArray){};
+
+
+  //Matrix manipulation
+  /**
+   * Rotates the piece from the origin axis.
+   * @param {string} axis - The axis of rotation. It follows the vector.re expressions.
+   * @param {number} angle - The radians of rotation.
+   */
+  rotateOrigin(axis, angle){};
+  /**
+   * Moves the piece relative to the current position (the new vector is added).
+   * 
+   * Input: p5 vector or coordinates
+   * @param {P5vector|number} posiOrX - P5Vector or diccionary ({x: 100, y: 0, z: 0}) with the coord.
+   * @param {number} [y] - y coord.
+   * @param {number} [z] - z coord.
+   */
+  move(posiOrX, y, z){};
+  /**
+   * Each time the position or rotation matrix (this.posMatrix or this.rMatrix) is changed, this method should be called to commit the change to the piece.
+   */
+  updateMatrix(){};
+  /**
+   * Rotates the piece by it's own axis.
+   * @deprecated
+   * @param {string} axis - The axis of rotation. It follows the vector.re expressions.
+   * @param {number} angle - The radians of rotation.
+   */
+  rotatePiece(axis, angle){};
+
+  //Setters and getters:
+  /**
+   * Set the position of the piece.
+   * 
+   * Input: p5 vector or coordinates
+   * @param {P5vector|number} posiOrX - P5Vector or diccionary ({x: 100, y: 0, z: 0}) with the coord.
+   * @param {number} [y] - y coord.
+   * @param {number} [z] - z coord.
+   */
+  setPos(posiOrX, y, z){};
+  
+  /**
+   * Returns the current position of the piece relative to the origin of coordinates.
+   */
+  getPos(){};
+}
+
+class Center extends RubikPiece{
+  /**
+   * This constructor adds one sticker to the top of the cube
+   * @extends RubikPiece
+   */
+  constructor(c, w){
+    super(c, w);
+    this.setPos(createVector(0, 0, this.w));
+    this.stickers.push(new RubikSticker(0, 0, COLORSDIC.NULL, this.w));
+  }
   show(){
     fill(this.color);
     push();
@@ -21,48 +96,6 @@ class RubikPiece{
       this.stickers[i].show();
     }
     pop();
-  }
-
-  rotatePiece(axis, angle){
-    let m = matrix.make.rotationOrigin(axis, angle);
-    this.rMatrix = matrix.o.mult(m,this.rMatrix);
-    this.updateMatrix();
-  }
-  rotateOrigin(axis, angle){
-    let m = matrix.make.rotationOrigin(axis, angle, this.rMatrix);
-    this.rMatrix = matrix.o.mult(m,this.rMatrix);
-    this.updateMatrix();
-  }
-  move(posiOrX, y, z){
-    let rM = matrix.make.translation(posiOrX, y, z);
-    this.posMatrix = matrix.o.mult(rM,this.posMatrix);
-    this.updateMatrix();
-  }
-  setPos(posi){
-    this.posMatrix = matrix.make.translation(posi);
-    this.updateMatrix();
-  }
-  updateMatrix(){
-    this.matrix = matrix.o.mult(this.posMatrix, this.rMatrix);
-  }
-  getPos(){
-    let v = [0, 0, 0];
-    let vectors = matrix.make.identity(4);
-    let m = matrix.o.mult(this.posMatrix, this.rMatrix);
-    for(let i = 0; i < 3; i++){
-      v[i] = matrix.o.mult(m, matrix.o.transpose([vectors[i]]))[3][0];
-    }
-    // return createVector(v[0], v[1], v[2]);
-    return v;
-  }
-  changeStickers(colorArray){}
-}
-
-class Center extends RubikPiece{
-  constructor(c, w){
-    super(c, w);
-    this.setPos(createVector(0, 0, this.w));
-    this.stickers.push(new RubikSticker(0, 0, COLORSDIC.NULL, this.w));
   }
   changeStickers(colorArray){
     try{
@@ -77,9 +110,51 @@ class Center extends RubikPiece{
       console.log(error);
     }
   }
+  
+  //Matrix operations:
+  rotateOrigin(axis, angle){
+    let m = matrix.make.rotationOrigin(axis, angle, this.rMatrix);
+    this.rMatrix = matrix.o.mult(m,this.rMatrix);
+    this.updateMatrix();
+  }
+  move(posiOrX, y, z){
+    let tM = matrix.make.translation(posiOrX, y, z);
+    this.posMatrix = matrix.o.mult(tM,this.posMatrix);
+    this.updateMatrix();
+  }
+  updateMatrix(){
+    this.matrix = matrix.o.mult(this.posMatrix, this.rMatrix);
+  }
+  rotatePiece(axis, angle){
+    let m = matrix.make.rotationOrigin(axis, angle);
+    this.rMatrix = matrix.o.mult(m,this.rMatrix);
+    this.updateMatrix();
+  }
+  
+
+  //Setters and getters:
+  setPos(posi, y, z){
+    this.posMatrix = matrix.make.translation(posi, y, z);
+    this.updateMatrix();
+  }
+  getPos(){
+    let v = [0, 0, 0];
+    let vectors = matrix.make.identity(4);
+    let m = matrix.o.mult(this.posMatrix, this.rMatrix);
+    for(let i = 0; i < 3; i++){
+      v[i] = matrix.o.mult(m, matrix.o.transpose([vectors[i]]))[3][0];
+    }
+    // return createVector(v[0], v[1], v[2]);
+    return v;
+  }
 }
 
+
 class Edge extends Center{
+  /**
+   * This constructor adds one sticker to the top of the cube
+   * @extends Center
+   */
   constructor(c, w){
     super(c, w);
     this.setPos(createVector(0, this.w, this.w));
