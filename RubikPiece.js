@@ -67,11 +67,11 @@ class RubikPiece{
    * @param {number} [z] - z coord.
    */
   setPos(posiOrX, y, z){};
-  
   /**
    * Returns the current position of the piece relative to the origin of coordinates.
+   * @param {boolean} P5Vect - whenever or not the output should be a P5Vector or array
    */
-  getPos(){};
+  getPos(P5Vect){};
 }
 
 class RubikPieceCenter extends RubikPiece{
@@ -131,21 +131,19 @@ class RubikPieceCenter extends RubikPiece{
     this.updateMatrix();
   }
   
-
   //Setters and getters:
   setPos(posi, y, z){
     this.posMatrix = matrix.make.translation(posi, y, z);
     this.updateMatrix();
   }
-  getPos(){
+  getPos(P5Vect){
     let v = [0, 0, 0];
     let vectors = matrix.make.identity(4);
     let m = matrix.o.mult(this.posMatrix, this.rMatrix);
     for(let i = 0; i < 3; i++){
       v[i] = matrix.o.mult(m, matrix.o.transpose([vectors[i]]))[3][0];
     }
-    // return createVector(v[0], v[1], v[2]);
-    return v;
+    return (P5Vect)? v : createVector(v[0], v[1], v[2]);
   }
 }
 
