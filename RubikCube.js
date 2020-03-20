@@ -168,44 +168,78 @@ class RubikCube{
   }
   
   move(move){
-    let angleOri = 1;
-    if(/\'/.test(move)){
-      angleOri = -1;
-    }
-    let axis, h;
-    switch(true){
-      case /^[uU]p?$/.test(move):
-        axis = "z";
-        h = 0;
-        break;
-      case /^[dD](own)?$/.test(move):
-        axis = "z";
-        h = 2;
+    try{
+      let angleOri = 1, inverted = false;
+      let axis, h;
+      switch(true){
+        case /^[uU]p?/.test(move):
+          axis = "z";
+          h = 0;
+          inverted = true;
+          angleOri *= -1;
+          if(/\'/.test(move)){
+            inverted = false;
+            angleOri *= -1;
+            move = "u";
+          }
+          break;
+        case /^[dD](own)?/.test(move):
+          axis = "z";
+          h = 2;
+          break;
+        case /^[rR](ight)?/.test(move):
+          axis = "x";
+          h = 0;
+          angleOri *= -1;
+          inverted = true;
+          if(/\'/.test(move)){
+            inverted = false;
+            angleOri *= -1;
+            move = "r";
+          }
+          break;
+        case /^[lL](eft)?/.test(move):
+          axis = "x";
+          h = 2;
+          break;
+        case /^[fF](ront)?/.test(move):
+          axis = "y";
+          h = 0;
+          angleOri = -1;
+          break;
+        case /^[bB](ack)?/.test(move):
+          axis = "y";
+          h = 2;
+          inverted = true;
+          if(/\'/.test(move)){
+            console.log("inverted");
+            inverted = false;
+            angleOri = -1;
+            move = "b";
+          }
+          break;
+        case true:
+          throw "invalid move";
+      }
+      if(/\'/.test(move)){
+        inverted = true;
         angleOri *= -1;
-        break;
-      case /^[rR](ight)?$/.test(move):
-        axis = "x";
-        h = 0;
-        break;
-      case /^[lL](eft)?$/.test(move):
-        axis = "x";
-        h = 2;
-        angleOri *= -1;
-        break;
-      case /^[fF](ront)?$/.test(move):
-        axis = "y";
-        h = 0;
-        break;
-      case /^[bB](ack)?$/.test(move):
-        axis = "y";
-        h = 2;
-        break;
+      }
+      if(inverted){
+        // console.log("inverted at " + axis);
+        array_nD.o.permutation_3D(this.pieces, axis, h);
+        array_nD.o.permutation_3D(this.pieces, axis, h);
+      }
+      
+      let movedPieces = array_nD.o.permutation_3D(this.pieces, axis, h);
+      
+      this.rotatePieces(axis, Math.PI / 2 * angleOri, movedPieces);
+      
+      // printMatrix_nD(movedPieces);
     }
-    //reversed not implemented
-    let movedPieces = array_nD.o.permutation_3D(this.pieces, axis, h);
-    // printMatrix_nD(movedPieces);
-    this.rotatePieces(axis, Math.PI/2 * angleOri, movedPieces);
-
+    catch(error){
+      console.log(error);
+    }
   }
 
   rotatePieces(axis, angle, slice){
