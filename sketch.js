@@ -1,21 +1,21 @@
 // var easycam;
-
+var rubik;
 var cubeW = 100;
 var angle = 0;
 var COLORS = [];
 var COLORSDIC = {};
-var moves = [];
-var delayMoves = 60;
-var t = 0;
 
-var rubik;
+var moves = [], acc = [];
+var delayMoves = 10;
+var t = 0, t2 = 0, xAcc = 0, yAcc = 0;
+var debugAxis, debugH, debugON;
 
 var a,b,c,d,e;//debug
 
+
 function setup() {
   createCanvas(1000, 1000, WEBGL);
-  // console.log("hola");
-  frameRate(30);
+  frameRate(60);
   COLORS = [
     //x
     color(255,0,0),//red
@@ -44,33 +44,31 @@ function setup() {
   };
   
   rubik = new RubikCube(3);
-  // a = new Edge();
-  // a.setPos(createVector(0, 100, 100));
-  // b = new Corner();
-  // b.color = COLORS[3];
-  // b.setPos(createVector(100, 100, 100));
 
+  // for(let i = 0; i < 4; i++){
+  //   moves.push("u", "u", "r", "r", "l", "l");
+  // }
+  /**
+   * b
+   * done: r, u, l, f, d
+  */
+  debugON = false;
+  // moves = ["b'"];
+  // moves = ["b'","b","b","b'"];
+  moves = ["u", "r", "r", "f", "b", "r", "b", "b", "r", "u", "u", "l", "b", "b", "r", "u'", "d'", "r", "r", "f", "r'", "l", "b", "b", "u", "u", "f", "f"];
+  // moves = ["b", "d", "f'", "b'", "d", "l", "l", "u", "l", "u'", "b", "d'", "r", "b", "r", "d'", "r", "l'", "f", "u", "u", "d"];
+  debugAxis = "y";
+  debugH = 2;
+  acc = array_nD.o.get3DSlice(rubik.pieces, debugAxis, debugH);
 
-  a = array_nD.make.empty(3,3,3);
-  b = 1;
-  for(let i = 0; i < 3; i++){
-    for(let j = 0; j < 3; j++){
-      for(let k = 0; k < 3; k++){
-        a[i][j][k] = b++;
-      }
-    }
-  }
-  printMatrix_nD(a);
-
-  // array_nD.o.set3DSlice(y, "x", 1, array_nD.o.get3DSlice(y, "x", 0));
-  // array_nD.o.set3DSlice(y, "x", 2, array_nD.o.get3DSlice(y, "x", 0));
-
+  console.log();
 }
 
 function draw() {
   background(220);
   // camera(600 * Math.sin(angle), 600 * Math.cos(angle), 600 * Math.cos(angle), 0, 0, 0, 0, 0, -1);
-  camera(-600, -600, 600  * Math.cos(angle), 0, 0, 0, 0, 0, -1);
+  camera(600, -600, 600  * Math.cos(angle), 0, 0, 0, 0, 0, -1);
+  // camera(600, 600, -600, 0, 0, 0, 0, 0, -1);
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);
   
   // angle = (Math.PI / 4);
@@ -78,27 +76,54 @@ function draw() {
   // w = Math.PI / 720
   angle = (angle - w);
 
-
-  push();
-  stroke(0);
-  strokeWeight(3);
-  fill(100, 100, 100);
-  box(cubeW);
-  pop();
-
   
-  // a.show();
-  // b.show();
-
   
+  
+  if(debugON && t2++ > delayMoves && acc.length > 0){
+    t2 = 0;
+    // printArray_nD(acc)
+    if(yAcc == 3){
+      xAcc = 0;
+      yAcc = 0;
+      for(let i = 0; i < 3; i++){
+        for(let j = 0; j < 3; j++){
+          acc[i][j].w = 100;
+        }
+      }
+      t++;
+    }
+    else if(xAcc == 3){
+      xAcc = 0;
+      yAcc++;
+    }
+    else{
+      acc[xAcc++][yAcc].w = 107;
+    }
+  }
+
+  if(!debugON && t++ > delayMoves && moves.length > 0){
+    t = 0;
+    rubik.move(moves[0]);
+    console.log((28 - moves.length) + " -> " + moves[0]);
+    moves.splice(0,1);
+
+    // if(28 - moves.length == 20){
+    //   console.log(moves[0]);
+    //   debugON = true;
+    //   debugAxis = "z";
+    //   debugH = 2;
+    //   t = -194094983274897239842;
+    // }
+    acc = array_nD.o.get3DSlice(rubik.pieces, debugAxis, debugH);
+  }
+  if(debugON && t > 0 && moves.length > 0){
+    t = 0;
+    rubik.move(moves[0]);
+    moves.splice(0,1);
+    // moves = [];
+    acc = array_nD.o.get3DSlice(rubik.pieces, debugAxis, debugH);
+  }
+
   rubik.show();
-  
-  // if(t++ > delayMoves && moves.length > 0){
-  //   t = 0;
-  //   rubik.m(moves[0]);
-  //   // moves.push(moves[0]);
-  //   moves.splice(0,1);
-  // }
-
   // noLoop();
 }

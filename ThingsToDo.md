@@ -29,7 +29,7 @@ README.MD
 
     apply rotation to slice of pieces.
 
-    lleft rotation inverted
+    -Exception at moves
 
 
 
