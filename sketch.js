@@ -13,8 +13,8 @@ var a,b,c,d,e;//debug
 
 
 function setup() {
-  createCanvas(1000, 1000, WEBGL);
-  // createCanvas(1920, 1080, WEBGL);
+  // createCanvas(1000, 1000, WEBGL);
+  createCanvas(1920, 1080, WEBGL);
   frameRate(60);
   COLORSDIC = {
     //x
