@@ -2,26 +2,26 @@
 
 README.MD
 
+shape cube (with stickers?)
 
 
 
 ## JS-RubikCube:
 
 ### GENERAL
-    -Use colordic instead of arrray
+    -Use colordic instead of array
+    -make color dicc to not depend on p5 and have colors on cube
 
 
 ### RubikSticker:
-    -JSDOC
-    -Sticker margin
-
+    
 ### RubikPiece:
-    -Get pos metod
-    -JSDOC
     -Simp getPos
 
 ### RubikCube:
-    -Colors
+
+    -Colors as var (rubikscube. proto. jfkaljfa).
+    -cubeW var (rubikscube. proto. jfkaljfa).
     -Cubes in order
     -JSDOC
     -Simp code
@@ -30,6 +30,8 @@ README.MD
     apply rotation to slice of pieces.
 
     -Exception at moves
+
+    -Set and get pos
 
 
 

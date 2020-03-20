@@ -1,10 +1,9 @@
 // var easycam;
 var rubik;
 var cubeW = 100;
-var angle = 0;
-var COLORS = [];
 var COLORSDIC = {};
 
+var angle = 0;
 var moves = [], acc = [];
 var delayMoves = 10;
 var t = 0, t2 = 0, xAcc = 0, yAcc = 0;
@@ -14,20 +13,9 @@ var a,b,c,d,e;//debug
 
 
 function setup() {
-  createCanvas(1920, 1080, WEBGL);
+  createCanvas(1000, 1000, WEBGL);
+  // createCanvas(1920, 1080, WEBGL);
   frameRate(60);
-  COLORS = [
-    //x
-    color(255,0,0),//red
-    color(245, 135, 66),//orange
-    //y
-    color(0, 144, 247),//blue
-    color(0, 255, 0),//green
-    //z
-    color(255),//white
-    color(247, 239, 0), //yellow
-    color(50)//cubeColor
-  ];
   COLORSDIC = {
     //x
     RED: color(255,0,0),//red
@@ -55,6 +43,7 @@ function setup() {
   debugON = false;
   // moves = ["b'"];
   // moves = ["b'","b","b","b'"];
+  // moves = ["r", "r", "l", "l", "f", "f", "b", "b", "u", "u", "d", "d"];
   // moves = ["u", "r", "r", "f", "b", "r", "b", "b", "r", "u", "u", "l", "b", "b", "r", "u'", "d'", "r", "r", "f", "r'", "l", "b", "b", "u", "u", "f", "f"];
   moves = ["b", "d", "f'", "b'", "d", "l", "l", "u", "l", "u'", "b", "d'", "r", "b", "r", "d'", "r", "l'", "f", "u", "u", "d"];
   debugAxis = "y";
@@ -66,14 +55,14 @@ function setup() {
 
 function draw() {
   background(220);
-  camera(600 * Math.sin(angle), 600 * Math.cos(angle), 600 * Math.cos(angle), 0, 0, 0, 0, 0, -1);
+  camera(600 * Math.sin(angle), -600 * Math.cos(angle), 600 * Math.cos(angle/2), 0, 0, 0, 0, 0, -1);
   // camera(600, -600, 600  * Math.cos(angle), 0, 0, 0, 0, 0, -1);
   // camera(600, 600, -600, 0, 0, 0, 0, 0, -1);
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);
   
   // angle = (Math.PI / 4);
-  // w = Math.PI / 180
-  w = Math.PI / 720
+  w = Math.PI / 180
+  // w = Math.PI / 720
   angle = (angle - w);
 
   
