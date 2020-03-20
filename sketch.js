@@ -14,7 +14,7 @@ var a,b,c,d,e;//debug
 
 
 function setup() {
-  createCanvas(1000, 1000, WEBGL);
+  createCanvas(1920, 1080, WEBGL);
   frameRate(60);
   COLORS = [
     //x
@@ -55,8 +55,8 @@ function setup() {
   debugON = false;
   // moves = ["b'"];
   // moves = ["b'","b","b","b'"];
-  moves = ["u", "r", "r", "f", "b", "r", "b", "b", "r", "u", "u", "l", "b", "b", "r", "u'", "d'", "r", "r", "f", "r'", "l", "b", "b", "u", "u", "f", "f"];
-  // moves = ["b", "d", "f'", "b'", "d", "l", "l", "u", "l", "u'", "b", "d'", "r", "b", "r", "d'", "r", "l'", "f", "u", "u", "d"];
+  // moves = ["u", "r", "r", "f", "b", "r", "b", "b", "r", "u", "u", "l", "b", "b", "r", "u'", "d'", "r", "r", "f", "r'", "l", "b", "b", "u", "u", "f", "f"];
+  moves = ["b", "d", "f'", "b'", "d", "l", "l", "u", "l", "u'", "b", "d'", "r", "b", "r", "d'", "r", "l'", "f", "u", "u", "d"];
   debugAxis = "y";
   debugH = 2;
   acc = array_nD.o.get3DSlice(rubik.pieces, debugAxis, debugH);
@@ -66,14 +66,14 @@ function setup() {
 
 function draw() {
   background(220);
-  // camera(600 * Math.sin(angle), 600 * Math.cos(angle), 600 * Math.cos(angle), 0, 0, 0, 0, 0, -1);
-  camera(600, -600, 600  * Math.cos(angle), 0, 0, 0, 0, 0, -1);
+  camera(600 * Math.sin(angle), 600 * Math.cos(angle), 600 * Math.cos(angle), 0, 0, 0, 0, 0, -1);
+  // camera(600, -600, 600  * Math.cos(angle), 0, 0, 0, 0, 0, -1);
   // camera(600, 600, -600, 0, 0, 0, 0, 0, -1);
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);
   
   // angle = (Math.PI / 4);
-  w = Math.PI / 180
-  // w = Math.PI / 720
+  // w = Math.PI / 180
+  w = Math.PI / 720
   angle = (angle - w);
 
   
