@@ -74,15 +74,15 @@ class RubikPiece{
   getPos(){};
 }
 
-class Center extends RubikPiece{
+class RubikPieceCenter extends RubikPiece{
   /**
    * This constructor adds one sticker to the top of the cube
    * @extends RubikPiece
    */
   constructor(c, w){
     super(c, w);
-    this.setPos(createVector(0, 0, this.w));
-    this.stickers.push(new RubikSticker(0, 0, COLORSDIC.NULL, this.w));
+    this.setPos(createVector(0, 0, this.w)); //set the position of the center in a correct spot
+    this.stickers.push(new RubikSticker(0, 0, COLORSDIC.NULL, this.w)); //add the sticker
   }
   show(){
     fill(this.color);
@@ -150,22 +150,26 @@ class Center extends RubikPiece{
 }
 
 
-class Edge extends Center{
+class RubikPieceEdge extends RubikPieceCenter{
   /**
-   * This constructor adds one sticker to the top of the cube
-   * @extends Center
+   * This constructor adds one sticker to side
+   * @extends RubikPieceCenter
    */
   constructor(c, w){
     super(c, w);
-    this.setPos(createVector(0, this.w, this.w));
-    this.stickers.push(new RubikSticker(-1, 0, COLORSDIC.NULL, this.w));
+    this.setPos(createVector(0, this.w, this.w)); //set the position of the center in a correct spot
+    this.stickers.push(new RubikSticker(-1, 0, COLORSDIC.NULL, this.w)); //add the sticker
   }
 }
 
-class Corner extends Edge{
+class RubikPieceCorner extends RubikPieceEdge{
+  /**
+   * This constructor adds one sticker to the other side
+   * @extends RubikPieceEdge
+   */
   constructor(c, w){
     super(c, w);
-    this.setPos(createVector(this.w, this.w, this.w))
-    this.stickers.push(new RubikSticker(0, 1, COLORSDIC.NULL, this.w));
+    this.setPos(createVector(this.w, this.w, this.w)); //set the position of the center in a correct spot
+    this.stickers.push(new RubikSticker(0, 1, COLORSDIC.NULL, this.w)); //add the sticker
   }
 }
