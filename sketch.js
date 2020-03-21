@@ -1,6 +1,5 @@
 // var easycam;
 var rubik;
-var cubeW = 100;
 var COLORSDIC = {};
 
 var angle = 0;
@@ -45,7 +44,7 @@ function setup() {
   // moves = ["b'","b","b","b'"];
   // moves = ["r", "r", "l", "l", "f", "f", "b", "b", "u", "u", "d", "d"];
   // moves = ["u", "r", "r", "f", "b", "r", "b", "b", "r", "u", "u", "l", "b", "b", "r", "u'", "d'", "r", "r", "f", "r'", "l", "b", "b", "u", "u", "f", "f"];
-  moves = ["b", "d", "f'", "b'", "d", "l", "l", "u", "l", "u'", "b", "d'", "r", "b", "r", "d'", "r", "l'", "f", "u", "u", "d"];
+  // moves = ["b", "d", "f'", "b'", "d", "l", "l", "u", "l", "u'", "b", "d'", "r", "b", "r", "d'", "r", "l'", "f", "u", "u", "d"];
   debugAxis = "y";
   debugH = 2;
   acc = array_nD.o.get3DSlice(rubik.pieces, debugAxis, debugH);
@@ -115,4 +114,11 @@ function draw() {
 
   rubik.show();
   // noLoop();
+}
+
+function keyPressed() {
+  console.log(keyCode);
+  if(keyCodes[keyCode] !== undefined){
+    rubik.move(keyCodes[keyCode]);
+  }
 }

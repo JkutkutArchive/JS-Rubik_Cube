@@ -2,16 +2,13 @@
 
 README.MD
 
-shape cube (with stickers?)
-
-
 
 ## JS-RubikCube:
 
 ### GENERAL
     -Use colordic instead of array
     -make color dicc to not depend on p5 and have colors on cube
-
+    -smooth rotations
 
 ### RubikSticker:
     
@@ -20,19 +17,16 @@ shape cube (with stickers?)
 
 ### RubikCube:
 
-    -Colors as var (rubikscube. proto. jfkaljfa).
-    -cubeW var (rubikscube. proto. jfkaljfa).
+    -Colors as var (rubikscube. proto. jfkaljfa)--> upsi
+    -Set and get pos
+
     -Cubes in order
     -JSDOC
     -Simp code
-    -Del center piece
 
-    apply rotation to slice of pieces.
-
-    -Exception at moves
-
-    -Set and get pos
-
+    shape cube (with stickers?)
+    2x2x2 and 4x4x4
+    sticker-less
 
 
 
@@ -44,28 +38,7 @@ shape cube (with stickers?)
 
 ### Matrix:
 
-    -base methods on array_nD
-    - Simplified syntax
-    - translation matrix
-    - scale matrix
-    - reflexion + jsdoc
-    - translation jsdoc
-
-    - JS-doc:
-        · optional parameters: @param {string} [somebody] - Somebody's name
-
-    - Rotation matrix
-        -errors
-        -JSDOC
-        X = arr.length
-        Y = arr[0].length
-    
-
 ### Functions:
-    -Add JSDOC
 
 ### array_nD:
-    -JSDOC
-    -finish methods (setSlice, permutation_3D)
-    -getSlice may need to transpose the slice
 

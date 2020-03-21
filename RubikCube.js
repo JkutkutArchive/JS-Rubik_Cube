@@ -1,10 +1,11 @@
 class RubikCube{
   constructor(dim, w, c){
     // this.pos = (pos)? pos : createVector(0, 0, 0);
-    this.dim = (dim)? dim : 3;
+    // this.dim = (dim)? dim : 3;
 
     this.color = (c)? c : COLORSDIC.CUBECOLOR;
     this.w = (w)? w : this.cubeW;
+    console.log(this.w)
     
     this.pieces = [];
     
@@ -14,20 +15,20 @@ class RubikCube{
       for(let j = 0; j < 3; j++){
         this.pieces[i].push(matrix.make.empty(1,3));
         if(i % 2 == 0 && j % 2 == 0){
-          this.pieces[i][j][0] = new RubikPieceCorner(this.color, this.width);        
-          this.pieces[i][j][1] = new RubikPieceEdge(this.color, this.width);
-          this.pieces[i][j][2] = new RubikPieceCorner(this.color, this.width);  
+          this.pieces[i][j][0] = new RubikPieceCorner(this.color, this.w);        
+          this.pieces[i][j][1] = new RubikPieceEdge(this.color, this.w);
+          this.pieces[i][j][2] = new RubikPieceCorner(this.color, this.w);  
         }
         else{
           if(i == 1 && j == 1){
-            this.pieces[i][j][0] = new RubikPieceCenter(this.color, this.width);
-            this.pieces[i][j][1] = new RubikPiece(this.color, this.width);
-            this.pieces[i][j][2] = new RubikPieceCenter(this.color, this.width);
+            this.pieces[i][j][0] = new RubikPieceCenter(this.color, this.w);
+            this.pieces[i][j][1] = new RubikPiece(this.color, this.w);
+            this.pieces[i][j][2] = new RubikPieceCenter(this.color, this.w);
           }
           else{
-            this.pieces[i][j][0] = new RubikPieceEdge(this.color, this.width);        
-            this.pieces[i][j][1] = new RubikPieceCenter(this.color, this.width);
-            this.pieces[i][j][2] = new RubikPieceEdge(this.color, this.width);        
+            this.pieces[i][j][0] = new RubikPieceEdge(this.color, this.w);        
+            this.pieces[i][j][1] = new RubikPieceCenter(this.color, this.w);
+            this.pieces[i][j][2] = new RubikPieceEdge(this.color, this.w);        
           }
         }
       }
@@ -231,7 +232,6 @@ class RubikCube{
       }
       
       let movedPieces = array_nD.o.permutation_3D(this.pieces, axis, h);
-      
       this.rotatePieces(axis, Math.PI / 2 * angleOri, movedPieces);
       
       // printMatrix_nD(movedPieces);
@@ -241,6 +241,7 @@ class RubikCube{
     }
   }
 
+
   rotatePieces(axis, angle, slice){
     for(let i = 0; i < 3; i++){
       for(let j = 0; j < 3; j++){
@@ -249,7 +250,6 @@ class RubikCube{
       }
     }
   }
-
 
   static get cubeW(){ return 100;};
 }
