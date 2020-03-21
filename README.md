@@ -6,8 +6,8 @@ This project uses a repository named [JS-tools](https://github.com/Jkutkut/JS-to
 In order for the HTML file to use this library, follow this format:
 
     .
-    ├── JS-Rubik_Cube
-    │   ├── index.html
+    ├── *JS-Rubik_Cube*
+    │   ├── *index.html*
     │   ├── libraries_and_doc
     │   │   ├── p5.dom.min.js
     │   │   ├── p5.js
@@ -23,7 +23,7 @@ In order for the HTML file to use this library, follow this format:
     │   ├── sketch.js
     │   ├── style.css
     │   └── ThingsToDo.md
-    └── JS-tools
+    └── *JS-tools*
         ├── functions.js
         ├── matrix
         │   ├── array_nD.js
