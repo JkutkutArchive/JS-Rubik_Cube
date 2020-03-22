@@ -6,7 +6,6 @@ README.MD
 ## JS-RubikCube:
 
 ### GENERAL
-    -Use colordic instead of array
     -make color dicc to not depend on p5 and have colors on cube
     -smooth rotations
 
@@ -34,11 +33,12 @@ README.MD
 ## JS-Tools:
 
 ### Matrix Representation:
-    - JS DOC
+
 
 ### Matrix:
 
 ### Functions:
 
 ### array_nD:
-
+    - JS DOC
+    - Fix logic to simplify RubikCube sintax

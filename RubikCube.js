@@ -4,7 +4,7 @@ class RubikCube{
     // this.dim = (dim)? dim : 3;
 
     this.color = (c)? c : COLORSDIC.CUBECOLOR;
-    this.w = (w)? w : this.cubeW;
+    this.w = (w)? w : RubikCube.cubeW;
     console.log(this.w)
     
     this.pieces = [];
@@ -167,7 +167,7 @@ class RubikCube{
     }
   }
   
-  move(move){
+  move(move, smoothMove){
     try{
       let angleOri = 1, inverted = false;
       let axis, h;
