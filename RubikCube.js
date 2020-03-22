@@ -1,11 +1,10 @@
 class RubikCube{
   constructor(dim, w, c){
     // this.pos = (pos)? pos : createVector(0, 0, 0);
-    // this.dim = (dim)? dim : 3;
+    this.dim = (dim)? dim : 3;
 
     this.color = (c)? c : COLORSDIC.CUBECOLOR;
     this.w = (w)? w : RubikCube.cubeW;
-    console.log(this.w)
     
     this.pieces = [];
     
@@ -241,6 +240,58 @@ class RubikCube{
     }
   }
 
+  moveV2(move){
+    let axis, h;
+    switch(true){
+      case /^[uU]p?/.test(move):
+        axis = "z";
+        h = 0;
+        break;
+      case /^[dD](own)?/.test(move):
+        axis = "z";
+        h = 2;
+        break;
+      case /^[rR](ight)?/.test(move):
+        axis = "x";
+        h = 0;
+        break;
+      case /^[lL](eft)?/.test(move):
+        axis = "x";
+        h = 2;
+        if(/'/.test(move)){
+          move = "f";
+        }
+        else{
+          move = "f'"
+        }
+        break;
+      case /^[fF](ront)?/.test(move):
+        axis = "y";
+        h = 0;
+        break;
+      case /^[bB](ack)?/.test(move):
+        break;
+    }
+    this.makeMove(axis, h, /'/.test(move));
+  }
+
+  makeMove(axis, h, inverse){
+    let angleOri = 1;
+    inverse = (inverse)? inverse : false;
+    let highH = h + 1 > this.dim / 2; //if on the second half of the cube
+
+    if((inverse || highH) && !(inverse && highH)){ //XOR -> if the rotation is reversed
+      console.log("Reversed move");
+      array_nD.o.permutation_3DV2(this.pieces, axis, h);
+      array_nD.o.permutation_3DV2(this.pieces, axis, h);
+      angleOri = -1;
+    }
+
+    console.log("moved the " + axis + " axis with h = " + h + " and reverse = " + (angleOri == -1));
+
+    let movedPieces = array_nD.o.permutation_3DV2(this.pieces, axis, h);
+    this.rotatePieces(axis, -Math.PI / 2 * angleOri, movedPieces);
+  }
 
   rotatePieces(axis, angle, slice){
     for(let i = 0; i < 3; i++){

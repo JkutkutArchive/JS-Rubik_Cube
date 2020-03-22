@@ -2,17 +2,16 @@
 
 README.MD
 
-
 ## JS-RubikCube:
 
 ### GENERAL
     -make color dicc to not depend on p5 and have colors on cube
     -smooth rotations
+    -Zoom with mouse wheel
 
 ### RubikSticker:
     
 ### RubikPiece:
-    -Simp getPos
 
 ### RubikCube:
 
@@ -31,9 +30,9 @@ README.MD
 
 -------------------------------------------------------------------------------------
 ## JS-Tools:
+Finish README.md
 
 ### Matrix Representation:
-
 
 ### Matrix:
 
