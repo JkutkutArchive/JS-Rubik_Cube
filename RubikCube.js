@@ -9,30 +9,39 @@ class RubikCube{
     this.pieces = [];
     
  
-    for(let i = 0; i < 3; i++){
+    let index; //index
+    for(let i = 0; i < this.dim; i++){
       this.pieces.push([]);
-      for(let j = 0; j < 3; j++){
-        this.pieces[i].push(matrix.make.empty(1,3));
+      for(let j = 0; j < this.dim; j++){
+        this.pieces[i].push(matrix.make.empty(1, this.dim));
+        index = 0;
         if(i % 2 == 0 && j % 2 == 0){
-          this.pieces[i][j][0] = new RubikPieceCorner(this.color, this.w);        
-          this.pieces[i][j][1] = new RubikPieceEdge(this.color, this.w);
-          this.pieces[i][j][2] = new RubikPieceCorner(this.color, this.w);  
+          this.pieces[i][j][index++] = new RubikPieceCorner(this.color, this.w); //index = 1 now     
+          for(; index < this.dim - 1; index++){
+            this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w); //Create edges pieces
+          }
+          this.pieces[i][j][index] = new RubikPieceCorner(this.color, this.w); //index does not increment cause end of this iteration.
         }
         else{
           if(i == 1 && j == 1){
-            this.pieces[i][j][0] = new RubikPieceCenter(this.color, this.w);
-            this.pieces[i][j][1] = new RubikPiece(this.color, this.w);
-            this.pieces[i][j][2] = new RubikPieceCenter(this.color, this.w);
+            this.pieces[i][j][index++] = new RubikPieceCenter(this.color, this.w);
+            for(; index < this.dim - 1; index++){
+              this.pieces[i][j][index] = new RubikPiece(this.color, this.w);//center of the cube
+            }
+            this.pieces[i][j][index] = new RubikPieceCenter(this.color, this.w);
           }
           else{
-            this.pieces[i][j][0] = new RubikPieceEdge(this.color, this.w);        
-            this.pieces[i][j][1] = new RubikPieceCenter(this.color, this.w);
-            this.pieces[i][j][2] = new RubikPieceEdge(this.color, this.w);        
+            this.pieces[i][j][index++] = new RubikPieceEdge(this.color, this.w);  
+            for(; index < this.dim - 1; index++){      
+              this.pieces[i][j][index] = new RubikPieceCenter(this.color, this.w);
+            }
+            this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w);        
           }
         }
       }
     }
     // printMatrix_nD(this.pieces);
+
 
     //  ~~~~~~~~~~~~~~~~~~~~~~~   Corners   ~~~~~~~~~~~~~~~~~~~~~~~
     let coV = [ //corner vectors
