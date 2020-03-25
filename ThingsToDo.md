@@ -20,7 +20,6 @@ README.MD
 
     -Cubes in order
     -JSDOC
-    -Simp code
 
     shape cube (with stickers?)
     2x2x2 and 4x4x4
@@ -40,4 +39,3 @@ Finish README.md
 
 ### array_nD:
     - JS DOC
-    - Fix logic to simplify RubikCube sintax
