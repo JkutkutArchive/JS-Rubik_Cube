@@ -55,8 +55,8 @@ function draw() {
   background(220);
   let angX = (mouseX - width / 2) * 1.5 * Math.PI / width;
   let angY = (mouseY - height / 2) * 0.5 * Math.PI / height;
-  camera(-700 * Math.sin(angX), 700 * Math.cos(angX), 700 * Math.sin(angY), 0, 0, 0, 0, 0, -1);
-  // camera(500 * Math.sin(angle), -500 * Math.cos(angle), 400 * Math.cos(angle/2), 0, 0, 0, 0, 0, -1);
+  // camera(-700 * Math.sin(angX), 700 * Math.cos(angX), 700 * Math.sin(angY), 0, 0, 0, 0, 0, -1);
+  camera(500 * Math.sin(angle), -500 * Math.cos(angle), 400 * Math.cos(angle/2), 0, 0, 0, 0, 0, -1);
   // camera(600, -600, 600  * Math.cos(angle), 0, 0, 0, 0, 0, -1);
   // camera(600, 600, -600, 0, 0, 0, 0, 0, -1);
   // camera(700 * Math.sin(-angle), 700 * Math.cos(angle), 700 , 0, 0, 0, 0, 0, -1);

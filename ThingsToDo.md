@@ -29,7 +29,6 @@ README.MD
 
 -------------------------------------------------------------------------------------
 ## JS-Tools:
-Finish README.md
 
 ### Matrix Representation:
 
@@ -38,4 +37,3 @@ Finish README.md
 ### Functions:
 
 ### array_nD:
-    - JS DOC

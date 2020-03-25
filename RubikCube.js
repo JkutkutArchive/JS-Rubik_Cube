@@ -200,8 +200,8 @@ class RubikCube{
 
   makeMove(axis, h, inverse){
     let angleOri = 1;
-    inverse = (inverse)? inverse : false;
     let highH = h + 1 > this.dim / 2; //if on the second half of the cube
+    inverse = (inverse)? inverse : false;
 
     if((inverse || highH) && !(inverse && highH)){ //XOR -> if the rotation is reversed
       array_nD.o.permutation_3D(this.pieces, axis, h);
