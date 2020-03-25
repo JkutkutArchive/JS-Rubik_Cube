@@ -39,19 +39,20 @@ function setup() {
    * b
    * done: r, u, l, f, d
   */
-  debugON = true;
-  // moves = ["u", "u'"];
-  // moves = ["d", "d'"];
-  // moves = ["r", "r'"];
-  // moves = ["l", "l'"];
-  moves = ["f"];
-  // moves = ["f", "f'"];
+  debugON = false;
+  moves = ["u", "u'"];
+  moves = ["d", "d'"];
+  moves = ["r", "r'"];
+  moves = ["l", "l'"];
+  moves = ["f", "f'"];
+  moves = ["b", "b'"];
+  moves = ["b'"];
   // moves = ["b'","b","b","b'"];
   // moves = ["r", "r", "l", "l", "f", "f", "b", "b", "u", "u", "d", "d"];
   // moves = ["u", "r", "r", "f", "b", "r", "b", "b", "r", "u", "u", "l", "b", "b", "r", "u'", "d'", "r", "r", "f", "r'", "l", "b", "b", "u", "u", "f", "f"];
-  // moves = ["b", "d", "f'", "b'", "d", "l", "l", "u", "l", "u'", "b", "d'", "r", "b", "r", "d'", "r", "l'", "f", "u", "u", "d"];
+  moves = ["b", "d", "f'", "b'", "d", "l", "l", "u", "l", "u'", "b", "d'", "r", "b", "r", "d'", "r", "l'", "f", "u", "u", "d"];
   debugAxis = "y";
-  debugH = 0;
+  debugH = 2;
   acc = array_nD.o.get3DSlice(rubik.pieces, debugAxis, debugH);
 
   console.log();

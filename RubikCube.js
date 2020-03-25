@@ -258,19 +258,16 @@ class RubikCube{
       case /^[lL](eft)?/.test(move):
         axis = "x";
         h = 2;
-        if(/'/.test(move)){
-          move = "f";
-        }
-        else{
-          move = "f'"
-        }
         break;
       case /^[fF](ront)?/.test(move):
         axis = "y";
         h = 0;
         break;
       case /^[bB](ack)?/.test(move):
-        break;
+        axis = "y";
+        h = 2;
+        this.makeMove(axis, h, !(/'/.test(move)));
+        return;
     }
     this.makeMove(axis, h, /'/.test(move));
   }
@@ -279,15 +276,19 @@ class RubikCube{
     let angleOri = 1;
     inverse = (inverse)? inverse : false;
     let highH = h + 1 > this.dim / 2; //if on the second half of the cube
+    // console.log("inverse = " + inverse + ", highH = " + highH);
 
     if((inverse || highH) && !(inverse && highH)){ //XOR -> if the rotation is reversed
-      console.log("Reversed move");
+      // console.log("Reversed move");
       array_nD.o.permutation_3DV2(this.pieces, axis, h);
       array_nD.o.permutation_3DV2(this.pieces, axis, h);
       angleOri = -1;
     }
+    if(vector.re.Y.test(axis) && highH){
+      angleOri *= -1;
+    }
 
-    console.log("moved the " + axis + " axis with h = " + h + " and reverse = " + (angleOri == -1));
+    // console.log("moved the " + axis + " axis with h = " + h + " and reverse = " + (angleOri == -1));
 
     let movedPieces = array_nD.o.permutation_3DV2(this.pieces, axis, h);
     this.rotatePieces(axis, -Math.PI / 2 * angleOri, movedPieces);
