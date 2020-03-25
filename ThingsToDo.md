@@ -15,6 +15,11 @@ README.MD
 
 ### RubikCube:
 
+    -Simplify constructor
+
+
+
+
     -Colors as var (rubikscube. proto. jfkaljfa)--> upsi
     -Set and get pos
 

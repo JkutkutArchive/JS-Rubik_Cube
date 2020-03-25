@@ -94,7 +94,7 @@ function draw() {
   if(!debugON && t++ > delayMoves && moves.length > 0){
     t = 0;
     rubik.move(moves[0]);
-    console.log((28 - moves.length) + " -> " + moves[0]);
+    console.log("New move -> " + moves[0]);
     moves.splice(0,1);
     acc = array_nD.o.get3DSlice(rubik.pieces, debugAxis, debugH);
   }
