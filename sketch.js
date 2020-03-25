@@ -93,25 +93,15 @@ function draw() {
 
   if(!debugON && t++ > delayMoves && moves.length > 0){
     t = 0;
-    rubik.moveV2(moves[0]);
+    rubik.move(moves[0]);
     console.log((28 - moves.length) + " -> " + moves[0]);
     moves.splice(0,1);
-
-    // if(28 - moves.length == 20){
-    //   console.log(moves[0]);
-    //   debugON = true;
-    //   debugAxis = "z";
-    //   debugH = 2;
-    //   t = -194094983274897239842;
-    // }
     acc = array_nD.o.get3DSlice(rubik.pieces, debugAxis, debugH);
   }
   if(debugON && t > 0 && moves.length > 0){
     t = 0;
-    rubik.moveV2(moves[0]);
-    // rubik.move(moves[0]);
+    rubik.move(moves[0]);
     moves.splice(0,1);
-    // moves = [];
     acc = array_nD.o.get3DSlice(rubik.pieces, debugAxis, debugH);
   }
 
