@@ -32,13 +32,6 @@ function setup() {
   
   rubik = new RubikCube(3);
 
-  // for(let i = 0; i < 4; i++){
-  //   moves.push("u", "u", "r", "r", "l", "l");
-  // }
-  /**
-   * b
-   * done: r, u, l, f, d
-  */
   debugON = false;
   // moves = ["u", "u'", "u'", "u"];
   // moves = ["d", "d'", "d'", "d"];
