@@ -131,6 +131,59 @@ class RubikCube{
 
     
     //  ~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~
+    if(this.dim > 2){
+      let offset = 0;
+      if(this.dim % 2 == 0){
+        offset = this.w / 2
+      }
+      let cen =  [
+        [1, 1, 0],
+        [1, this.dim - 1, 1],
+        [1, 1, this.dim - 1],
+        [1, 0, 1],
+        [0, 1, 1],
+        [this.dim - 1, 1, 1]
+      ];
+      for(let i = 0; i < 6; i++){ //for each center
+        let dX = (cen[i][0] == 1)? 1 : 0; //if the centers are on the X axis
+        let dY = (cen[i][1] == 1)? 1 : 0; //if the centers are on the Y axis
+        let dZ = (cen[i][2] == 1)? 1 : 0; //if the centers are on the Z axis
+        // console.log("Working at " + array_nDToString(cen[i], ","));
+        for(let j = 0; j < this.dim - 2; j++){
+          for(let k = 0; k < this.dim - 2; k++){
+            let x = j * dX;                             //index of the center in the X axis form the first center
+            let y = (cen[i][0] == 1)? k * dY : j * dY;  //index of the center in the Y axis form the first center
+            let z = k * dZ;                             //index of the center in the Z axis form the first center
+            
+            // console.log((cen[i][0] + x) + ", " + (cen[i][1] + y) + ", " + (cen[i][2] + z));
+
+            this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].setPos(offset, offset, this.w * (this.dim - 1) / 2);
+
+            let l =  - (Math.floor(this.dim / 2) - 1);
+            this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].move((j + l) * this.w, (k + l) * this.w,0);
+
+            //Rotate
+            if(i == 5){
+              this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].rotateOrigin("y", Math.PI / 2);
+            }
+            else if(i == 4){
+              this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].rotateOrigin("y", -Math.PI / 2);
+            }
+            else{
+              this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].rotateOrigin("x", -Math.PI / 2 * i);
+            }
+            
+            //Stickers
+            let cX = (cen[i][0] > 1)? 2 : cen[i][0];
+            let cY = (cen[i][1] > 1)? 2 : cen[i][1];
+            let cZ = (cen[i][2] > 1)? 2 : cen[i][2];
+            this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].changeStickers(RUBIKCOLOR[cX][cY][cZ]);
+          }
+        }
+      }
+
+
+    }
     /*if(this.dim % 2 == 1){//center of the centers (3x3x3)
       let cen =  [
         [1, 1, 0],
