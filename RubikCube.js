@@ -158,7 +158,12 @@ class RubikCube{
 */
     
     //  ~~~~~~~~~~~~~~~~~~~~~~~   Edges   ~~~~~~~~~~~~~~~~~~~~~~~    
-    if(this.dim % 2 == 1){
+    if(this.dim > 2){
+      let offset = 0;
+      if(this.dim % 2 == 0){
+        offset = this.w / 2
+      }
+      
       //green and blue
       let eG = [
         [1, 0],
@@ -184,8 +189,8 @@ class RubikCube{
           this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].setPos(0, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
 
           let k = - (Math.floor(this.dim / 2) - 1) + j;
-          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].move(this.w * k, 0, 0);
-          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].move(this.w * k, 0, 0);
+          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].move(this.w * k + offset, 0, 0);
+          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].move(this.w * k + offset, 0, 0);
           
 
           //Rotation
@@ -201,7 +206,7 @@ class RubikCube{
 
           //******Orange and red******
           this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].setPos(0, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
-          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].move(this.w * k, 0, 0);
+          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].move(this.w * k + offset, 0, 0);
 
           //rotation
           this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].rotateOrigin("z", Math.PI / 2 * ((i > 1)? -1 : 1));
