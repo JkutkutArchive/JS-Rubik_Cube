@@ -8,141 +8,8 @@ class RubikCube{
     
     this.pieces = [];
     
-    console.log("Starting constructor:");
-
-    /** MISSING THE LOCATION OF THE PIECES */
-    /** CONDITIONS NOT GOOD FOR OTHER CUBES */
-    let index; //index
-    let xGood, yGood;
-    for(let i = 0; i < this.dim; i++){
-      this.pieces.push([]);
-      for(let j = 0; j < this.dim; j++){
-        index = 0;
-        this.pieces[i].push(matrix.make.empty(1, this.dim));
-        xGood = (i == 0) || (i == this.dim - 1);
-        yGood = (j == 0) || (j == this.dim - 1);
-        if(xGood && yGood){ // Corner collums
-          this.pieces[i][j][index++] = new RubikPieceCorner(this.color, this.w); //index = 1 now     
-          for(; index < this.dim - 1; index++){
-            this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w); //Create edges pieces
-          }
-          this.pieces[i][j][index] = new RubikPieceCorner(this.color, this.w); //index does no increment cause end of this iteration.
-        }
-        else if(xGood || yGood){
-          this.pieces[i][j][index++] = new RubikPieceEdge(this.color, this.w);  
-          for(; index < this.dim - 1; index++){      
-            this.pieces[i][j][index] = new RubikPieceCenter(this.color, this.w);
-          }
-          this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w);
-        }
-        else{
-          this.pieces[i][j][index++] = new RubikPieceCenter(this.color, this.w);
-          for(; index < this.dim - 1; index++){
-            this.pieces[i][j][index] = new RubikPiece(this.color, this.w);//center of the cube
-          }
-          this.pieces[i][j][index] = new RubikPieceCenter(this.color, this.w);
-        }
-      }
-    }
-    
-    // if()
-    
-    
-    // let index; //index
-    // for(let i = 0; i < this.dim; i++){
-    //   this.pieces.push([]);
-    //   for(let j = 0; j < this.dim; j++){
-    //     this.pieces[i].push(matrix.make.empty(1, this.dim));
-    //     index = 0;
-    //     if(i % 2 == 0 && j % 2 == 0){
-    //       this.pieces[i][j][index++] = new RubikPieceCorner(this.color, this.w); //index = 1 now     
-    //       for(; index < this.dim - 1; index++){
-    //         this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w); //Create edges pieces
-    //       }
-    //       this.pieces[i][j][index] = new RubikPieceCorner(this.color, this.w); //index does not increment cause end of this iteration.
-    //     }
-    //     else{
-    //       if(i == 1 && j == 1){
-    //         this.pieces[i][j][index++] = new RubikPieceCenter(this.color, this.w);
-    //         for(; index < this.dim - 1; index++){
-    //           this.pieces[i][j][index] = new RubikPiece(this.color, this.w);//center of the cube
-    //         }
-    //         this.pieces[i][j][index] = new RubikPieceCenter(this.color, this.w);
-    //       }
-    //       else{
-    //         this.pieces[i][j][index++] = new RubikPieceEdge(this.color, this.w);  
-    //         for(; index < this.dim - 1; index++){      
-    //           this.pieces[i][j][index] = new RubikPieceCenter(this.color, this.w);
-    //         }
-    //         this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w);        
-    //       }
-    //     }
-    //   }
-    // }
-
-    
-    //  ~~~~~~~~~~~~~~~~~~~~~~~   Corners   ~~~~~~~~~~~~~~~~~~~~~~~
-    let coV = [ //corner vectors
-      [0, 0],
-      [this.dim - 1, 0],
-      [this.dim - 1, this.dim - 1],
-      [0, this.dim - 1],
-    ];
-    //front => y = 0
-    for(let i = 0; i < 4; i++){
-      this.pieces[coV[i][0]][0][coV[i][1]].rotateOrigin("y", Math.PI * 0.5 * i);
-      this.pieces[coV[i][0]][this.dim - 1][coV[i][1]].rotateOrigin("z", Math.PI);
-      this.pieces[coV[i][0]][this.dim - 1][coV[i][1]].rotateOrigin("y", Math.PI * 0.5 * (i-1));
-    }
-
-    //  ~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~
-    if(this.dim % 2 == 1){
-      let cen =  [
-        [1, 1, 0],
-        [1, 2, 1],
-        [1, 1, 2],
-        [1, 0, 1],
-        
-      ];
-      for(let i = 0; i < 4; i++){
-        this.pieces[cen[i][0]][cen[i][1]][cen[i][2]].rotateOrigin("x", -Math.PI / 2 * i);
-      }
-      this.pieces[0][1][1].rotateOrigin("y", -Math.PI / 2);
-      this.pieces[2][1][1].rotateOrigin("y", Math.PI / 2);
-    }
-
-    //  ~~~~~~~~~~~~~~~~~~~~~~~   Edges   ~~~~~~~~~~~~~~~~~~~~~~~    
-    if(this.dim > 2){
-      //green and blue
-      let eG = [
-        [1, 0],
-        [2, 1],
-        [1, 2],
-        [0, 1]
-      ];
-      for(let i = 0; i < 4; i++){
-        this.pieces[eG[i][0]][2][eG[i][1]].rotateOrigin("z", Math.PI);
-        this.pieces[eG[i][0]][2][eG[i][1]].rotateOrigin("y", Math.PI / 2 * i);
-        this.pieces[eG[i][0]][0][eG[i][1]].rotateOrigin("y", Math.PI / 2 * i);
-      }
-      //orange and red 
-      let edge = [
-        [0, 1, 0],
-        [0, 1, 2],
-        [2, 1, 0],
-        [2, 1, 2]
-      ];
-      for(let i = 0; i < 4; i++){
-        this.pieces[edge[i][0]][edge[i][1]][edge[i][2]].rotateOrigin("z", Math.PI / 2 * ((i > 1)? -1 : 1));
-        if(i % 2 == 1){
-          this.pieces[edge[i][0]][edge[i][1]][edge[i][2]].rotateOrigin("y", Math.PI / 2 * ((i > 1)? 1 : -1));
-        }
-      }
-    }
-
-    
     //color
-    let RUBIKCOLOR = [
+    const RUBIKCOLOR = [
       [//X = 0
         [//Y = 0
           [COLORSDIC.WHITE, COLORSDIC.BLUE, COLORSDIC.ORANGE],//Z = 0
@@ -197,14 +64,163 @@ class RubikCube{
       
     ];
 
+
+
+
+    console.log("Starting constructor:");
+
+    /** MISSING THE LOCATION OF THE PIECES */
+    let index; //index
+    let xGood, yGood;
     for(let i = 0; i < this.dim; i++){
+      this.pieces.push([]);
       for(let j = 0; j < this.dim; j++){
-        for(let k = 0; k < this.dim; k++){
-          this.pieces[i][j][k].changeStickers(RUBIKCOLOR[i][j][k]);
+        index = 0;
+        this.pieces[i].push(matrix.make.empty(1, this.dim));
+        xGood = (i == 0) || (i == this.dim - 1);
+        yGood = (j == 0) || (j == this.dim - 1);
+        if(xGood && yGood){ // Corner collums
+          this.pieces[i][j][index++] = new RubikPieceCorner(this.color, this.w); //index = 1 now     
+          for(; index < this.dim - 1; index++){
+            this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w); //Create edges pieces
+          }
+          this.pieces[i][j][index] = new RubikPieceCorner(this.color, this.w); //index does no increment cause end of this iteration.
+        }
+        else if(xGood || yGood){
+          this.pieces[i][j][index++] = new RubikPieceEdge(this.color, this.w);  
+          for(; index < this.dim - 1; index++){      
+            this.pieces[i][j][index] = new RubikPieceCenter(this.color, this.w);
+          }
+          this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w);
+        }
+        else{
+          this.pieces[i][j][index++] = new RubikPieceCenter(this.color, this.w);
+          for(; index < this.dim - 1; index++){
+            this.pieces[i][j][index] = new RubikPiece(this.color, this.w);//center of the cube
+          }
+          this.pieces[i][j][index] = new RubikPieceCenter(this.color, this.w);
         }
       }
     }
     
+    //  ~~~~~~~~~~~~~~~~~~~~~~~   Corners   ~~~~~~~~~~~~~~~~~~~~~~~ (DONE)
+    let coV = [ //corner vectors
+      [0, 0],
+      [this.dim - 1, 0],
+      [this.dim - 1, this.dim - 1],
+      [0, this.dim - 1],
+    ];
+    //front => y = 0
+
+    let coord = (this.dim % 2 == 0)? this.w * (this.dim - 1) * 0.5 : Math.floor(this.dim / 2) * this.w;
+    for(let i = 0; i < this.dim; i += this.dim - 1){
+      for(let j = 0; j < this.dim; j += this.dim - 1){
+        for(let k = 0; k < this.dim; k += this.dim - 1){
+          this.pieces[i][j][k].setPos(coord, coord, coord); //translarion
+
+          this.pieces[i][j][k].changeStickers(RUBIKCOLOR[(i == 0)? 0:2][(j == 0)? 0:2][(k == 0)? 0:2]);//stickers
+        }
+      }
+    }
+    
+    for(let i = 0; i < 4; i++){ //Rotation
+      this.pieces[coV[i][0]][0][coV[i][1]].rotateOrigin("y", Math.PI * 0.5 * i);
+      this.pieces[coV[i][0]][this.dim - 1][coV[i][1]].rotateOrigin("z", Math.PI);
+      this.pieces[coV[i][0]][this.dim - 1][coV[i][1]].rotateOrigin("y", Math.PI * 0.5 * (i-1));
+    }
+
+    
+    //  ~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~
+    /*if(this.dim % 2 == 1){//center of the centers (3x3x3)
+      let cen =  [
+        [1, 1, 0],
+        [1, 2, 1],
+        [1, 1, 2],
+        [1, 0, 1]
+      ];
+
+      for(let i = 0; i < 4; i++){
+        this.pieces[cen[i][0]][cen[i][1]][cen[i][2]].rotateOrigin("x", -Math.PI / 2 * i);
+        this.pieces[cen[i][0]][cen[i][1]][cen[i][2]].changeStickers(RUBIKCOLOR[cen[i][0]][cen[i][1]][cen[i][2]]);
+      }
+      this.pieces[0][1][1].rotateOrigin("y", -Math.PI / 2);
+      this.pieces[2][1][1].rotateOrigin("y", Math.PI / 2);
+      this.pieces[0][1][1].changeStickers(RUBIKCOLOR[0][1][1]);
+      this.pieces[2][1][1].changeStickers(RUBIKCOLOR[2][1][1]);
+    }
+    else if(this.dim > 2){ //4x4x4
+      //MISSING CODE
+      // for(let i = 0; i < n / 2 - 1; i++){
+
+      // }
+
+    }
+*/
+    
+    //  ~~~~~~~~~~~~~~~~~~~~~~~   Edges   ~~~~~~~~~~~~~~~~~~~~~~~    
+    if(this.dim % 2 == 1){
+      //green and blue
+      let eG = [
+        [1, 0],
+        [this.dim - 1, 1],
+        [1, this.dim - 1],
+        [0, 1]
+      ];
+      let edge = [
+        [0, 1, 0],
+        [0, 1, this.dim - 1],
+        [this.dim - 1, 1, 0],
+        [this.dim - 1, 1, this.dim - 1]
+      ];
+
+      for(let i = 0; i < 4; i++){
+        let dX = (eG[i][0] == 1)? 1 : 0;
+        let dZ = (eG[i][1] == 1)? 1 : 0;
+
+        
+        for(let j = 0; j < this.dim - 2; j++){ //for each edge-piece in edge line
+          //******Blue and green******
+          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].setPos(0, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
+          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].setPos(0, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
+
+          let k = - (Math.floor(this.dim / 2) - 1) + j;
+          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].move(this.w * k, 0, 0);
+          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].move(this.w * k, 0, 0);
+          
+
+          //Rotation
+          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].rotateOrigin("y", Math.PI / 2 * i);
+          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].rotateOrigin("z", Math.PI);
+          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].rotateOrigin("y", Math.PI / 2 * i);
+
+          //stickers
+          let colorX = (eG[i][0] > 1)? 2 : eG[i][0];
+          let colorZ = (eG[i][1] > 1)? 2 : eG[i][1];
+          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].changeStickers(RUBIKCOLOR[colorX][0][colorZ]);
+          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].changeStickers(RUBIKCOLOR[colorX][2][colorZ]);
+
+          //******Orange and red******
+          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].setPos(0, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
+          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].move(this.w * k, 0, 0);
+
+          //rotation
+          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].rotateOrigin("z", Math.PI / 2 * ((i > 1)? -1 : 1));
+          if(i % 2 == 1){
+            this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].rotateOrigin("y", Math.PI / 2 * ((i > 1)? 1 : -1));
+          }
+
+          //stickers
+          colorX = (edge[i][0] > 1)? 2 : edge[i][0];
+          let colorY = (edge[i][1] > 1)? 2 : edge[i][1];
+          colorZ = (edge[i][2] > 1)? 2 : edge[i][2];
+          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].changeStickers(RUBIKCOLOR[colorX][colorY][colorZ]);
+
+        }
+      }
+    }
+
+
+    console.log("Ended constructor");
   }
   
   show(){
