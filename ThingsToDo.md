@@ -15,15 +15,15 @@ README.MD
 
 ### RubikCube:
 
-    -Colors as var (rubikscube. proto. jfkaljfa)--> upsi
-    -Set and get pos
+    -Colors as var (rubikscube. proto. jfkaljfa)--> not possible right now
+    -Set and get pos -> not possible right now
 
 
     -JSDOC
 
-    shape cube (with stickers?)
+    shape cube (with stickers?):
+        this may need new constructor
     
-    sticker-less
 
 
 

@@ -30,7 +30,8 @@ function setup() {
     
   };
   
-  rubik = new RubikCube(4);
+  rubik = new MirrorRubikCube();
+  // rubik = new RubikCube(4);
 
   debugON = false;
   // moves = ["u", "u'", "u'", "u"];

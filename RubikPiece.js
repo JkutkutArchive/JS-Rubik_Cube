@@ -14,7 +14,7 @@ class RubikPiece{
     this.matrix = matrix.make.identity(4); //result of posMatrix * rMatrix
 
     this.color = (c)? c : COLORSDIC.NULL; //P5color of the piece
-    this.w = (w)? w : RubikCube.cubeW; 
+    this.w = (w)? w : RubikCube.cubeW;
   }
 
   /**
@@ -102,9 +102,13 @@ class RubikPieceCenter extends RubikPiece{
     push();
     strokeWeight(4);
     applyMatrix(...matrix.p.applyRotation(this.matrix));
-    box(this.w);
-    // box(this.w,50,25);
-    
+
+    if(Array.isArray(this.w)){
+
+    }
+    else{
+      box(this.w);
+    }    
     for(let i = 0; i < this.stickers.length; i++){
       this.stickers[i].show();
     }

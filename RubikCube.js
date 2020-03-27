@@ -333,9 +333,89 @@ class RubikCube{
   static get cubeW(){ return 100;};
 }
 
-class stickerlessRubikCube extends RubikCube{
+class StickerlessRubikCube extends RubikCube{
   constructor(dim, w, c){
     super(dim, w, c);
     this.changeStickersWPercent(1.0);
+  }
+}
+
+class InvisibleRubikCube extends RubikCube{
+  constructor(dim, w, c){
+    super(dim, w, c);
+    for(let i = 0; i < this.dim; i++){
+      for(let j = 0; j < this.dim; j++){
+        for(let k = 0; k < this.dim; k++){
+          this.pieces[i][j][k].w = 0; 
+        }
+      }
+    }
+  }
+}
+
+class MirrorRubikCube extends RubikCube{
+  constructor(w, c){
+    super(3, w, c);
+    let RUBIKSIZE =[
+      [ //X = 0
+        [ //Y = 0
+          [0, 0, 0], //Z = 0
+          [0, 0, 0], //Z = 1
+          [0, 0, 0]  //Z = 2
+        ],
+        [ //Y = 1
+          [0, 0, 0], //Z = 0
+          [0, 0, 0], //Z = 1
+          [0, 0, 0]  //Z = 2
+        ],
+        [ //Y = 2
+          [0, 0, 0], //Z = 0
+          [0, 0, 0], //Z = 1
+          [0, 0, 0]  //Z = 2
+        ]
+      ],
+      [ //X = 1
+        [ //Y = 0
+          [0, 0, 0], //Z = 0
+          [0, 0, 0], //Z = 1
+          [0, 0, 0]  //Z = 2
+        ],
+        [ //Y = 1
+          [0, 0, 0], //Z = 0
+          [0, 0, 0], //Z = 1
+          [0, 0, 0]  //Z = 2
+        ],
+        [ //Y = 2
+          [0, 0, 0], //Z = 0
+          [0, 0, 0], //Z = 1
+          [0, 0, 0]  //Z = 2
+        ]
+      ],
+      [ //X = 2
+        [ //Y = 0
+          [0, 0, 0], //Z = 0
+          [0, 0, 0], //Z = 1
+          [0, 0, 0]  //Z = 2
+        ],
+        [ //Y = 1
+          [0, 0, 0], //Z = 0
+          [0, 0, 0], //Z = 1
+          [0, 0, 0]  //Z = 2
+        ],
+        [ //Y = 2
+          [0, 0, 0], //Z = 0
+          [0, 0, 0], //Z = 1
+          [0, 0, 0]  //Z = 2
+        ]
+      ]
+    ];
+    
+    for(let i = 0; i < this.dim; i++){
+      for(let j = 0; j < this.dim; j++){
+        for(let k = 0; k < this.dim; k++){
+          this.pieces[i][j][k].w = RUBIKSIZE[i][j][k].map(x => x * this.w); 
+        }
+      }
+    }
   }
 }
