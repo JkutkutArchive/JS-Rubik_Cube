@@ -1,6 +1,6 @@
 class RubikCube{
   constructor(dim, w, c){
-    // this.pos = (pos)? pos : createVector(0, 0, 0);
+    this.pos = createVector(0, 0, 0);
     this.dim = (dim)? dim : 3;
 
     this.color = (c)? c : COLORSDIC.CUBECOLOR;
@@ -250,7 +250,6 @@ class RubikCube{
       }
     }
   }
-  
 
   move(move, prevCube){
     let axis, h;
@@ -320,5 +319,23 @@ class RubikCube{
     }
   }
 
+  //getters and setters
+  
+  changeStickersWPercent(wP){
+    for(let i = 0; i < this.dim; i++){
+      for(let j = 0; j < this.dim; j++){
+        for(let k = 0; k < this.dim; k++){
+          this.pieces[i][j][k].changeStickersWPercent(wP); 
+        }
+      }
+    }
+  }
   static get cubeW(){ return 100;};
+}
+
+class stickerlessRubikCube extends RubikCube{
+  constructor(dim, w, c){
+    super(dim, w, c);
+    this.changeStickersWPercent(1.0);
+  }
 }

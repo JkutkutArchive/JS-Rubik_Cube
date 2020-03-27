@@ -27,7 +27,15 @@ class RubikPiece{
    * @throws error if not correct lenght of array (number of stickers). 
    */
   changeStickers(colorArray){};
-
+  /**
+   * updates the width of the stickers in this piece
+   */
+  changeStickersW(){}
+  /**
+   * Changes the percentage of the stickers in this piece
+   * @param {number} wP - The new percentage.
+   */
+  changeStickersWPercent(wP){}
 
   //Matrix manipulation
   /**
@@ -72,6 +80,11 @@ class RubikPiece{
    * @param {boolean} P5Vect - whenever or not the output should be a P5Vector or array
    */
   getPos(P5Vect){};
+  /**
+   * Changes the with of the sticker
+   * @param {number} w - The new width
+  */
+  setWidth(w){}
 }
 
 class RubikPieceCenter extends RubikPiece{
@@ -110,6 +123,16 @@ class RubikPieceCenter extends RubikPiece{
       console.log(error);
     }
   }
+  changeStickersW(){
+    for(let i = 0; i < this.stickers.length; i++){
+      this.stickers[i].setWidth(this.w);
+    }
+  }
+  changeStickersWPercent(wP){
+    for(let i = 0; i < this.stickers.length; i++){
+      this.stickers[i].setWPercent(wP);
+    }
+  }
   
   //Matrix operations:
   rotateOrigin(axis, angle){
@@ -144,6 +167,18 @@ class RubikPieceCenter extends RubikPiece{
       v[i] = matrix.o.mult(m, matrix.o.transpose([vectors[i]]))[3][0];
     }
     return (P5Vect)? v : createVector(v[0], v[1], v[2]);
+  }
+  setWidth(w){
+    try{
+        if(typeof(w) != "number"){
+            throw "it is not a number";
+        }
+        this.w = w;
+        this.changeStickersW();
+    }
+    catch(error){
+        console.log(error);
+    }
   }
 }
 
