@@ -134,7 +134,7 @@ class RubikCube{
     if(this.dim > 2){
       let offset = 0;
       if(this.dim % 2 == 0){
-        offset = this.w / 2
+        // offset = this.w / 2
       }
       let cen =  [
         [1, 1, 0],
@@ -157,19 +157,26 @@ class RubikCube{
             
             // console.log((cen[i][0] + x) + ", " + (cen[i][1] + y) + ", " + (cen[i][2] + z));
 
+            //initial pos
             this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].setPos(offset, offset, this.w * (this.dim - 1) / 2);
-
-            let l =  - (Math.floor(this.dim / 2) - 1);
-            this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].move((j + l) * this.w, (k + l) * this.w,0);
+            //move to correct position
+            let l = - (Math.floor(this.dim / 2) - 1);
 
             //Rotate
             if(i == 5){
+              // this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].rotateOrigin("z", Math.PI / 2 * i);
+              this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].move(-(k + l) * this.w, -(j + l) * this.w,0);
               this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].rotateOrigin("y", Math.PI / 2);
+
             }
             else if(i == 4){
+              this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].move((k + l) * this.w, -(j + l) * this.w,0);
               this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].rotateOrigin("y", -Math.PI / 2);
             }
             else{
+              let ori = i == 3 || i == 2;
+              this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].move(-(j + l) * this.w, -((ori)? -1 : 1)*(k + l) * this.w,0);
+              // this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].rotateOrigin("z", -Math.PI / 2 * i);
               this.pieces[cen[i][0] + x][cen[i][1] + y][cen[i][2] + z].rotateOrigin("x", -Math.PI / 2 * i);
             }
             
@@ -189,7 +196,7 @@ class RubikCube{
     if(this.dim > 2){
       let offset = 0;
       if(this.dim % 2 == 0){
-        offset = this.w / 2
+        offset = -this.w / 2
       }
       
       //green and blue
@@ -215,12 +222,14 @@ class RubikCube{
           //******Blue and green******
 
           //initial pos
-          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].setPos(0, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
-          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].setPos(0, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
+          let ori1 = i > 1;
+          let ori2 = 
+          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].setPos(((i > 1)? -1 : 1) * offset, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
+          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].setPos(((i > 1)? -1 : 1) * offset, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
           //move to true pos
           let k = - (Math.floor(this.dim / 2) - 1) + j;
-          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].move(((i < 2)? -1 : 1) * this.w * k + offset, 0, 0);
-          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].move(((i > 1)? -1 : 1) * this.w * k + offset, 0, 0);
+          this.pieces[eG[i][0] + dX * j][0][eG[i][1] + dZ * j].move(((i < 2)? -1 : 1) * this.w * k, 0, 0);
+          this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].move(((i < 2)? -1 : 1) * this.w * k, 0, 0);
 
 
           //Rotation
@@ -235,8 +244,8 @@ class RubikCube{
           this.pieces[eG[i][0] + dX * j][this.dim - 1][eG[i][1] + dZ * j].changeStickers(RUBIKCOLOR[colorX][2][colorZ]);
 
           //******Orange and red******
-          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].setPos(0, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
-          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].move(((i > 1)? -1 : 1) * this.w * k + offset, 0, 0);
+          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].setPos(((i < 2)? -1 : 1) * offset, this.w * (this.dim - 1) / 2, this.w * (this.dim - 1) / 2);
+          this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].move(((i > 1)? -1 : 1) * this.w * k, 0, 0);
 
           //rotation
           this.pieces[edge[i][0]][edge[i][1] + j][edge[i][2]].rotateOrigin("z", Math.PI / 2 * ((i > 1)? -1 : 1));
@@ -329,8 +338,8 @@ class RubikCube{
   }
 
   rotatePieces(axis, angle, slice){
-    for(let i = 0; i < 3; i++){
-      for(let j = 0; j < 3; j++){
+    for(let i = 0; i < this.dim; i++){
+      for(let j = 0; j < this.dim; j++){
         // slice[i][j].w = 107;
         slice[i][j].rotateOrigin(axis, angle);
       }
