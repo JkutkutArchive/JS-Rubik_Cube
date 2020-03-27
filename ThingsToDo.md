@@ -15,19 +15,14 @@ README.MD
 
 ### RubikCube:
 
-    -Simplify constructor
-
-
-
-
     -Colors as var (rubikscube. proto. jfkaljfa)--> upsi
     -Set and get pos
 
-    -Cubes in order
+
     -JSDOC
 
     shape cube (with stickers?)
-    2x2x2 and 4x4x4
+    
     sticker-less
 
 
@@ -42,3 +37,5 @@ README.MD
 ### Functions:
 
 ### array_nD:
+    -3d array can mean array[array[array[]]] and arr[3][3]
+    -Rotation for every slice
