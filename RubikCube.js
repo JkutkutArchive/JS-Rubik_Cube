@@ -355,65 +355,29 @@ class InvisibleRubikCube extends RubikCube{
 
 class MirrorRubikCube extends RubikCube{
   constructor(w, c){
-    super(3, w, c);
-    let RUBIKSIZE =[
-      [ //X = 0
-        [ //Y = 0
-          [0, 0, 0], //Z = 0
-          [0, 0, 0], //Z = 1
-          [0, 0, 0]  //Z = 2
-        ],
-        [ //Y = 1
-          [0, 0, 0], //Z = 0
-          [0, 0, 0], //Z = 1
-          [0, 0, 0]  //Z = 2
-        ],
-        [ //Y = 2
-          [0, 0, 0], //Z = 0
-          [0, 0, 0], //Z = 1
-          [0, 0, 0]  //Z = 2
-        ]
-      ],
-      [ //X = 1
-        [ //Y = 0
-          [0, 0, 0], //Z = 0
-          [0, 0, 0], //Z = 1
-          [0, 0, 0]  //Z = 2
-        ],
-        [ //Y = 1
-          [0, 0, 0], //Z = 0
-          [0, 0, 0], //Z = 1
-          [0, 0, 0]  //Z = 2
-        ],
-        [ //Y = 2
-          [0, 0, 0], //Z = 0
-          [0, 0, 0], //Z = 1
-          [0, 0, 0]  //Z = 2
-        ]
-      ],
-      [ //X = 2
-        [ //Y = 0
-          [0, 0, 0], //Z = 0
-          [0, 0, 0], //Z = 1
-          [0, 0, 0]  //Z = 2
-        ],
-        [ //Y = 1
-          [0, 0, 0], //Z = 0
-          [0, 0, 0], //Z = 1
-          [0, 0, 0]  //Z = 2
-        ],
-        [ //Y = 2
-          [0, 0, 0], //Z = 0
-          [0, 0, 0], //Z = 1
-          [0, 0, 0]  //Z = 2
-        ]
-      ]
-    ];
+    super(2, w, c);//min process time
+
+    this.dim = 3;
+
+    const RCx = [1.75, 0, -2];
+    const RCy = [1.5, 0, -2.25];
+    const RCz = [1.5, 0, -2.25];
+
+    const RSx = [1.5, 2, 2];
+    const RSy = [1, 2, 2.5];
+    const RSz = [1, 2, 2.5];
+
+    this.pieces = array_nD.make.empty(3,3,3);
     
     for(let i = 0; i < this.dim; i++){
       for(let j = 0; j < this.dim; j++){
         for(let k = 0; k < this.dim; k++){
-          this.pieces[i][j][k].w = RUBIKSIZE[i][j][k].map(x => x * this.w); 
+          this.pieces[i][j][k] = new RubikPieceCenter(c, w);
+          this.pieces[i][j][k].stickers = [];
+
+          this.pieces[i][j][k].w = [RSx[i], RSy[j], RSz[k]].map(x => x * this.w); 
+          this.pieces[i][j][k].move(...[RCx[i], RCy[j], RCz[k]].map(x => x * this.w));
+          
         }
       }
     }

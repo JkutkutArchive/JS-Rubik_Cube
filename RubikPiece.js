@@ -104,7 +104,7 @@ class RubikPieceCenter extends RubikPiece{
     applyMatrix(...matrix.p.applyRotation(this.matrix));
 
     if(Array.isArray(this.w)){
-
+      box(...this.w);
     }
     else{
       box(this.w);
