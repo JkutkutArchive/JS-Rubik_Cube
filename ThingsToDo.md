@@ -2,9 +2,11 @@
 
 README.MD
 
+
 ## JS-RubikCube:
 
 ### GENERAL
+    -Controls
     -make color dicc to not depend on p5 and have colors on cube
     -smooth rotations
     -Zoom with mouse wheel
@@ -21,10 +23,6 @@ README.MD
 
     -JSDOC
 
-    shape cube (with stickers?):
-        this may need new constructor
-    
-
 
 
 -------------------------------------------------------------------------------------
@@ -37,5 +35,3 @@ README.MD
 ### Functions:
 
 ### array_nD:
-    -3d array can mean array[array[array[]]] and arr[3][3]
-    -Rotation for every slice
