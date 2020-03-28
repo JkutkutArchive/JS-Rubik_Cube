@@ -48,7 +48,6 @@ function draw() {
   }
 
   rubik.show();
-  // noLoop();
 }
 
 function keyPressed() {
@@ -62,19 +61,14 @@ function mousePressed() {
   moving = true;
   prev.x = mouseX;
   prev.y = mouseY;
-  
 }
 function mouseReleased() {
   moving = false;
-
   angX += incX;
   angY += incY;
   incX = 0;
   incY = 0;
 }
-
-
-
 function mouseWheel(event) {
   ampli += event.delta;
   return false; //prevent scrolling
