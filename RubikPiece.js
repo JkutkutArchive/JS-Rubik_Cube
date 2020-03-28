@@ -87,6 +87,9 @@ class RubikPiece{
   setWidth(w){}
 }
 
+/**
+ * @class This class generates the centers of the rubik's cube
+ */
 class RubikPieceCenter extends RubikPiece{
   /**
    * This constructor adds one sticker to the top of the cube
@@ -186,7 +189,9 @@ class RubikPieceCenter extends RubikPiece{
   }
 }
 
-
+/**
+ * @class This class generates the edges of the rubik's cube
+ */
 class RubikPieceEdge extends RubikPieceCenter{
   /**
    * This constructor adds one sticker to side
@@ -199,6 +204,9 @@ class RubikPieceEdge extends RubikPieceCenter{
   }
 }
 
+/**
+ * @class This class generates the corners of the rubik's cube
+*/
 class RubikPieceCorner extends RubikPieceEdge{
   /**
    * This constructor adds one sticker to the other side
