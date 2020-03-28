@@ -263,7 +263,7 @@ class RubikCube{
             break;
           case /^[dD](own)?/.test(move):
             axis = "z";
-            h = 2;
+            h = this.dim - 1;
             break;
           case /^[rR](ight)?/.test(move):
             axis = "x";
@@ -271,7 +271,7 @@ class RubikCube{
             break;
           case /^[lL](eft)?/.test(move):
             axis = "x";
-            h = 2;
+            h = this.dim - 1;
             break;
           case /^[fF](ront)?/.test(move):
             axis = "y";
@@ -279,8 +279,11 @@ class RubikCube{
             break;
           case /^[bB](ack)?/.test(move):
             axis = "y";
-            h = 2;
+            h = this.dim - 1;
             break;
+          case true:
+            console.log("Error with move");
+            return;
         }
         break;
       case 3:
@@ -288,13 +291,13 @@ class RubikCube{
           case /c/.test(move):
             break;
           case true:
-            this.move(move, 1);
+            this.move(move, prevCube + 1);
             return;
         }
         break;
-      case true:
-        this.move(move, 1);
-            return;
+      case this.dim - prevCube:
+        this.move(move, prevCube + 1);
+        return;
     }
     this.makeMove(axis, h, /'/.test(move));
   }

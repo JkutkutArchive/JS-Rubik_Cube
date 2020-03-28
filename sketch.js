@@ -43,8 +43,8 @@ function draw() {
   camera(-ampli * Math.sin(angX + incX), ampli * Math.cos(angX + incX), ampli * Math.sin(angY + incY), 0, 0, 0, 0, 0, -1);
 
   if(moving){
-    incX = (mouseX - prev.x) / 200;
-    incY = (mouseY - prev.y) / 200;
+    incX = (mouseX - prev.x) / 500 * Math.pow(1.001, Math.abs(incX));
+    incY = (mouseY - prev.y) / 500 * Math.pow(1.001, Math.abs(incX));
   }
 
   rubik.show();
@@ -54,8 +54,7 @@ function draw() {
 function keyPressed() {
   console.log(keyCode);
   if(keyCodes[keyCode] !== undefined){
-    // rubik.move(keyCodes[keyCode]);
-    rubik.move(keyCodes[keyCode], true);
+    rubik.move(keyCodes[keyCode]);
   }
 }
 
