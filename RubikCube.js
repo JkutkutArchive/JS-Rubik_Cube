@@ -292,6 +292,9 @@ class RubikCube{
             return;
         }
         break;
+      case true:
+        this.move(move, 1);
+            return;
     }
     this.makeMove(axis, h, /'/.test(move));
   }
