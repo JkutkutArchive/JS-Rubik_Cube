@@ -100,22 +100,25 @@ class RubikPieceCenter extends RubikPiece{
     // this.setPos(createVector(0, 0, this.w)); //set the position of the center in a correct spot
     this.stickers.push(new RubikSticker(0, 0, COLORSDIC.NULL, this.w)); //add the sticker
   }
-  show(){
-    mainCanvas.fill(this.color);
-    mainCanvas.push();
-    mainCanvas.strokeWeight(4);
-    mainCanvas.applyMatrix(...matrix.p.applyRotation(this.matrix));
+  show(canvas){
+    console.log(canvas == undefined);
+    canvas = (canvas == undefined)? mainCanvas : canvas;
+
+    canvas.fill(this.color);
+    canvas.push();
+    canvas.strokeWeight(4);
+    canvas.applyMatrix(...matrix.p.applyRotation(this.matrix));
 
     if(Array.isArray(this.w)){
-      mainCanvas.box(...this.w);
+      canvas.box(...this.w);
     }
     else{
-      mainCanvas.box(this.w);
+      canvas.box(this.w);
     }    
     for(let i = 0; i < this.stickers.length; i++){
-      this.stickers[i].show();
+      this.stickers[i].show(canvas);
     }
-    mainCanvas.pop();
+    canvas.pop();
   }
   changeStickers(colorArray){
     try{

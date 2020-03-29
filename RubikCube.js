@@ -241,11 +241,11 @@ class RubikCube{
     }
   }
   
-  show(){
+  show(canvas){
     for(let i = 0; i < this.dim; i++){
       for(let j = 0; j < this.dim; j++){
         for(let k = 0; k < this.dim; k++){
-          this.pieces[i][j][k].show(); 
+          this.pieces[i][j][k].show(canvas); 
         }
       }
     }
