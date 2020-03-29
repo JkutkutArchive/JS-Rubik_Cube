@@ -101,21 +101,21 @@ class RubikPieceCenter extends RubikPiece{
     this.stickers.push(new RubikSticker(0, 0, COLORSDIC.NULL, this.w)); //add the sticker
   }
   show(){
-    fill(this.color);
-    push();
-    strokeWeight(4);
-    applyMatrix(...matrix.p.applyRotation(this.matrix));
+    mainCanvas.fill(this.color);
+    mainCanvas.push();
+    mainCanvas.strokeWeight(4);
+    mainCanvas.applyMatrix(...matrix.p.applyRotation(this.matrix));
 
     if(Array.isArray(this.w)){
-      box(...this.w);
+      mainCanvas.box(...this.w);
     }
     else{
-      box(this.w);
+      mainCanvas.box(this.w);
     }    
     for(let i = 0; i < this.stickers.length; i++){
       this.stickers[i].show();
     }
-    pop();
+    mainCanvas.pop();
   }
   changeStickers(colorArray){
     try{

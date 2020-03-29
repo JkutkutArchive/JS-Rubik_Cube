@@ -35,7 +35,8 @@ var s1 = function( sketch ) {//main canvas
       NULL: sketch.color(100)
     };
     // rubik = new RubikCube(2);
-    // rubik = new InvisibleRubikCube(5);
+    rubik = new InvisibleRubikCube(5);
+    // rubik = new RubikCube(5);
     // rubik = new MirrorRubikCube(null, color(255, 204 ,0))
   }
   sketch.draw = function() { //main canvas
@@ -82,6 +83,7 @@ var s1 = function( sketch ) {//main canvas
     sketch.pop();
     sketch.pop();
 
+
     let offset = 0;
     // let coordH = Math.round((mouseX - screenWidth / 2) / rubik.w) - offset;
     // let coordV = -Math.round((mouseY - screenHeight / 2) / rubik.w) - offset;
@@ -115,8 +117,13 @@ var s1 = function( sketch ) {//main canvas
     //     }
     //   }
     // }
-    // rubik.show();
+    rubik.show();
+    // sketch.noLoop();
   }
+
+
+
+
 
   //~~~~~~~~~~~~~~~~~~    CONTROLS    ~~~~~~~~~~~~~~~~~~
   sketch.keyPressed = function(){
@@ -125,7 +132,6 @@ var s1 = function( sketch ) {//main canvas
     //   rubik.move(keyCodes[keyCode]);
     // }
   }
-
   sketch.mousePressed = function(){
     sketch.cursor('grab');
     moving = true;
@@ -157,7 +163,6 @@ var s1 = function( sketch ) {//main canvas
     }
     return false; //prevent scrolling
   }
-
 };
 
 var s2 = function( sketch ) {
@@ -177,6 +182,6 @@ var s2 = function( sketch ) {
 
 
 // create a new instance of p5 and pass in the function for sketch 1
-new p5(s1);
+var mainCanvas = new p5(s1);
 // create the second instance of p5 and pass in the function for sketch 2
 new p5(s2);

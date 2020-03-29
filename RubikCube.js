@@ -1,6 +1,6 @@
 class RubikCube{
   constructor(dim, w, c){
-    this.pos = createVector(0, 0, 0);
+    // this.pos = createVector(0, 0, 0);
     this.dim = (dim)? dim : 3;
 
     this.color = (c)? c : COLORSDIC.CUBECOLOR;

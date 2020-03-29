@@ -21,16 +21,16 @@ class RubikSticker{
      * Prints on screen the sticker.
      */
     show(){
-        push();
-        noStroke(); //Without borders
-        fill(this.c); //Fill with sticker's color
+        mainCanvas.push();
+        mainCanvas.noStroke(); //Without borders
+        mainCanvas.fill(this.c); //Fill with sticker's color
         //Place at correct position
-        rotateX(this.rX); //Rotate on the X axis
-        rotateY(this.rY); //Rotate on the Y axis
-        translate(0,0, this.width * 0.52); //Translate to the face of the cube (width * (0.5 + offset to see the sticker)).
+        mainCanvas.rotateX(this.rX); //Rotate on the X axis
+        mainCanvas.rotateY(this.rY); //Rotate on the Y axis
+        mainCanvas.translate(0,0, this.width * 0.52); //Translate to the face of the cube (width * (0.5 + offset to see the sticker)).
         
-        plane(this.width * this.wPercent); //Draw the sticker a bit smaller than the piece
-        pop();
+        mainCanvas.plane(this.width * this.wPercent); //Draw the sticker a bit smaller than the piece
+        mainCanvas.pop();
     }
     /**
      * Changes the color of the sticker
