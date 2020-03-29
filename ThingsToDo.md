@@ -9,7 +9,7 @@ README.MD
     -Controls
     -make color dicc to not depend on p5 and have colors on cube
     -smooth rotations
-    -Zoom with mouse wheel
+    -Reduce redundant vars
 
 ### RubikSticker:
     
