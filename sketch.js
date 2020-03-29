@@ -1,6 +1,8 @@
 
 const screenWidth = 1080;
 var screenHeight = 1080;
+var buffer;
+var buffSize = 100;
 
 var rubik;
 var COLORSDIC = {};
@@ -18,7 +20,8 @@ var incX = 0, incZ = 0;
 
 function setup() {
   // createCanvas(1000, 1000, WEBGL);
-  createCanvas(screenWidth, screenHeight, WEBGL);
+  createCanvas(screenWidth, screenHeight + buffSize, WEBGL);
+  buffer = createGraphics(buffSize, buffSize, WEBGL);
   frameRate(30);
   COLORSDIC = {
     //x
@@ -55,6 +58,9 @@ function draw() {
     incZ = (mouseY - prev.y) / 500 * Math.pow(1.001, Math.abs(incX));
   }
 
+  buffer.background(0)
+  buffer.rect(10, 10, 90, 90);
+
   //debug planes
 
   let pihalf = Math.PI / 2;
@@ -84,8 +90,10 @@ function draw() {
   pop();
 
   let offset = 0;
+
   let coordH = Math.round((mouseX - width/2) / rubik.w) - offset;
   let coordV = -Math.round((mouseY - height/2) / rubik.w) - offset;
+  
   if(Math.abs(coordH) < rubik.dim * 0.5 && Math.abs(coordV) < rubik.dim * 0.5){
     if(Math.abs(angZ) > Math.PI / 4){ //CHECK FACE
       if(angZ > 0){
@@ -94,8 +102,6 @@ function draw() {
       }
       else{
         console.log("Yellow");
-        // yIndex = Math.round((mouseY - height/2) / rubik.w);
-        // zIndex = -(rubik.dim - 1);
       }
     }
     else{
@@ -233,6 +239,7 @@ function keyPressed() {
 }
 
 function mousePressed() {
+  cursor('grab');
   moving = true;
   prev.x = mouseX;
   prev.y = mouseY;
@@ -243,6 +250,7 @@ function mouseReleased() {
   angZ += incZ;
   incX = 0;
   incZ = 0;
+  cursor();
 }
 function mouseWheel(event) {
   if(ampli > rubik.w * rubik.dim){
@@ -250,6 +258,9 @@ function mouseWheel(event) {
   }
   else if(event.delta > 0){
     ampli += event.delta;
+  }
+  else{
+    ampli = rubik.w * rubik.dim;
   }
 
   return false; //prevent scrolling
