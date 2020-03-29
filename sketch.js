@@ -1,6 +1,12 @@
+/**
+ * @author Jkutkut
+ * @see https://github.com/Jkutkut/
+ */
+const mainCanvasWidth = 1920;
+const mainCanvasHeight = 1080;
 
-const screenWidth = 1080;
-const screenHeight = 1080;
+const secondCanvasWidth = 500;
+const secondCanvasHeight = 500;
 
 var rubik;
 var COLORSDIC = {};
@@ -16,10 +22,10 @@ var incX = 0, incZ = 0;
 
 var s1 = function( sketch ) {//main canvas
   sketch.setup = function() {
-    let canvas1 = sketch.createCanvas(screenWidth, screenHeight, sketch.WEBGL);
+    let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL);
     canvas1.position(0,0);
     sketch.frameRate(30);
-  
+
     COLORSDIC = {
       //x
       RED: sketch.color(255,0,0),//red
@@ -41,15 +47,16 @@ var s1 = function( sketch ) {//main canvas
   }
   sketch.draw = function() { //main canvas
     sketch.background(220);
-    let mouseX = sketch.mouseX;
-    let mouseY = sketch.mouseY;
+
     let camX = -ampli * Math.sin(angX + incX);
     let camY = ampli * Math.cos(angX + incX);
     let camZ = ampli * Math.sin(angZ + incZ);
     
-    // camera(0, ampli * Math.cos(angX + incX), 0, 0, 0, 0, 0, 0, -1);
     sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1);
 
+    let mouseX = sketch.mouseX;
+    let mouseY = sketch.mouseY;
+    
     //camera Controls
     if(moving){
       incX = (mouseX - prev.x) / 500 * Math.pow(1.005, Math.abs(incX));
@@ -84,45 +91,57 @@ var s1 = function( sketch ) {//main canvas
     sketch.pop();
 
 
-    let offset = 0;
-    // let coordH = Math.round((mouseX - screenWidth / 2) / rubik.w) - offset;
-    // let coordV = -Math.round((mouseY - screenHeight / 2) / rubik.w) - offset;
 
+    // let offset = 0;
+    // let coordH = Math.round((mouseX - mainCanvasWidth / 2) / rubik.w) - offset;
+    // let coordV = -Math.round((mouseY - mainCanvasHeight / 2) / rubik.w) - offset;
     // if(Math.abs(coordH) < rubik.dim * 0.5 && Math.abs(coordV) < rubik.dim * 0.5){
     //   if(Math.abs(angZ) > Math.PI / 4){ //CHECK FACE
-    //     if(angZ > 0){
-    //       console.log("White");
-    //       zIndex = 0;
-    //     }
-    //     else{
-    //       console.log("Yellow");
-    //     }
+    //     
     //   }
-    //   else{
-    //     if(Math.abs(Math.sin(angX)) > Math.abs(Math.cos(angX))){
-    //       if(Math.sin(angX) < 0){
-    //         console.log("Orange");
-    //       }
-    //       else{
-    //         console.log("Red");
-    //       }
-    //     }
-    //     else{
-    //       if(Math.cos(angX) > 0){
-    //         console.log("Blue");
-    //       }
-    //       else{
-    //         console.log("Green");
-    //       }
-    //     }
-    //   }
+      
     // }
     rubik.show();
-    // sketch.noLoop();
+    sketch.noLoop();
   }
 
 
-
+  sketch.lookingAt = function(){
+    let look = [];
+    if(Math.abs(angZ) > Math.PI / 3.5){
+      if(angZ > 0){
+        console.log("White");
+        look = [0, 0, 1];
+      }
+      else{
+        console.log("Yellow");
+        look = [0, 0, -1];
+      }
+    }
+    else{
+      if(Math.abs(Math.sin(angX)) > Math.abs(Math.cos(angX))){
+        if(Math.sin(angX) < 0){
+          console.log("Orange");
+          look = [1, 0, 0];
+        }
+        else{
+          console.log("Red");
+          look = [-1, 0, 0];
+        }
+      }
+      else{
+        if(Math.cos(angX) > 0){
+          console.log("Blue");
+          look = [0, 1, 0];
+        }
+        else{
+          console.log("Green");
+          look = [0, -1, 0];
+        }
+      }
+    }
+    return look;
+  }
 
 
   //~~~~~~~~~~~~~~~~~~    CONTROLS    ~~~~~~~~~~~~~~~~~~
@@ -141,10 +160,13 @@ var s1 = function( sketch ) {//main canvas
   sketch.mouseReleased = function(){
     sketch.cursor();
     moving = false;
-    angX += incX;
-    angZ += incZ;
+    angX += incX % Math.PI;
+    angZ += (incZ % Math.PI);
     incX = 0;
     incZ = 0;
+    sketch.lookingAt();
+
+    secondCanvas.update();
   }
   sketch.mouseWheel = function(){
     try{
@@ -165,11 +187,11 @@ var s1 = function( sketch ) {//main canvas
   }
 };
 
-var s2 = function( sketch ) {
+var s2 = function(sketch) {
 
    sketch.setup = function() {
-    let canvas2 = sketch.createCanvas(100, 100, sketch.WEBGL);
-    canvas2.position(0,1080);
+    let canvas2 = sketch.createCanvas(secondCanvasWidth, secondCanvasHeight, sketch.WEBGL);
+    canvas2.position(mainCanvasWidth - secondCanvasWidth, mainCanvasHeight - secondCanvasHeight);
   }
   sketch.draw = function() {
     //for canvas 2
@@ -177,11 +199,25 @@ var s2 = function( sketch ) {
     sketch.rotateX(sketch.frameCount * 0.01);
     sketch.rotateZ(sketch.frameCount * 0.02);
     sketch.cone(30, 50);
+
+    sketch.noLoop();
+  }
+
+  sketch.update = function(){
+    let look = mainCanvas.lookingAt();
+
+    let dist = rubik.w * rubik.dim;
+    console.log(dist);
+    sketch.camera(...look.map(x => x * dist), 0, 0, 0, 0, 0, -1);
+    console.log(look)
+    printArray_nD(look.map(x => x * dist));
+    // sketch.background(200);
+
+    // rubik.show(secondCanvas);
   }
 };
 
 
-// create a new instance of p5 and pass in the function for sketch 1
+// create a new instance of p5 and pass in the function for sketch 1 and 2
 var mainCanvas = new p5(s1);
-// create the second instance of p5 and pass in the function for sketch 2
-new p5(s2);
+var secondCanvas = new p5(s2);
