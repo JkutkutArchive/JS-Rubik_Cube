@@ -102,7 +102,7 @@ var s1 = function( sketch ) {//main canvas
       
     // }
     rubik.show();
-    sketch.noLoop();
+    // sketch.noLoop();
   }
 
 
@@ -111,35 +111,37 @@ var s1 = function( sketch ) {//main canvas
     if(Math.abs(angZ) > Math.PI / 3.5){
       if(angZ > 0){
         console.log("White");
-        look = [0, 0, 1];
+        look.push([0, 0, 1]);
       }
       else{
         console.log("Yellow");
-        look = [0, 0, -1];
+        look.push([0, 0, -1]);
       }
     }
     else{
       if(Math.abs(Math.sin(angX)) > Math.abs(Math.cos(angX))){
         if(Math.sin(angX) < 0){
           console.log("Orange");
-          look = [1, 0, 0];
+          look.push([1, 0, 0]);
         }
         else{
           console.log("Red");
-          look = [-1, 0, 0];
+          look.push([-1, 0, 0]);
         }
       }
       else{
         if(Math.cos(angX) > 0){
           console.log("Blue");
-          look = [0, 1, 0];
+          look.push([0, 1, 0]);
         }
         else{
           console.log("Green");
-          look = [0, -1, 0];
+          look.push([0, -1, 0]);
         }
       }
     }
+
+    look.push([-Math.round(Math.sin(angX + incX)), Math.round(Math.cos(angX + incX)), 0]);
     return look;
   }
 
@@ -192,28 +194,25 @@ var s2 = function(sketch) {
    sketch.setup = function() {
     let canvas2 = sketch.createCanvas(secondCanvasWidth, secondCanvasHeight, sketch.WEBGL);
     canvas2.position(mainCanvasWidth - secondCanvasWidth, mainCanvasHeight - secondCanvasHeight);
+    sketch.background(200);
   }
   sketch.draw = function() {
-    //for canvas 2
-    sketch.background(100);
-    sketch.rotateX(sketch.frameCount * 0.01);
-    sketch.rotateZ(sketch.frameCount * 0.02);
-    sketch.cone(30, 50);
-
     sketch.noLoop();
   }
 
   sketch.update = function(){
     let look = mainCanvas.lookingAt();
-
     let dist = rubik.w * rubik.dim;
-    console.log(dist);
-    sketch.camera(...look.map(x => x * dist), 0, 0, 0, 0, 0, -1);
-    console.log(look)
-    printArray_nD(look.map(x => x * dist));
-    // sketch.background(200);
 
-    // rubik.show(secondCanvas);
+    let coord = vector.addition(look[0].map(x => x * dist * 2), look[1]);
+
+    console.log(coord);
+
+    sketch.camera(...coord, 0, 0, 0, 0, 0, -1);
+    // printArray_nD(look.map(x => x * dist));
+    sketch.background(200);
+
+    rubik.show(secondCanvas);
   }
 };
 

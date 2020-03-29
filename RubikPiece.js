@@ -101,7 +101,6 @@ class RubikPieceCenter extends RubikPiece{
     this.stickers.push(new RubikSticker(0, 0, COLORSDIC.NULL, this.w)); //add the sticker
   }
   show(canvas){
-    console.log(canvas == undefined);
     canvas = (canvas == undefined)? mainCanvas : canvas;
 
     canvas.fill(this.color);
