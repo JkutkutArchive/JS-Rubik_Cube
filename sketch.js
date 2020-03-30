@@ -17,11 +17,13 @@ var camX, camY, camZ;
 var moving = false;
 var prev = {x: 0, y: 0};//(x,y) mouse coord
 var ampli = 1000;
-var angX = 0.25 * Math.PI;
-// var angZ = 0.01;
-var angZ = 3 * 0.25 * Math.PI;
+var angX = 1.2 * 0.25 * Math.PI;
+var angZ = 3.2 * 0.25 * Math.PI;
 var incX = 0, incZ = 0;
 var trueIncX = 0, trueIncZ = 0;
+
+var look = [0, 0, 0];
+var boxCoord = [0,0,0];
 
 var s1 = function( sketch ) {//main canvas
   sketch.setup = function() {
@@ -96,6 +98,11 @@ var s1 = function( sketch ) {//main canvas
     sketch.pop();
 
 
+    sketch.push();
+    sketch.translate(...boxCoord);
+    sketch.box(rubik.w);
+    sketch.pop();
+
 
     rubik.show();
     // sketch.noLoop();
@@ -103,8 +110,7 @@ var s1 = function( sketch ) {//main canvas
 
 
   sketch.lookingAt = function(){
-    let look = [];
-    console.log(angZ / Math.PI)
+    look = [];
     if(angZ / Math.PI > 0.75){
       console.log("White");
       look.push([0, 0, 1]);
@@ -136,10 +142,13 @@ var s1 = function( sketch ) {//main canvas
       }
     }
 
-    look.push([Math.round(Math.cos(angX + trueIncX)), Math.round(Math.sin(angX + trueIncX)), 0]);
+    let x = Math.cos(angX + trueIncX);
+    let y = Math.sin(angX + trueIncX);
+    x = (Math.abs(x) > Math.abs(y))? x : 0;
+    y = (x == 0)? y : 0;
+    look.push([Math.round(x), Math.round(y), 0]);
     return look;
   }
-
 
   //~~~~~~~~~~~~~~~~~~    CONTROLS    ~~~~~~~~~~~~~~~~~~
   sketch.keyPressed = function(){
@@ -164,7 +173,7 @@ var s1 = function( sketch ) {//main canvas
     incZ = 0;
     trueIncX = 0;
     trueIncZ = 0;
-    sketch.lookingAt();
+    // sketch.lookingAt();
 
     secondCanvas.update();
   }
@@ -192,26 +201,80 @@ var s2 = function(sketch) {
    sketch.setup = function() {
     let canvas2 = sketch.createCanvas(secondCanvasWidth, secondCanvasHeight, sketch.WEBGL);
     canvas2.position(mainCanvasWidth - secondCanvasWidth, mainCanvasHeight - secondCanvasHeight);
-    sketch.background(200);
+    sketch.frameRate(5);
+    sketch.camera(0, 1, rubik.w * rubik.dim * 2, 0, 0, 0, 0, 0, -1);
+    sketch.update();
   }
   sketch.draw = function() {
-    sketch.noLoop();
+    sketch.background(200);
+
+    if(sketch.mouseX > 0 && sketch.mouseY > 0 &&
+      sketch.mouseX < secondCanvasWidth && sketch.mouseY < secondCanvasHeight){
+      let x = Math.floor(sketch.mouseX / (secondCanvasWidth / rubik.dim));
+      let y = Math.floor(sketch.mouseY / (secondCanvasHeight / rubik.dim));
+      
+      printArray_nD(look);
+
+      
+      // printArray_nD([x, y]);
+      let dX, dY, dZ;
+      if(look[0][2] == 0){//horizontal
+        dX = (look[0][0] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][1] == -1)? -1 : 1) : 0;
+        dY = (look[0][1] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][0] == 1)? -1 : 1) : 0;
+        dZ = -(y - Math.floor(rubik.dim / 2));
+      }
+      else{//yellow or white
+        // dX = ((look[1][0] == 0)? x  - Math.floor(rubik.dim / 2): (y - Math.floor(rubik.dim / 2)));
+        // dY = ((look[1][1] == 0)? x  - Math.floor(rubik.dim / 2): (y - Math.floor(rubik.dim / 2)) * look[0][2]);
+        // dX = (look[1][0] == 0)? x  - Math.floor(rubik.dim / 2) : (y - Math.floor(rubik.dim / 2) * look[1][0]);
+        // dY = (look[1][1] == 0)? x  - Math.floor(rubik.dim / 2): (y - Math.floor(rubik.dim / 2)) * look[1][1];
+
+        if(look[1][0] == 0 && look[1][1] == 1){
+          dX = x - Math.floor(rubik.dim / 2);
+          dY = y - Math.floor(rubik.dim / 2);
+        }
+        else if(look[1][0] == 1 && look[1][1] == 0){
+          dX =  (y - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1);
+          dY = -(x - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1);
+        }
+        else if(look[1][0] == 0 && look[1][1] == -1){
+          dX = -(x - Math.floor(rubik.dim / 2));
+          dY = -(y - Math.floor(rubik.dim / 2));
+        }
+        else if(look[1][0] == -1 && look[1][1] == 0){
+          dX = -(y - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1);
+          dY =  (x - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1);
+        }
+        // dX *= look[0][2];
+        dY *= look[0][2];
+        dZ = 0;
+      }
+      // let dX = (look[0][0] == 0)? x - Math.floor(rubik.dim / 2) : 0;
+      // let dY = (look[0][1] == 0)? (look[0][0] == 0)? x - Math.floor(rubik.dim / 2) : y - Math.floor(rubik.dim / 2) : 0;
+      // let dZ = (look[0][2] == 0)? y - Math.floor(rubik.dim / 2) : 0;
+
+      // printArray_nD([dX, dY, dZ]);
+      sketch.push();
+      sketch.translate(...vector.addition(boxCoord, [dX, dY, dZ].map(x => x * rubik.w)));
+      sketch.box(rubik.w);
+      sketch.pop();
+      
+    }
+    rubik.show(secondCanvas);
+    // sketch.noLoop();
   }
 
   sketch.update = function(){
     let look = mainCanvas.lookingAt();
     let dist = rubik.w * rubik.dim;
-
-    // printArray_nD(look);
-    let coord = vector.addition(look[0].map(x => x * dist * 2), look[1]);
-
-    // console.log(coord);
-
+    let coord = vector.addition(look[0].map(x => x * dist * 1.4), look[1]);
     sketch.camera(...coord, 0, 0, 0, 0, 0, -1);
-    // printArray_nD(look.map(x => x * dist));
-    sketch.background(200);
 
-    rubik.show(secondCanvas);
+    boxCoord = look[0].map(x => x * rubik.w * Math.floor(rubik.dim / 2));
+  }
+
+  sketch.mouseOver = function(){
+    console.log("in")
   }
 };
 
