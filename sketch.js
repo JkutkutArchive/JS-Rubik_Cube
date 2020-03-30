@@ -23,7 +23,8 @@ var incX = 0, incZ = 0;
 var trueIncX = 0, trueIncZ = 0;
 
 var look = [0, 0, 0];
-var boxCoord = [0,0,0];
+var boxCoordBase = [0,0,0];
+var boxCoordRela = [0,0,0];
 
 var s1 = function( sketch ) {//main canvas
   sketch.setup = function() {
@@ -99,7 +100,7 @@ var s1 = function( sketch ) {//main canvas
 
 
     sketch.push();
-    sketch.translate(...boxCoord);
+    sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
     sketch.box(rubik.w);
     sketch.pop();
 
@@ -224,38 +225,21 @@ var s2 = function(sketch) {
         dZ = -(y - Math.floor(rubik.dim / 2));
       }
       else{//yellow or white
-        // dX = ((look[1][0] == 0)? x  - Math.floor(rubik.dim / 2): (y - Math.floor(rubik.dim / 2)));
-        // dY = ((look[1][1] == 0)? x  - Math.floor(rubik.dim / 2): (y - Math.floor(rubik.dim / 2)) * look[0][2]);
-        // dX = (look[1][0] == 0)? x  - Math.floor(rubik.dim / 2) : (y - Math.floor(rubik.dim / 2) * look[1][0]);
-        // dY = (look[1][1] == 0)? x  - Math.floor(rubik.dim / 2): (y - Math.floor(rubik.dim / 2)) * look[1][1];
-
-        if(look[1][0] == 0 && look[1][1] == 1){
-          dX = x - Math.floor(rubik.dim / 2);
-          dY = y - Math.floor(rubik.dim / 2);
+        if(look[1][0] == 0){
+          dX = (x - Math.floor(rubik.dim / 2)) * look[1][1];
+          dY = (y - Math.floor(rubik.dim / 2)) * look[1][1];
         }
-        else if(look[1][0] == 1 && look[1][1] == 0){
-          dX =  (y - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1);
-          dY = -(x - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1);
+        else if(look[1][1] == 0){
+          dX =  (y - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1) * look[1][0];
+          dY = -(x - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1) * look[1][0];
         }
-        else if(look[1][0] == 0 && look[1][1] == -1){
-          dX = -(x - Math.floor(rubik.dim / 2));
-          dY = -(y - Math.floor(rubik.dim / 2));
-        }
-        else if(look[1][0] == -1 && look[1][1] == 0){
-          dX = -(y - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1);
-          dY =  (x - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1);
-        }
-        // dX *= look[0][2];
-        dY *= look[0][2];
+        dY *= look[0][2];//invert move if on bottom face
         dZ = 0;
       }
-      // let dX = (look[0][0] == 0)? x - Math.floor(rubik.dim / 2) : 0;
-      // let dY = (look[0][1] == 0)? (look[0][0] == 0)? x - Math.floor(rubik.dim / 2) : y - Math.floor(rubik.dim / 2) : 0;
-      // let dZ = (look[0][2] == 0)? y - Math.floor(rubik.dim / 2) : 0;
+      boxCoordRela = [dX, dY, dZ];
 
-      // printArray_nD([dX, dY, dZ]);
       sketch.push();
-      sketch.translate(...vector.addition(boxCoord, [dX, dY, dZ].map(x => x * rubik.w)));
+      sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
       sketch.box(rubik.w);
       sketch.pop();
       
@@ -270,7 +254,7 @@ var s2 = function(sketch) {
     let coord = vector.addition(look[0].map(x => x * dist * 1.4), look[1]);
     sketch.camera(...coord, 0, 0, 0, 0, 0, -1);
 
-    boxCoord = look[0].map(x => x * rubik.w * Math.floor(rubik.dim / 2));
+    boxCoordBase = look[0].map(x => x * rubik.w * Math.floor(rubik.dim / 2));
   }
 
   sketch.mouseOver = function(){
