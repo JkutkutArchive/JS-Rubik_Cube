@@ -16,9 +16,11 @@ var COLORSDIC = {};
 var moving = false;
 var prev = {x: 0, y: 0};//(x,y) mouse coord
 var ampli = 1000;
-var angX = -0.25 * Math.PI;
-var angZ = 0.5 * Math.PI;
+var angX = 0.25 * Math.PI;
+// var angZ = 0.01;
+var angZ = 3 * 0.25 * Math.PI;
 var incX = 0, incZ = 0;
+var trueIncX = 0, trueIncZ = 0;
 
 var s1 = function( sketch ) {//main canvas
   sketch.setup = function() {
@@ -47,21 +49,24 @@ var s1 = function( sketch ) {//main canvas
   }
   sketch.draw = function() { //main canvas
     sketch.background(220);
-
-    let camX = -ampli * Math.sin(angX + incX);
-    let camY = ampli * Math.cos(angX + incX);
-    let camZ = ampli * Math.sin(angZ + incZ);
-    
-    sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1);
-
     let mouseX = sketch.mouseX;
     let mouseY = sketch.mouseY;
-    
+
     //camera Controls
     if(moving){
       incX = (mouseX - prev.x) / 500 * Math.pow(1.005, Math.abs(incX));
       incZ = (mouseY - prev.y) / 500 * Math.pow(1.001, Math.abs(incX));
+
+      trueIncX = incX;
+      trueIncZ = ((angZ + incZ) / Math.PI > 1)? Math.PI - angZ : ((angZ + incZ) < 0)? -angZ + 0.0001 : incZ;
     }
+
+    let camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+    let camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+    let camZ =  -ampli * Math.cos(angZ + trueIncZ);
+    
+    sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1);
+    
     //debug planes
 
     let pihalf = Math.PI / 2;
@@ -162,10 +167,13 @@ var s1 = function( sketch ) {//main canvas
   sketch.mouseReleased = function(){
     sketch.cursor();
     moving = false;
-    angX += incX % Math.PI;
-    angZ += (incZ % Math.PI);
+    angX += trueIncX;
+    angZ += trueIncZ;
+
     incX = 0;
     incZ = 0;
+    trueIncX = 0;
+    trueIncZ = 0;
     sketch.lookingAt();
 
     secondCanvas.update();
