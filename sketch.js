@@ -13,6 +13,7 @@ var COLORSDIC = {};
 
 
 //Controls
+var camX, camY, camZ;
 var moving = false;
 var prev = {x: 0, y: 0};//(x,y) mouse coord
 var ampli = 1000;
@@ -61,14 +62,13 @@ var s1 = function( sketch ) {//main canvas
       trueIncZ = ((angZ + incZ) / Math.PI > 1)? Math.PI - angZ : ((angZ + incZ) < 0)? -angZ + 0.0001 : incZ;
     }
 
-    let camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-    let camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-    let camZ =  -ampli * Math.cos(angZ + trueIncZ);
+    camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+    camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+    camZ =  -ampli * Math.cos(angZ + trueIncZ);
     
     sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1);
     
     //debug planes
-
     let pihalf = Math.PI / 2;
     let l = 1000;
     sketch.push();
@@ -97,15 +97,6 @@ var s1 = function( sketch ) {//main canvas
 
 
 
-    // let offset = 0;
-    // let coordH = Math.round((mouseX - mainCanvasWidth / 2) / rubik.w) - offset;
-    // let coordV = -Math.round((mouseY - mainCanvasHeight / 2) / rubik.w) - offset;
-    // if(Math.abs(coordH) < rubik.dim * 0.5 && Math.abs(coordV) < rubik.dim * 0.5){
-    //   if(Math.abs(angZ) > Math.PI / 4){ //CHECK FACE
-    //     
-    //   }
-      
-    // }
     rubik.show();
     // sketch.noLoop();
   }
@@ -113,19 +104,18 @@ var s1 = function( sketch ) {//main canvas
 
   sketch.lookingAt = function(){
     let look = [];
-    if(Math.abs(angZ) > Math.PI / 3.5){
-      if(angZ > 0){
-        console.log("White");
-        look.push([0, 0, 1]);
-      }
-      else{
-        console.log("Yellow");
-        look.push([0, 0, -1]);
-      }
+    console.log(angZ / Math.PI)
+    if(angZ / Math.PI > 0.75){
+      console.log("White");
+      look.push([0, 0, 1]);
+    }
+    else if(angZ / Math.PI < 0.25){
+      console.log("Yellow");
+      look.push([0, 0, -1]);
     }
     else{
-      if(Math.abs(Math.sin(angX)) > Math.abs(Math.cos(angX))){
-        if(Math.sin(angX) < 0){
+      if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
+        if(Math.cos(angX) > 0){
           console.log("Orange");
           look.push([1, 0, 0]);
         }
@@ -135,7 +125,7 @@ var s1 = function( sketch ) {//main canvas
         }
       }
       else{
-        if(Math.cos(angX) > 0){
+        if(Math.sin(angX) > 0){
           console.log("Blue");
           look.push([0, 1, 0]);
         }
@@ -146,7 +136,7 @@ var s1 = function( sketch ) {//main canvas
       }
     }
 
-    look.push([-Math.round(Math.sin(angX + incX)), Math.round(Math.cos(angX + incX)), 0]);
+    look.push([Math.round(Math.cos(angX + trueIncX)), Math.round(Math.sin(angX + trueIncX)), 0]);
     return look;
   }
 
@@ -212,9 +202,10 @@ var s2 = function(sketch) {
     let look = mainCanvas.lookingAt();
     let dist = rubik.w * rubik.dim;
 
+    // printArray_nD(look);
     let coord = vector.addition(look[0].map(x => x * dist * 2), look[1]);
 
-    console.log(coord);
+    // console.log(coord);
 
     sketch.camera(...coord, 0, 0, 0, 0, 0, -1);
     // printArray_nD(look.map(x => x * dist));
