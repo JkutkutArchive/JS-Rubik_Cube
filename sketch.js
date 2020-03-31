@@ -51,7 +51,7 @@ var s1 = function( sketch ) {//main canvas
       NULL: sketch.color(100),
 
     };
-    // rubik = new RubikCube(2);
+    // rubik = new RubikCube(4);
     rubik = new InvisibleRubikCube(5);
     // rubik = new RubikCube(5);
     // rubik = new MirrorRubikCube(null, color(255, 204 ,0))
@@ -272,16 +272,18 @@ var s2 = function(sketch) {
     if(!selectingMove){
       return;//if not selecting a move, do nothing
     }
-    selectingMove = false;
-    let x = Math.floor(startX / (secondCanvasWidth / rubik.dim));
-    let y = Math.floor(startY / (secondCanvasHeight / rubik.dim));
-    //analize the move
     let deltaX = sketch.mouseX - startX;
     let deltaY = sketch.mouseY - startY;
     if(Math.max(Math.abs(deltaX), Math.abs(deltaY)) < rubik.w){
       return;//If move small, do not do it
     }
-    let moveMade = [0, 0];
+    selectingMove = false;
+
+    //analize the move
+    let x = Math.floor(startX / (secondCanvasWidth / rubik.dim));
+    let y = Math.floor(startY / (secondCanvasHeight / rubik.dim));
+    
+    let moveMade = [0, 0];//[right (1) or left (-1), up (1) or down (-1)]
     if(Math.abs(deltaX) > Math.abs(deltaY)){
       if(deltaX > 0){
         console.log("Right");
@@ -302,12 +304,9 @@ var s2 = function(sketch) {
         moveMade[1] = -1;
       }
     }
-    printArray_nD([x,y]);
-    printArray_nD(boxCoordRela);
 
-    if(look[0][2] == 0){//horizontal faces
-      let axis, h, inverted;
-
+    let axis, h, inverted;
+    if(look[0][2] == 0){ //horizontal faces
       if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
         axis = "z";
         h = y;
@@ -320,12 +319,76 @@ var s2 = function(sketch) {
         inverted = moveMade[1] == -1; 
         inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;
         inverted = (look[0][0] == 1 || look[0][1] == -1)? !inverted : inverted;
-
       }
-
-      rubik.makeMove(axis, h, inverted); //makeMove(axis, h, inverse)
-
     }
+    else if(look[0][2] == 1){ //White face
+      printArray_nD([x,y]);
+      printArray_nD(boxCoordRela);
+      if(look[1][1] == 1){//over blue
+        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+          axis = "y";
+          h = rubik.dim - 1 - y;
+          inverted = moveMade[0] == 1;
+          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+
+        }
+        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
+          axis = "x";
+          h = rubik.dim - 1 - x;
+          inverted = moveMade[1] == 1;
+          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+
+        }
+      }
+      else if(look[1][1] == -1){//over green
+        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+          axis = "y";
+          h = y;
+         inverted = moveMade[0] == 1;
+        inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+
+        }
+        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
+          axis = "x";
+          h = x;
+          inverted = moveMade[1] == 1;
+          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+
+        }
+      }
+      else if(look[1][0] == 1){ //over orange
+        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+          axis = "x";
+          h = rubik.dim - 1 - y;
+          inverted = moveMade[0] == 1;
+          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
+          axis = "y";
+          h = x;
+          inverted = moveMade[1] == 1;
+          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+
+        }
+      }
+      else{ //over red
+        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+          axis = "x";
+          h = y;
+          inverted = moveMade[0] == 1;
+          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
+          axis = "y";
+          h = rubik.dim - 1 - x;
+          inverted = moveMade[1] == 1;
+          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+      }
+    }
+
+
+    rubik.makeMove(axis, h, inverted); //makeMove(axis, h, inverse)
   }
 
 
