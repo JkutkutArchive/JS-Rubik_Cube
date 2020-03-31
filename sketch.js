@@ -337,7 +337,6 @@ var s2 = function(sketch) {
           h = rubik.dim - 1 - x;
           inverted = moveMade[1] == 1;
           inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-
         }
       }
       else if(look[1][1] == -1){//over green

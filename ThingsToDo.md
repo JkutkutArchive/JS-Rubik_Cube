@@ -7,7 +7,7 @@ README.MD
 
 ### GENERAL
     -Controls
-        -problem: inversion of the z move 
+        -Finish yellow face
     -make color dicc to not depend on p5 and have colors on cube
     -smooth rotations
     -Reduce redundant vars
@@ -17,6 +17,8 @@ README.MD
 ### RubikPiece:
 
 ### RubikCube:
+    -At move, invert recursive algo to boost performance
+
     -Update JSDOC with instances logic
 
     -Colors as var (rubikscube. proto. jfkaljfa)--> not possible right now
