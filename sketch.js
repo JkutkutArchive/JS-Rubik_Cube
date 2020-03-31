@@ -22,6 +22,10 @@ var angZ = 3.2 * 0.25 * Math.PI;
 var incX = 0, incZ = 0;
 var trueIncX = 0, trueIncZ = 0;
 
+
+var selectingMove = false;
+var startX = 0, startY = 0;//select move start coord
+
 var look = [0, 0, 0];
 var boxCoordBase = [0,0,0];
 var boxCoordRela = [0,0,0];
@@ -43,8 +47,9 @@ var s1 = function( sketch ) {//main canvas
       WHITE: sketch.color(255),//white
       YELLOW: sketch.color(247, 239, 0), //yellow
       CUBECOLOR: sketch.color(50),//cubeColor
-      
-      NULL: sketch.color(100)
+      INVERSECUBECOLOR: sketch.color(255 - 50),
+      NULL: sketch.color(100),
+
     };
     // rubik = new RubikCube(2);
     rubik = new InvisibleRubikCube(5);
@@ -100,6 +105,7 @@ var s1 = function( sketch ) {//main canvas
 
 
     sketch.push();
+    sketch.fill(COLORSDIC.INVERSECUBECOLOR);
     sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
     sketch.box(rubik.w);
     sketch.pop();
@@ -123,21 +129,21 @@ var s1 = function( sketch ) {//main canvas
     else{
       if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
         if(Math.cos(angX) > 0){
-          console.log("Orange");
+          // console.log("Orange");
           look.push([1, 0, 0]);
         }
         else{
-          console.log("Red");
+          // console.log("Red");
           look.push([-1, 0, 0]);
         }
       }
       else{
         if(Math.sin(angX) > 0){
-          console.log("Blue");
+          // console.log("Blue");
           look.push([0, 1, 0]);
         }
         else{
-          console.log("Green");
+          // console.log("Green");
           look.push([0, -1, 0]);
         }
       }
@@ -159,10 +165,12 @@ var s1 = function( sketch ) {//main canvas
     // }
   }
   sketch.mousePressed = function(){
-    sketch.cursor('grab');
-    moving = true;
-    prev.x = sketch.mouseX;
-    prev.y = sketch.mouseY;
+    if(!secondCanvas.inBounds()){
+      sketch.cursor('grab');
+      moving = true;
+      prev.x = sketch.mouseX;
+      prev.y = sketch.mouseY;
+    }
   }
   sketch.mouseReleased = function(){
     sketch.cursor();
@@ -209,44 +217,117 @@ var s2 = function(sketch) {
   sketch.draw = function() {
     sketch.background(200);
 
-    if(sketch.mouseX > 0 && sketch.mouseY > 0 &&
-      sketch.mouseX < secondCanvasWidth && sketch.mouseY < secondCanvasHeight){
-      let x = Math.floor(sketch.mouseX / (secondCanvasWidth / rubik.dim));
-      let y = Math.floor(sketch.mouseY / (secondCanvasHeight / rubik.dim));
-      
-      printArray_nD(look);
+    if(!selectingMove){
+      if(sketch.inBounds()){
+        let x = Math.floor(sketch.mouseX / (secondCanvasWidth / rubik.dim));
+        let y = Math.floor(sketch.mouseY / (secondCanvasHeight / rubik.dim));
+        
+        printArray_nD(look);
 
-      
-      // printArray_nD([x, y]);
-      let dX, dY, dZ;
-      if(look[0][2] == 0){//horizontal
-        dX = (look[0][0] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][1] == -1)? -1 : 1) : 0;
-        dY = (look[0][1] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][0] == 1)? -1 : 1) : 0;
-        dZ = -(y - Math.floor(rubik.dim / 2));
-      }
-      else{//yellow or white
-        if(look[1][0] == 0){
-          dX = (x - Math.floor(rubik.dim / 2)) * look[1][1];
-          dY = (y - Math.floor(rubik.dim / 2)) * look[1][1];
+        
+        // printArray_nD([x, y]);
+        let dX, dY, dZ;
+        if(look[0][2] == 0){//horizontal
+          dX = (look[0][0] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][1] == -1)? -1 : 1) : 0;
+          dY = (look[0][1] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][0] == 1)? -1 : 1) : 0;
+          dZ = -(y - Math.floor(rubik.dim / 2));
         }
-        else if(look[1][1] == 0){
-          dX =  (y - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1) * look[1][0];
-          dY = -(x - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1) * look[1][0];
+        else{//yellow or white
+          if(look[1][0] == 0){
+            dX = (x - Math.floor(rubik.dim / 2)) * look[1][1];
+            dY = (y - Math.floor(rubik.dim / 2)) * look[1][1];
+          }
+          else if(look[1][1] == 0){
+            dX =  (y - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1) * look[1][0];
+            dY = -(x - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1) * look[1][0];
+          }
+          dY *= look[0][2];//invert move if on bottom face
+          dZ = 0;
         }
-        dY *= look[0][2];//invert move if on bottom face
-        dZ = 0;
+        boxCoordRela = [dX, dY, dZ];
       }
-      boxCoordRela = [dX, dY, dZ];
-
-      sketch.push();
-      sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
-      sketch.box(rubik.w);
-      sketch.pop();
-      
+      else{
+        boxCoordBase = [0, 0, 0]; //Reset relative position
+      }
     }
+
+    sketch.push();
+    sketch.fill(COLORSDIC.INVERSECUBECOLOR);
+    sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
+    sketch.box(rubik.w);
+    sketch.pop();
     rubik.show(secondCanvas);
     // sketch.noLoop();
   }
+
+
+  sketch.mousePressed = function(){
+    if(sketch.inBounds()){
+      selectingMove = true;
+      startX = sketch.mouseX;
+      startY = sketch.mouseY;
+    }
+  }
+  sketch.mouseReleased = function(){
+    if(!selectingMove){
+      return;//if not selecting a move, do nothing
+    }
+    selectingMove = false;
+    let x = Math.floor(startX / (secondCanvasWidth / rubik.dim));
+    let y = Math.floor(startY / (secondCanvasHeight / rubik.dim));
+    //analize the move
+    let deltaX = sketch.mouseX - startX;
+    let deltaY = sketch.mouseY - startY;
+    if(Math.max(Math.abs(deltaX), Math.abs(deltaY)) < rubik.w){
+      return;//If move small, do not do it
+    }
+    let moveMade = [0, 0];
+    if(Math.abs(deltaX) > Math.abs(deltaY)){
+      if(deltaX > 0){
+        console.log("Right");
+        moveMade[0] = 1;
+      }
+      else{
+        console.log("Left");
+        moveMade[0] = -1;
+      }
+    }
+    else{
+      if(deltaY > 0){
+        console.log("Down");
+        moveMade[1] = 1;
+      }
+      else{
+        console.log("Up");
+        moveMade[1] = -1;
+      }
+    }
+    printArray_nD([x,y]);
+    printArray_nD(boxCoordRela);
+
+    if(look[0][2] == 0){//horizontal faces
+      let axis, h, inverted;
+
+      if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+        axis = "z";
+        h = y;
+        inverted = moveMade[0] == 1;
+        inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+      }
+      else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
+        axis = (look[0][0] != 0)? "y" : "x";
+        h = (look[0][0] == 1 || look[0][1] == -1)? x : rubik.dim - 1 - x; //if rotation on y axis, index is inverted
+        inverted = moveMade[1] == -1; 
+        inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;
+        inverted = (look[0][0] == 1 || look[0][1] == -1)? !inverted : inverted;
+
+      }
+
+      rubik.makeMove(axis, h, inverted); //makeMove(axis, h, inverse)
+
+    }
+  }
+
 
   sketch.update = function(){
     let look = mainCanvas.lookingAt();
@@ -257,8 +338,11 @@ var s2 = function(sketch) {
     boxCoordBase = look[0].map(x => x * rubik.w * Math.floor(rubik.dim / 2));
   }
 
-  sketch.mouseOver = function(){
-    console.log("in")
+  sketch.inBounds = function(){
+    return sketch.mouseX > 0 && 
+           sketch.mouseY > 0 &&
+           sketch.mouseX < secondCanvasWidth &&
+           sketch.mouseY < secondCanvasHeight;
   }
 };
 
