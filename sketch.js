@@ -24,7 +24,7 @@ var trueIncX = 0, trueIncZ = 0;
 
 
 var selectingMove = false;
-var startX = 0, startY = 0;//select move start coord
+var startMove = {x: 0, y: 0};//select move start coord
 
 var look = [0, 0, 0];
 var boxCoordBase = [0,0,0];
@@ -206,33 +206,31 @@ var s1 = function( sketch ) {//main canvas
 };
 
 var s2 = function(sketch) {
-
+  /**
+   * Setup of the second sketch.
+   */
    sketch.setup = function() {
-    let canvas2 = sketch.createCanvas(secondCanvasWidth, secondCanvasHeight, sketch.WEBGL);
-    canvas2.position(mainCanvasWidth - secondCanvasWidth, mainCanvasHeight - secondCanvasHeight);
-    sketch.frameRate(5);
-    sketch.camera(0, 1, rubik.w * rubik.dim * 2, 0, 0, 0, 0, 0, -1);
-    sketch.update();
+    let canvas2 = sketch.createCanvas(secondCanvasWidth, secondCanvasHeight, sketch.WEBGL); //make canvas
+    canvas2.position(mainCanvasWidth - secondCanvasWidth, mainCanvasHeight - secondCanvasHeight); //set canvas pos
+    sketch.frameRate(15); //set frameRate
+    sketch.update(); //Update the canvas
   }
+  /**
+   * Second canvas Draw.
+   */
   sketch.draw = function() {
     sketch.background(200);
-
-    if(!selectingMove){
-      if(sketch.inBounds()){
+    if(!selectingMove){ //if not on selecting move
+      if(sketch.inBounds()){ //if on bounds, get the coords of the facing piece
         let x = Math.floor(sketch.mouseX / (secondCanvasWidth / rubik.dim));
-        let y = Math.floor(sketch.mouseY / (secondCanvasHeight / rubik.dim));
-        
-        printArray_nD(look);
-
-        
-        // printArray_nD([x, y]);
+        let y = Math.floor(sketch.mouseY / (secondCanvasHeight / rubik.dim));        
         let dX, dY, dZ;
-        if(look[0][2] == 0){//horizontal
+        if(look[0][2] == 0){ //looking at horizontal face
           dX = (look[0][0] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][1] == -1)? -1 : 1) : 0;
           dY = (look[0][1] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][0] == 1)? -1 : 1) : 0;
           dZ = -(y - Math.floor(rubik.dim / 2));
         }
-        else{//yellow or white
+        else{ //looking at yellow or white face
           if(look[1][0] == 0){
             dX = (x - Math.floor(rubik.dim / 2)) * look[1][1];
             dY = (y - Math.floor(rubik.dim / 2)) * look[1][1];
@@ -241,48 +239,35 @@ var s2 = function(sketch) {
             dX =  (y - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1) * look[1][0];
             dY = -(x - Math.floor(rubik.dim / 2)) * ((look[0][2] == -1)? -1 : 1) * look[1][0];
           }
-          dY *= look[0][2];//invert move if on bottom face
+          dY *= look[0][2];//invert move if on bottom face (-1) or do nothing (1)
           dZ = 0;
         }
         boxCoordRela = [dX, dY, dZ];
       }
-      else{
+      else{ //if not in bounds
         boxCoordBase = [0, 0, 0]; //Reset relative position
       }
     }
-
-    // sketch.push();
-    // sketch.fill(COLORSDIC.INVERSECUBECOLOR);
-    // sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
-    // sketch.box(rubik.w);
-    // sketch.pop();
+    else{//if selecting a move
+      if(!sketch.mouseIsPressed){
+        startMove = false;
+      }
+    }
     rubik.show(secondCanvas);
-    // sketch.noLoop();
   }
 
 
+  /**
+   * If mouse on bounds, starts the movement mode.
+   */
   sketch.mousePressed = function(){
-    if(sketch.inBounds()){
-      selectingMove = true;
-      startX = sketch.mouseX;
-      startY = sketch.mouseY;
-    }
+    if(sketch.inBounds()){ //Only if mouse on bounds
+      selectingMove = true; //Start the movement mode
+      startMove = {x: sketch.mouseX, y: sketch.mouseY}; //Save the initial coordinates of the mouse
+      }
   }
-  sketch.mouseReleased = function(){
-    if(!selectingMove){
-      return;//if not selecting a move, do nothing
-    }
-    let deltaX = sketch.mouseX - startX;
-    let deltaY = sketch.mouseY - startY;
-    if(Math.max(Math.abs(deltaX), Math.abs(deltaY)) < rubik.w){
-      return;//If move small, do not do it
-    }
-    selectingMove = false;
 
-    //analize the move
-    let x = Math.floor(startX / (secondCanvasWidth / rubik.dim));
-    let y = Math.floor(startY / (secondCanvasHeight / rubik.dim));
-    
+  sketch.movementMade = function(deltaX, deltaY){
     let moveMade = [0, 0];//[right (1) or left (-1), up (1) or down (-1)]
     if(Math.abs(deltaX) > Math.abs(deltaY)){
       if(deltaX > 0){
@@ -304,161 +289,144 @@ var s2 = function(sketch) {
         moveMade[1] = -1;
       }
     }
+    return moveMade;
+  }
+
+  sketch.mouseReleased = function(){
+    if(!selectingMove || !Number.isInteger(startMove.x) || !Number.isInteger(startMove.x)){
+      return; //if not selecting a move or not correct array, do not continue
+    }
+
+    let delta = {x: sketch.mouseX - startMove.x, y: sketch.mouseY - startMove.y};
+    if(Math.max(Math.abs(delta.x), Math.abs(delta.y)) < rubik.w){
+      return;//If move length small (less than one cube), do not do it
+    }
+    //If here, correct selection of move made
+    selectingMove = false; //Selecting move ended
+
+    //analize the move
+    let m = {x: 0, y: 0}; //Mouse coordinates index (top = {0, 0}, botom = {rubik.dim - 1, rubik.dim - 1})
+    m.x = Math.floor(startMove.x / secondCanvasWidth * rubik.dim);
+    m.y = Math.floor(startMove.y / secondCanvasHeight * rubik.dim);
+    
+    // console.log(delta);
+    let moveMade = sketch.movementMade(delta.x, delta.y); //[right (1) or left (-1), up (1) or down (-1)]
 
     let axis, h, inverted;
     if(look[0][2] == 0){ //horizontal faces
       if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
         axis = "z";
-        h = y;
+        h = m.y;
         inverted = moveMade[0] == 1;
         inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
       }
       else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
         axis = (look[0][0] != 0)? "y" : "x";
-        h = (look[0][0] == 1 || look[0][1] == -1)? x : rubik.dim - 1 - x; //if rotation on y axis, index is inverted
+        h = (look[0][0] == 1 || look[0][1] == -1)? m.x : rubik.dim - 1 - m.x; //if rotation on y axis, index is inverted
         inverted = moveMade[1] == -1; 
         inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;
         inverted = (look[0][0] == 1 || look[0][1] == -1)? !inverted : inverted;
       }
     }
+    
     else if(look[0][2] == 1){ //White face
-      if(look[1][1] == 1){//over blue
-        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
-          axis = "y";
-          h = rubik.dim - 1 - y;
-          inverted = moveMade[0] == 1;
-          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+      let isBlue, isOrange;
+      let isHoriMove, hSmall, hBigOrSmall, preInverted;
+      
+      isHoriMove = moveMade[0] != 0; //true => Right or left (1, -1) move of the mouse. false => Up or down (1, -1) move of the mouse
+      let v = (isHoriMove)? m.y : m.x; //Used later to calc h
+      preInverted = (isHoriMove)? moveMade[0] == 1 : moveMade[1] == 1; //used to calc inverted
 
-        }
-        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
-          axis = "x";
-          h = rubik.dim - 1 - x;
-          inverted = moveMade[1] == 1;
-          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-        }
+      if(look[1][1] != 0){ //over blue or green
+        isBlue = look[1][1] == 1; //is over blue face
+        h = (isBlue)? rubik.dim - 1 - v : v;
+        hSmall = h < (rubik.dim - rubik.dim % 2) / 2;
+        hBigOrSmall = (isBlue == isHoriMove) != hSmall; //xOr(xnOr(isBlue, isHoriMove), hSmall)
+        axis = (isHoriMove)? "y" : "x"; //axis of movement
+        inverted = !(hBigOrSmall != preInverted); //Invert preInverted if hBigOrSmall is true (it is inverted because inverted works :S)
       }
-      else if(look[1][1] == -1){//over green
-        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
-          axis = "y";
-          h = y;
-         inverted = moveMade[0] == 1;
-        inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-
-        }
-        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
-          axis = "x";
-          h = x;
-          inverted = moveMade[1] == 1;
-          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-
-        }
-      }
-      else if(look[1][0] == 1){ //over orange
-        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
-          axis = "x";
-          h = rubik.dim - 1 - y;
-          inverted = moveMade[0] == 1;
-          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-        }
-        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
-          axis = "y";
-          h = x;
-          inverted = moveMade[1] == 1;
-          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-
-        }
-      }
-      else{ //over red
-        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
-          axis = "x";
-          h = y;
-          inverted = moveMade[0] == 1;
-          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-        }
-        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
-          axis = "y";
-          h = rubik.dim - 1 - x;
-          inverted = moveMade[1] == 1;
-          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-        }
+      else{ //over orange or red face (look[1][0] != 0)
+        isOrange = look[1][0] == 1; //if over orange face
+        h = (isHoriMove == isOrange)? rubik.dim - 1 - v : v;//xnor condition
+        axis = (isHoriMove)? "x" : "y"; //axis of movement
+        hSmall = h < (rubik.dim - rubik.dim % 2) / 2;
+        inverted = (isOrange == hSmall) != preInverted; //XOR(XNOR(isOrange, hSmall), preInverted);
       }
     }
-    else if(look[0][2] == -1){
-      printArray_nD([x,y]);
-      printArray_nD(boxCoordRela);
-      if(look[1][1] == 1){//under blue
-        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
-          axis = "y";
-          h = y;
-          inverted = moveMade[0] == 1;
-          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+    else{ //Yellow face
+      let isBlue, isOrange;
+      let isHoriMove, hSmall, hBigOrSmall, preInverted;
 
+      isHoriMove = moveMade[0] != 0; //true => Right or left (1, -1) move of the mouse. false => Up or down (1, -1) move of the mouse
+      let v = (isHoriMove)? m.y : m.x; //Used later to calc h
+      preInverted = (isHoriMove)? moveMade[0] == 1 : moveMade[1] == 1; //used to calc inverted
+      
+      if(look[1][1] != 0){ //under blue or green
+        isBlue = look[1][1] == 1; //is under blue face
+        axis = (isHoriMove)? "y" : "x"; //axis of movement
+        h = (isBlue != isHoriMove)? rubik.dim - 1 - v : v;
+        hSmall = h < (rubik.dim - rubik.dim % 2) / 2;
+        hBigOrSmall = (isBlue)? !hSmall: hSmall;
+        inverted = (hBigOrSmall)? !preInverted: preInverted;
+      }
+      else{ //under orange or red face (look[1][0] != 0)
+        isOrange = look[1][0] == 1; //if under orange face
+        axis = (isHoriMove)? "x" : "y"; //axis of movement
+        h = (isOrange)? v : rubik.dim - 1 - v;
+        hSmall = h < (rubik.dim - rubik.dim % 2) / 2;
+        hBigOrSmall = (isOrange == isHoriMove)? !hSmall : hSmall;
+        inverted = (hBigOrSmall)? !preInverted: preInverted;
+      }
+
+      if(look[1][0] == 1){ //under orange
+        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+          // axis = "x";
+          // h = m.y;
+          // inverted = moveMade[0] == 1;
+          // inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
         }
         else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
-          axis = "x";
-          h = rubik.dim - 1 - x;
-          inverted = moveMade[1] == 1;
-          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+          // axis = "y";
+          // h = m.x;
+          // inverted = moveMade[1] == 1;
+          // inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
         }
       }
-      else if(look[1][1] == -1){//under green
+      else{ //under red
         if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
-          axis = "y";
-          h = rubik.dim - 1 - y;
-         inverted = moveMade[0] == 1;
-        inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+          // axis = "x";
+          // h = rubik.dim - 1 - m.y;
+          // inverted = moveMade[0] == 1;
+          // inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
         }
         else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
-          axis = "x";
-          h = x;
-          inverted = moveMade[1] == 1;
-          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-        }
-      }
-      else if(look[1][0] == 1){ //over orange
-        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
-          axis = "x";
-          h = y;
-          inverted = moveMade[0] == 1;
-          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-        }
-        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
-          axis = "y";
-          h = x;
-          inverted = moveMade[1] == 1;
-          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-        }
-      }
-      else{ //over red
-        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
-          axis = "x";
-          h = rubik.dim - 1 - y;
-          inverted = moveMade[0] == 1;
-          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
-        }
-        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
-          axis = "y";
-          h = rubik.dim - 1 - x;
-          inverted = moveMade[1] == 1;
-          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+          // axis = "y";
+          // h = rubik.dim - 1 - m.x;
+          // inverted = moveMade[1] == 1;
+          // inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
         }
       }
     }
 
-
+    startMove = {x: null, y: null}; //Reset start move
     rubik.makeMove(axis, h, inverted); //makeMove(axis, h, inverse)
   }
 
 
-  sketch.update = function(){
+  /**
+   * Updates the canvas and stores the coord of the face facing
+   */
+  sketch.update = function(){ 
     let look = mainCanvas.lookingAt();
-    let dist = rubik.w * rubik.dim;
-    let coord = vector.addition(look[0].map(x => x * dist * 1.4), look[1]);
-    sketch.camera(...coord, 0, 0, 0, 0, 0, -1);
-
-    boxCoordBase = look[0].map(x => x * rubik.w * Math.floor(rubik.dim / 2));
+    let cameraCoord = vector.addition(look[0].map(x => x * rubik.w * rubik.dim * 1.4), look[1]); //camera Coordinates
+    sketch.camera(...cameraCoord, 0, 0, 0, 0, 0, -1);
+    boxCoordBase = look[0].map(x => x * rubik.w * Math.floor(rubik.dim / 2)); //coordinates of the center of the face facing
   }
 
+  /**
+   * Returns whenever the mouse is in bounds
+   * @return {boolean} The result
+   */
   sketch.inBounds = function(){
     return sketch.mouseX > 0 && 
            sketch.mouseY > 0 &&
