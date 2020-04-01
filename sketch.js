@@ -52,8 +52,8 @@ var s1 = function( sketch ) {//main canvas
 
     };
     // rubik = new RubikCube(4);
-    rubik = new InvisibleRubikCube(5);
-    // rubik = new RubikCube(5);
+    // rubik = new InvisibleRubikCube(5);
+    rubik = new RubikCube(5);
     // rubik = new MirrorRubikCube(null, color(255, 204 ,0))
   }
   sketch.draw = function() { //main canvas
@@ -79,36 +79,36 @@ var s1 = function( sketch ) {//main canvas
     //debug planes
     let pihalf = Math.PI / 2;
     let l = 1000;
-    sketch.push();
-    sketch.fill(sketch.color(200, 200, 0, 250));
-    sketch.noStroke();
-    sketch.push();
-    sketch.rotateX(pihalf / 2);
-    sketch.plane(l / 2, l);
-    sketch.rotateX(-pihalf);
-    sketch.plane(l / 2, l);
-    sketch.pop();
-    sketch.push();
-    sketch.rotateY(pihalf / 2);
-    sketch.plane(l, l / 2);
-    sketch.rotateY(-pihalf);
-    sketch.plane(l, l / 2);
-    sketch.pop();
-    sketch.push();
-    sketch.rotateZ(pihalf / 2);
-    sketch.rotateX(pihalf);
-    sketch.plane(l, l / 2);
-    sketch.rotateY(-pihalf);
-    sketch.plane(l, l / 2);
-    sketch.pop();
-    sketch.pop();
+    // sketch.push();
+    // sketch.fill(sketch.color(200, 200, 0, 250));
+    // sketch.noStroke();
+    // sketch.push();
+    // sketch.rotateX(pihalf / 2);
+    // sketch.plane(l / 2, l);
+    // sketch.rotateX(-pihalf);
+    // sketch.plane(l / 2, l);
+    // sketch.pop();
+    // sketch.push();
+    // sketch.rotateY(pihalf / 2);
+    // sketch.plane(l, l / 2);
+    // sketch.rotateY(-pihalf);
+    // sketch.plane(l, l / 2);
+    // sketch.pop();
+    // sketch.push();
+    // sketch.rotateZ(pihalf / 2);
+    // sketch.rotateX(pihalf);
+    // sketch.plane(l, l / 2);
+    // sketch.rotateY(-pihalf);
+    // sketch.plane(l, l / 2);
+    // sketch.pop();
+    // sketch.pop();
 
 
-    sketch.push();
-    sketch.fill(COLORSDIC.INVERSECUBECOLOR);
-    sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
-    sketch.box(rubik.w);
-    sketch.pop();
+    // sketch.push();
+    // sketch.fill(COLORSDIC.INVERSECUBECOLOR);
+    // sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
+    // sketch.box(rubik.w);
+    // sketch.pop();
 
 
     rubik.show();
@@ -251,11 +251,11 @@ var s2 = function(sketch) {
       }
     }
 
-    sketch.push();
-    sketch.fill(COLORSDIC.INVERSECUBECOLOR);
-    sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
-    sketch.box(rubik.w);
-    sketch.pop();
+    // sketch.push();
+    // sketch.fill(COLORSDIC.INVERSECUBECOLOR);
+    // sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
+    // sketch.box(rubik.w);
+    // sketch.pop();
     rubik.show(secondCanvas);
     // sketch.noLoop();
   }
@@ -322,8 +322,6 @@ var s2 = function(sketch) {
       }
     }
     else if(look[0][2] == 1){ //White face
-      printArray_nD([x,y]);
-      printArray_nD(boxCoordRela);
       if(look[1][1] == 1){//over blue
         if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
           axis = "y";
@@ -376,6 +374,67 @@ var s2 = function(sketch) {
           h = y;
           inverted = moveMade[0] == 1;
           inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
+          axis = "y";
+          h = rubik.dim - 1 - x;
+          inverted = moveMade[1] == 1;
+          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+      }
+    }
+    else if(look[0][2] == -1){
+      printArray_nD([x,y]);
+      printArray_nD(boxCoordRela);
+      if(look[1][1] == 1){//under blue
+        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+          axis = "y";
+          h = y;
+          inverted = moveMade[0] == 1;
+          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+
+        }
+        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
+          axis = "x";
+          h = rubik.dim - 1 - x;
+          inverted = moveMade[1] == 1;
+          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+      }
+      else if(look[1][1] == -1){//under green
+        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+          axis = "y";
+          h = rubik.dim - 1 - y;
+         inverted = moveMade[0] == 1;
+        inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
+          axis = "x";
+          h = x;
+          inverted = moveMade[1] == 1;
+          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+      }
+      else if(look[1][0] == 1){ //over orange
+        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+          axis = "x";
+          h = y;
+          inverted = moveMade[0] == 1;
+          inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+        else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
+          axis = "y";
+          h = x;
+          inverted = moveMade[1] == 1;
+          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        }
+      }
+      else{ //over red
+        if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+          axis = "x";
+          h = rubik.dim - 1 - y;
+          inverted = moveMade[0] == 1;
+          inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
         }
         else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
           axis = "y";
