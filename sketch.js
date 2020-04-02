@@ -260,7 +260,6 @@ var s2 = function(sketch) {
     rubik.show(secondCanvas);
   }
 
-
   /**
    * If mouse on bounds, starts the movement mode.
    */
@@ -271,31 +270,9 @@ var s2 = function(sketch) {
       }
   }
 
-  sketch.movementMade = function(deltaX, deltaY){
-    let moveMade = [0, 0];//[right (1) or left (-1), up (1) or down (-1)]
-    if(Math.abs(deltaX) > Math.abs(deltaY)){
-      if(deltaX > 0){
-        console.log("Right");
-        moveMade[0] = 1;
-      }
-      else{
-        console.log("Left");
-        moveMade[0] = -1;
-      }
-    }
-    else{
-      if(deltaY > 0){
-        console.log("Down");
-        moveMade[1] = 1;
-      }
-      else{
-        console.log("Up");
-        moveMade[1] = -1;
-      }
-    }
-    return moveMade;
-  }
-
+  /**
+   * If movement made, analice that move and perform it
+   */
   sketch.mouseReleased = function(){
     if(!selectingMove || !Number.isInteger(startMove.x) || !Number.isInteger(startMove.x)){
       return; //if not selecting a move or not correct array, do not continue
@@ -312,20 +289,16 @@ var s2 = function(sketch) {
     let m = {x: 0, y: 0}; //Mouse coordinates index (top = {0, 0}, botom = {rubik.dim - 1, rubik.dim - 1})
     m.x = Math.floor(startMove.x / secondCanvasWidth * rubik.dim);
     m.y = Math.floor(startMove.y / secondCanvasHeight * rubik.dim);
-    
-    // console.log(delta);
     let moveMade = sketch.movementMade(delta.x, delta.y); //[right (1) or left (-1), up (1) or down (-1)]
+    
     let axis, h, inverted;
-
     let isBlue, isOrange;
     let isHoriMove, hSmall, hBigOrSmall, preInverted;
+    
     isHoriMove = moveMade[0] != 0; //true => Right or left (1, -1) move of the mouse. false => Up or down (1, -1) move of the mouse
     hSmall = function(h){return h < (rubik.dim - rubik.dim % 2) / 2};
     preInverted = (isHoriMove)? moveMade[0] == 1 : moveMade[1] == 1; //used to calc inverted
     let v = (isHoriMove)? m.y : m.x; //Used later to calc h
-
-
-    //v is constant with all
 
     if(look[0][2] == 0){ //horizontal faces
       if(isHoriMove){ //Right or left (1, -1) move of the mouse
@@ -371,11 +344,9 @@ var s2 = function(sketch) {
         inverted = hBigOrSmall != preInverted; //Invert preInverted if hBigOrSmall is true
       }
     }
-
     startMove = {x: null, y: null}; //Reset start move
     rubik.makeMove(axis, h, inverted); //makeMove(axis, h, inverse)
   }
-
 
   /**
    * Updates the canvas and stores the coord of the face facing
@@ -388,17 +359,31 @@ var s2 = function(sketch) {
   }
 
   /**
+   * Given the params, calc what type of movement has been done
+   * @see increment is defined as deltaX = finalCoord.x - initialCoord.x;
+   * @param {number} deltaX - The increment of the mouse on the X (Horizontal) axis.
+   * @param {number} deltaY - The increment of the mouse on the Y (Vertical) axis.
+   * @returns {number[]} Array with the movement made; [x, y],, if negative => oposite position
+   */
+  sketch.movementMade = function(deltaX, deltaY){
+    let moveMade = [0, 0];//[right (1) or left (-1), up (1) or down (-1)]
+    if(Math.abs(deltaX) > Math.abs(deltaY)){
+      moveMade[0] = (deltaX > 0)? 1 : -1; //1 => Right; -1 => Left
+    }
+    else{
+      moveMade[1] = (deltaY > 0)? 1 : -1; //1 => Up; -1 => Down
+    }
+    return moveMade;
+  }
+
+  /**
    * Returns whenever the mouse is in bounds
-   * @return {boolean} The result
+   * @return {boolean} (0 < mouseX < width and 0 < mouseY < height)
    */
   sketch.inBounds = function(){
-    return sketch.mouseX > 0 && 
-           sketch.mouseY > 0 &&
-           sketch.mouseX < secondCanvasWidth &&
-           sketch.mouseY < secondCanvasHeight;
+    return sketch.mouseX > 0 && sketch.mouseY > 0 && sketch.mouseX < secondCanvasWidth && sketch.mouseY < secondCanvasHeight;
   }
 };
-
 
 // create a new instance of p5 and pass in the function for sketch 1 and 2
 var mainCanvas = new p5(s1);
