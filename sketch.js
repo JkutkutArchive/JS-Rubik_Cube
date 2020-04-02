@@ -2,10 +2,11 @@
  * @author Jkutkut
  * @see https://github.com/Jkutkut/
  */
-const mainCanvasWidth = 1920;
-const mainCanvasHeight = 1080;
+// var mainCanvasWidth = 1920;
+var mainCanvasWidth;
+var mainCanvasHeight;
 var secondCanvasWPercent = 0.25;
-var secondCanvasWidth = mainCanvasWidth * secondCanvasWPercent; //square Canvas
+var secondCanvasWidth; //square Canvas
 
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
@@ -24,7 +25,7 @@ var trueIncX = 0, trueIncZ = 0; //True increment on those axis
 
 //Canvas 2
 var selectingMove = false;
-var startMove = {x: 0, y: 0}; //select move start coord
+var startMove; //diccionary to select move start coord {x: 0, y: 0}
 var look; //Double array with the axis looking to at Canvas 1 => Canvas 2
 var boxCoordBase = [0,0,0]; //Coord of the Center of that face
 var boxCoordRela = [0,0,0]; //Coord relative from there
@@ -34,6 +35,8 @@ var s1 = function( sketch ) {//main canvas
    * Setup of the Canvas 1
    */
   sketch.setup = function() {
+    mainCanvasWidth = (mainCanvasWidth)? mainCanvasWidth : sketch.windowWidth;
+    mainCanvasHeight = (mainCanvasHeight)? mainCanvasHeight : mainCanvasWidth * 9 / 16;
     let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
     canvas1.position(0,0); //Set canvas (left corner) position
     sketch.frameRate(30); //Set frameRate
@@ -53,6 +56,8 @@ var s1 = function( sketch ) {//main canvas
       NULL: sketch.color(100)
     };
     rubik = new InvisibleRubikCube(5); //create the cube
+    secondCanvasWidth = mainCanvasWidth * secondCanvasWPercent; //to make the second canvas
+    secondCanvas = new p5(s2); //create the second canvas
   }
 
   /**
@@ -196,6 +201,8 @@ var s2 = function(sketch) {
     else{//if selecting a move
       if(!sketch.mouseIsPressed){
         startMove = false;
+        selectingMove = false;
+        console.log("not pressed anymore")
       }
     }
     rubik.show(secondCanvas);
@@ -206,7 +213,9 @@ var s2 = function(sketch) {
    */
   sketch.mousePressed = function(){
     if(sketch.inBounds()){ //Only if mouse on bounds
+      sketch.cursor('grab'); //Change mouse icon
       selectingMove = true; //Start the movement mode
+      console.log("move started");
       startMove = {x: sketch.mouseX, y: sketch.mouseY}; //Save the initial coordinates of the mouse
       }
   }
@@ -215,16 +224,21 @@ var s2 = function(sketch) {
    * If movement made, analice that move and perform it
    */
   sketch.mouseReleased = function(){
-    if(!selectingMove || !Number.isInteger(startMove.x) || !Number.isInteger(startMove.x)){
+    sketch.cursor(); //Reset mouse icon
+    console.log(startMove);
+    if(!selectingMove || typeof(startMove.x) != "number" || typeof(startMove.x) != "number"){
+      console.log("Not correct: " + !selectingMove + ", " + !Number.isInteger(startMove.x) + ", " + !Number.isInteger(startMove.x));
       return; //if not selecting a move or not correct array, do not continue
     }
 
     let delta = {x: sketch.mouseX - startMove.x, y: sketch.mouseY - startMove.y};
-    if(Math.max(Math.abs(delta.x), Math.abs(delta.y)) < rubik.w){
+    if(Math.max(Math.abs(delta.x), Math.abs(delta.y)) < secondCanvasWidth / rubik.dim){
+      console.log("Movement too small");
       return;//If move length small (less than one cube), do not do it
     }
     //If here, correct selection of move made
     selectingMove = false; //Selecting move ended
+
 
     //analize the move
     let m = {x: 0, y: 0}; //Mouse coordinates index (top = {0, 0}, botom = {rubik.dim - 1, rubik.dim - 1})
@@ -360,4 +374,4 @@ var s2 = function(sketch) {
 
 // create a new instance of p5 and pass in the function for sketch 1 and 2
 var mainCanvas = new p5(s1);
-var secondCanvas = new p5(s2);
+var secondCanvas; //Defined at the end of mainCanvas.setup
