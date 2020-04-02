@@ -322,27 +322,25 @@ var s2 = function(sketch) {
     isHoriMove = moveMade[0] != 0; //true => Right or left (1, -1) move of the mouse. false => Up or down (1, -1) move of the mouse
     hSmall = function(h){return h < (rubik.dim - rubik.dim % 2) / 2};
     preInverted = (isHoriMove)? moveMade[0] == 1 : moveMade[1] == 1; //used to calc inverted
+    let v = (isHoriMove)? m.y : m.x; //Used later to calc h
+
 
     //v is constant with all
 
     if(look[0][2] == 0){ //horizontal faces
       if(isHoriMove){ //Right or left (1, -1) move of the mouse
         axis = "z";
-        h = m.y;
-        inverted = moveMade[0] == 1;
-        inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        h = v;
+        inverted = hSmall(h) == (moveMade[0] == 1);//xnor(hSmall, moveMade[0] == 1)
       }
       else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
         axis = (look[0][0] != 0)? "y" : "x";
-        h = (look[0][0] == 1 || look[0][1] == -1)? m.x : rubik.dim - 1 - m.x; //if rotation on y axis, index is inverted
-        inverted = moveMade[1] == -1; 
-        inverted = (hSmall(h))? !inverted : inverted;
-        inverted = (look[0][0] == 1 || look[0][1] == -1)? !inverted : inverted;
+        h = (look[0][0] == 1 || look[0][1] == -1)? v : rubik.dim - 1 - v; //if rotation on y axis, index is inverted
+        inverted = hSmall(h) != (moveMade[1] == -1);// XOR (hSmall, (moveMade[1] == -1))
+        inverted = (look[0][0] == 1 || look[0][1] == -1) != inverted;//XOR(special cases, inverted)
       }
     }
     else if(look[0][2] == 1){ //White face
-      let v = (isHoriMove)? m.y : m.x; //Used later to calc h
-
       if(look[1][1] != 0){ //over blue or green
         isBlue = look[1][1] == 1; //is over blue face
         h = (isBlue)? rubik.dim - 1 - v : v;
@@ -357,9 +355,7 @@ var s2 = function(sketch) {
         inverted = (isOrange == hSmall(h)) != preInverted; //XOR(XNOR(isOrange, hSmall), preInverted);
       }
     }
-    else{ //Yellow face
-      let v = (isHoriMove)? m.y : m.x; //Used later to calc h
-      
+    else{ //Yellow face      
       if(look[1][1] != 0){ //under blue or green
         isBlue = look[1][1] == 1; //is under blue face
         axis = (isHoriMove)? "y" : "x"; //axis of movement
