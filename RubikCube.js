@@ -282,15 +282,35 @@ class RubikCube{
             axis = "y";
             h = this.dim - 1;
             break;
+          case vector.re.X.test(move):
+          case vector.re.Y.test(move):
+          case vector.re.Z.test(move):
+            axis = move;
+            let rev;
+            for(let i = 0; i < this.dim; i++){
+              rev = /'/.test(move) != (i >= (this.dim - this.dim % 2) / 2);
+              this.makeMove(axis, i, rev);
+            }
+            return;
           case true:
-            console.log("Error with move");
+            console.log("That move is not correct or not implemented");
             return;
         }
         break;
       case 3:
         switch(true){
-          case /c/.test(move):
+          case /^[mM](iddle)?/.test(move):
+            axis = "x";
+            h = Math.floor(this.dim / 2);
             break;
+          case /^[eE](cuator)?/.test(move):
+            axis = "z";
+            h = Math.floor(this.dim / 2);
+            break;
+          case /^[sS](tanding)?/.test(move):
+            axis = "y";
+            h = Math.floor(this.dim / 2);
+          break;
           case true:
             this.move(move, prevCube + 1);
             return;
