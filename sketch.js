@@ -3,10 +3,14 @@
  * @see https://github.com/Jkutkut/
  */
 const mainCanvasWidth = 1920;
+// const mainCanvasWidth = 720;
 const mainCanvasHeight = 1080;
+// const mainCanvasHeight = 480;
 
 const secondCanvasWidth = 500;
+// const secondCanvasWidth = mainCanvasWidth * 0.260417;
 const secondCanvasHeight = 500;
+// const secondCanvasHeight = secondCanvasWidth;
 
 var rubik;
 var COLORSDIC = {};
@@ -63,8 +67,8 @@ var s1 = function( sketch ) {//main canvas
 
     //camera Controls
     if(moving){
-      incX = (mouseX - prev.x) / 500 * Math.pow(1.005, Math.abs(incX));
-      incZ = (mouseY - prev.y) / 500 * Math.pow(1.001, Math.abs(incX));
+      incX = (mouseX - prev.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(incX));
+      incZ = (mouseY - prev.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(incX));
 
       trueIncX = incX;
       trueIncZ = ((angZ + incZ) / Math.PI > 1)? Math.PI - angZ : ((angZ + incZ) < 0)? -angZ + 0.0001 : incZ;
@@ -315,28 +319,28 @@ var s2 = function(sketch) {
 
     let isBlue, isOrange;
     let isHoriMove, hSmall, hBigOrSmall, preInverted;
+    isHoriMove = moveMade[0] != 0; //true => Right or left (1, -1) move of the mouse. false => Up or down (1, -1) move of the mouse
     hSmall = function(h){return h < (rubik.dim - rubik.dim % 2) / 2};
+    preInverted = (isHoriMove)? moveMade[0] == 1 : moveMade[1] == 1; //used to calc inverted
+
+    //v is constant with all
 
     if(look[0][2] == 0){ //horizontal faces
-      if(moveMade[0] != 0){ //Right or left (1, -1) move of the mouse
+      if(isHoriMove){ //Right or left (1, -1) move of the mouse
         axis = "z";
         h = m.y;
-        inverted = moveMade[0] == 1;
-        inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
+        inverted = (hSmall(h))? !preInverted : preInverted;//if y > half cube, invert move
       }
       else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
         axis = (look[0][0] != 0)? "y" : "x";
         h = (look[0][0] == 1 || look[0][1] == -1)? m.x : rubik.dim - 1 - m.x; //if rotation on y axis, index is inverted
-        inverted = moveMade[1] == -1; 
-        inverted = (h < (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;
+        inverted = (!hSmall(h))? !preInverted : preInverted;
         inverted = (look[0][0] == 1 || look[0][1] == -1)? !inverted : inverted;
       }
     }
     else if(look[0][2] == 1){ //White face
-      isHoriMove = moveMade[0] != 0; //true => Right or left (1, -1) move of the mouse. false => Up or down (1, -1) move of the mouse
       let v = (isHoriMove)? m.y : m.x; //Used later to calc h
-      preInverted = (isHoriMove)? moveMade[0] == 1 : moveMade[1] == 1; //used to calc inverted
-      
+
       if(look[1][1] != 0){ //over blue or green
         isBlue = look[1][1] == 1; //is over blue face
         h = (isBlue)? rubik.dim - 1 - v : v;
@@ -352,9 +356,7 @@ var s2 = function(sketch) {
       }
     }
     else{ //Yellow face
-      isHoriMove = moveMade[0] != 0; //true => Right or left (1, -1) move of the mouse. false => Up or down (1, -1) move of the mouse
       let v = (isHoriMove)? m.y : m.x; //Used later to calc h
-      preInverted = (isHoriMove)? moveMade[0] == 1 : moveMade[1] == 1; //used to calc inverted
       
       if(look[1][1] != 0){ //under blue or green
         isBlue = look[1][1] == 1; //is under blue face
@@ -367,7 +369,6 @@ var s2 = function(sketch) {
         isOrange = look[1][0] == 1; //if under orange face
         axis = (isHoriMove)? "x" : "y"; //axis of movement
         h = (isOrange)? v : rubik.dim - 1 - v;
-        // hSmall = h < (rubik.dim - rubik.dim % 2) / 2;
         hBigOrSmall = (isOrange == isHoriMove) != hSmall(h);
         inverted = hBigOrSmall != preInverted; //Invert preInverted if hBigOrSmall is true
       }
