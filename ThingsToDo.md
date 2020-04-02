@@ -7,10 +7,14 @@ README.MD
 
 ### GENERAL
     -Controls
-        -Finish yellow face
+        -Refactor again
     -make color dicc to not depend on p5 and have colors on cube
     -smooth rotations
     -Reduce redundant vars
+
+    -Undo function
+    -Time
+    -Detect window size
 
 ### RubikSticker:
     
