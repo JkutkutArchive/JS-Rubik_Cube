@@ -227,18 +227,15 @@ var s2 = function(sketch) {
     sketch.cursor(); //Reset mouse icon
     console.log(startMove);
     if(!selectingMove || typeof(startMove.x) != "number" || typeof(startMove.x) != "number"){
-      console.log("Not correct: " + !selectingMove + ", " + !Number.isInteger(startMove.x) + ", " + !Number.isInteger(startMove.x));
       return; //if not selecting a move or not correct array, do not continue
     }
 
     let delta = {x: sketch.mouseX - startMove.x, y: sketch.mouseY - startMove.y};
     if(Math.max(Math.abs(delta.x), Math.abs(delta.y)) < secondCanvasWidth / rubik.dim){
-      console.log("Movement too small");
       return;//If move length small (less than one cube), do not do it
     }
     //If here, correct selection of move made
     selectingMove = false; //Selecting move ended
-
 
     //analize the move
     let m = {x: 0, y: 0}; //Mouse coordinates index (top = {0, 0}, botom = {rubik.dim - 1, rubik.dim - 1})
