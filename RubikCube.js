@@ -7,6 +7,7 @@ class RubikCube{
     this.w = (w)? w : RubikCube.cubeW;
     
     this.pieces = [];
+    this.movesMade = [];//To keep track of the movements made => undo function
     
     //color
     const RUBIKCOLOR = [
@@ -314,14 +315,33 @@ class RubikCube{
     }
     let movedPieces = array_nD.o.permutation_3D(this.pieces, axis, h);
     this.rotatePieces(axis, -Math.PI / 2 * angleOri, movedPieces);
+
+    this.movesMade.push([axis, h, inverse]); //Store the movement made at the end
   }
 
   rotatePieces(axis, angle, slice){
     for(let i = 0; i < this.dim; i++){
       for(let j = 0; j < this.dim; j++){
-        // slice[i][j].w = 107;
         slice[i][j].rotateOrigin(axis, angle);
       }
+    }
+  }
+
+  undo(){
+    try{
+      if(this.movesMade.length == 0){
+        throw "Not movement made yet, so not possible to undo any move.";
+      }
+      let arr = this.movesMade[this.movesMade.length - 1]; //arr = [axis, h, inverse];
+      printArray_nD(arr);
+      arr[2] = !arr[2]; //Now the move it is inverted
+      printArray_nD(arr);
+      this.movesMade.pop(); //delete the move that it's going to be undone.
+      this.makeMove(...arr); //Restore the cube with an oposite move
+      this.movesMade.pop(); //delete the move just made
+    }
+    catch(error){
+      console.log(error);
     }
   }
 
