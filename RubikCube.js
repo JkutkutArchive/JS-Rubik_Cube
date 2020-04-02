@@ -1,16 +1,22 @@
+/**
+ * This class enables to create a fully functional Rubik's Cube.
+ * @see Some classes inheritance from this class.
+ */
 class RubikCube{
+  /**
+   * Construct the rubik's cube class.
+   * @param {number} dim - dimension of the cube (3 => 3x3x3 cube)
+   * @param {number} w - Width of each piece in the cube
+   * @param {P5-Color} c - Color of the base of the cube (color of the pieces)
+   * @see this.pieces = array with the pieces is position
+   */
   constructor(dim, w, c){
-    // this.pos = createVector(0, 0, 0);
     this.dim = (dim)? dim : 3;
-
     this.color = (c)? c : COLORSDIC.CUBECOLOR;
     this.w = (w)? w : RubikCube.cubeW;
-    
     this.pieces = [];
     this.movesMade = [];//To keep track of the movements made => undo function
-    
-    //color
-    const RUBIKCOLOR = [
+    const RUBIKCOLOR = [ //color of the pieces
       [//X = 0
         [//Y = 0
           [COLORSDIC.WHITE, COLORSDIC.BLUE, COLORSDIC.ORANGE],//Z = 0
@@ -106,7 +112,6 @@ class RubikCube{
       [this.dim - 1, this.dim - 1],
       [0, this.dim - 1],
     ];
-
     //if 2n+1 cube => need for a midle piece => different coordinates
     let coord = (this.dim % 2 == 0)? this.w * (this.dim - 1) * 0.5 : Math.floor(this.dim / 2) * this.w;
     for(let i = 0; i < this.dim; i += this.dim - 1){//for each corner
@@ -123,13 +128,12 @@ class RubikCube{
       this.pieces[coV[i][0]][this.dim - 1][coV[i][1]].rotateOrigin("y", Math.PI * 0.5 * (i-1));
     }
 
-    
     if(this.dim > 2){//if this.dim > 2 => need for edges and centers
       let offset = 0;
       if(this.dim % 2 == 0){//if 2n+1 cube => need of center piece => offset needed
         offset = -this.w / 2;
       }
-    //  ~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~
+      //~~~~~~~~~~~~~~~~~~~~~~~   Centers   ~~~~~~~~~~~~~~~~~~~~~~~
       let cen =  [//coordinates of the centers of every 2n+1 cube
         [1, 1, 0],
         [1, this.dim - 1, 1],
@@ -173,9 +177,7 @@ class RubikCube{
         }
       }
     
-      //  ~~~~~~~~~~~~~~~~~~~~~~~   Edges   ~~~~~~~~~~~~~~~~~~~~~~~    
-      
-      //green and blue
+      //~~~~~~~~~~~~~~~~~~~~~~~   Edges   ~~~~~~~~~~~~~~~~~~~~~~~    
       let eG = [//blue and green edges
         [1, 0],
         [this.dim - 1, 1],
@@ -242,6 +244,10 @@ class RubikCube{
     }
   }
   
+  /**
+   * Display the cube on the selected canvas.
+   * @param {P5Canvas} canvas - Canvas to print the cube into.
+   */
   show(canvas){
     for(let i = 0; i < this.dim; i++){
       for(let j = 0; j < this.dim; j++){
@@ -252,9 +258,16 @@ class RubikCube{
     }
   }
 
+  /**
+   * Analize the given move and makes it.
+   * @param {string} move - String with the desired move
+   * @param {number} prevCube? - used for internal iteration. Defines the dim of (dim - prevCube) of the cube to search the movement 
+   * @see Rubik's cube notation.
+   * @throws Error if move not defined or not implemented yet.
+   */
   move(move, prevCube){
     let axis, h;
-    prevCube = (prevCube)? prevCube : 0;
+    prevCube = (prevCube)? prevCube : 0; //If not given, set to 0
     switch(this.dim - prevCube){
       case 2:
         switch(true){
@@ -320,9 +333,15 @@ class RubikCube{
         this.move(move, prevCube + 1);
         return;
     }
-    this.makeMove(axis, h, /'/.test(move));
+    this.makeMove(axis, h, /'/.test(move));//make the move. Reverse it if "'" given in move
   }
 
+  /**
+   * 
+   * @param {string} axis - String with the desired axis
+   * @param {number} h - The height of the slice to rotate 
+   * @param {*} inverse 
+   */
   makeMove(axis, h, inverse){
     let angleOri = 1;
     let highH = h + 1 > this.dim / 2; //if on the second half of the cube
@@ -339,6 +358,12 @@ class RubikCube{
     this.movesMade.push([axis, h, inverse]); //Store the movement made at the end
   }
 
+  /**
+   * Fisically rotates the selected slice of pieces the selected amount
+   * @param {string} axis - String with the axis of rotation
+   * @param {number} angle - the amount of radians to rotate
+   * @param {RubikCube[][]} slice - Slice of the cube that we want to rotate.
+   */
   rotatePieces(axis, angle, slice){
     for(let i = 0; i < this.dim; i++){
       for(let j = 0; j < this.dim; j++){
@@ -347,6 +372,9 @@ class RubikCube{
     }
   }
 
+  /**
+   * Undo the last move made
+   */
   undo(){
     try{
       if(this.movesMade.length == 0){
@@ -367,6 +395,10 @@ class RubikCube{
 
   //getters and setters
   
+  /**
+   * Changes the % of the size of the stickers related to the pieces itself. 
+   * @param {number} wP - percent of the size of the stickers (over 1) 
+   */
   changeStickersWPercent(wP){
     for(let i = 0; i < this.dim; i++){
       for(let j = 0; j < this.dim; j++){
@@ -376,9 +408,17 @@ class RubikCube{
       }
     }
   }
+
+  /**
+   * @returns {number} - The default piece size.
+   */
   static get cubeW(){ return 100;};
 }
 
+/**
+ * Rubik's Cube without stickers, so the faces are filled with the colors of those stickers.
+ * @extends RubikCube
+ */
 class StickerlessRubikCube extends RubikCube{
   constructor(dim, w, c){
     super(dim, w, c);
@@ -386,6 +426,10 @@ class StickerlessRubikCube extends RubikCube{
   }
 }
 
+/**
+ * Rubik's Cube without pieces, so only the stickers are visible.
+ * @extends RubikCube
+ */
 class InvisibleRubikCube extends RubikCube{
   constructor(dim, w, c){
     super(dim, w, c);
@@ -399,31 +443,28 @@ class InvisibleRubikCube extends RubikCube{
   }
 }
 
+/**
+ * 3x3x3 Mirror Rubik's Cube.
+ * @extends RubikCube
+ */
 class MirrorRubikCube extends RubikCube{
   constructor(w, c){
     super(2, w, c);//min process time
-
     this.dim = 3;
-
     const RCx = [1.75, 0, -2];
     const RCy = [1.5, 0, -2.25];
     const RCz = [1.5, 0, -2.25];
-
     const RSx = [1.5, 2, 2];
     const RSy = [1, 2, 2.5];
     const RSz = [1, 2, 2.5];
-
-    this.pieces = array_nD.make.empty(3,3,3);
-    
-    for(let i = 0; i < this.dim; i++){
-      for(let j = 0; j < this.dim; j++){
-        for(let k = 0; k < this.dim; k++){
-          this.pieces[i][j][k] = new RubikPieceCenter(c, w);
-          this.pieces[i][j][k].stickers = [];
-
-          this.pieces[i][j][k].w = [RSx[i], RSy[j], RSz[k]].map(x => x * this.w); 
-          this.pieces[i][j][k].move(...[RCx[i], RCy[j], RCz[k]].map(x => x * this.w));
-          
+    this.pieces = array_nD.make.empty(3,3,3); //init the array
+    for(let i = 0; i < 3; i++){ //For each piece
+      for(let j = 0; j < 3; j++){
+        for(let k = 0; k < 3; k++){
+          this.pieces[i][j][k] = new RubikPieceCenter(c, w); //Create the piece
+          this.pieces[i][j][k].stickers = []; //Mirror has no stickers but diferent shape
+          this.pieces[i][j][k].w = [RSx[i], RSy[j], RSz[k]].map(x => x * this.w); //Set the custom width
+          this.pieces[i][j][k].move(...[RCx[i], RCy[j], RCz[k]].map(x => x * this.w)); //Move to correct position
         }
       }
     }
