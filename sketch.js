@@ -329,12 +329,14 @@ var s2 = function(sketch) {
       if(isHoriMove){ //Right or left (1, -1) move of the mouse
         axis = "z";
         h = m.y;
-        inverted = (hSmall(h))? !preInverted : preInverted;//if y > half cube, invert move
+        inverted = moveMade[0] == 1;
+        inverted = (h >= (rubik.dim - rubik.dim % 2) / 2)? !inverted : inverted;//if y > half cube, invert move
       }
       else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
         axis = (look[0][0] != 0)? "y" : "x";
         h = (look[0][0] == 1 || look[0][1] == -1)? m.x : rubik.dim - 1 - m.x; //if rotation on y axis, index is inverted
-        inverted = (!hSmall(h))? !preInverted : preInverted;
+        inverted = moveMade[1] == -1; 
+        inverted = (hSmall(h))? !inverted : inverted;
         inverted = (look[0][0] == 1 || look[0][1] == -1)? !inverted : inverted;
       }
     }
