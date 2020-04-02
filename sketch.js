@@ -12,33 +12,36 @@ const secondCanvasWidth = 500;
 const secondCanvasHeight = 500;
 // const secondCanvasHeight = secondCanvasWidth;
 
-var rubik;
-var COLORSDIC = {};
+var rubik; //Here the cube will be stored
+var COLORSDIC = {}; //Diccionary with the colors used at this project
 
 
-//Controls
-var camX, camY, camZ;
-var moving = false;
-var prev = {x: 0, y: 0};//(x,y) mouse coord
-var ampli = 1000;
-var angX = 1.2 * 0.25 * Math.PI;
-var angZ = 3.2 * 0.25 * Math.PI;
-var incX = 0, incZ = 0;
-var trueIncX = 0, trueIncZ = 0;
+//Canvas 1
+var ampli = 1000; //Initial amplitude of the movement / distace in every axis
+var camX, camY, camZ; //Coordinates of the camera.
+var moving = false; //Whenever a movement of the camera is happening.
+var iniMousePos = {x: 0, y: 0};//(x,y) initial mouse coord (used to move camera)
+var angX = 1.2 * 0.25 * Math.PI; //Angle for X and Y camCoordinates
+var angZ = 3.2 * 0.25 * Math.PI; //Angle for Z camCoordinate
+var deltaMoveCam = {h: 0, v: 0}; //increment on the Horizontal and Vertical Axis when doing a move
+var trueIncX = 0, trueIncZ = 0; //True increment on those axis
 
 
+//Canvas 2
 var selectingMove = false;
-var startMove = {x: 0, y: 0};//select move start coord
-
-var look = [0, 0, 0];
-var boxCoordBase = [0,0,0];
-var boxCoordRela = [0,0,0];
+var startMove = {x: 0, y: 0}; //select move start coord
+var look; //Double array with the axis looking to at Canvas 1 => Canvas 2
+var boxCoordBase = [0,0,0]; //Coord of the Center of that face
+var boxCoordRela = [0,0,0]; //Coord relative from there
 
 var s1 = function( sketch ) {//main canvas
+  /**
+   * Setup of the Canvas 1
+   */
   sketch.setup = function() {
-    let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL);
-    canvas1.position(0,0);
-    sketch.frameRate(30);
+    let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
+    canvas1.position(0,0); //Set canvas (left corner) position
+    sketch.frameRate(30); //Set frameRate
 
     COLORSDIC = {
       //x
@@ -52,157 +55,97 @@ var s1 = function( sketch ) {//main canvas
       YELLOW: sketch.color(247, 239, 0), //yellow
       CUBECOLOR: sketch.color(50),//cubeColor
       INVERSECUBECOLOR: sketch.color(255 - 50),
-      NULL: sketch.color(100),
-
+      NULL: sketch.color(100)
     };
-    // rubik = new RubikCube(4);
-    rubik = new InvisibleRubikCube(5);
-    // rubik = new RubikCube(5);
-    // rubik = new MirrorRubikCube(null, color(255, 204 ,0))
+    rubik = new InvisibleRubikCube(5); //create the cube
   }
+
+  /**
+   * Draw of the Canvas 1
+   */
   sketch.draw = function() { //main canvas
     sketch.background(220);
-    let mouseX = sketch.mouseX;
-    let mouseY = sketch.mouseY;
-
-    //camera Controls
-    if(moving){
-      incX = (mouseX - prev.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(incX));
-      incZ = (mouseY - prev.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(incX));
-
-      trueIncX = incX;
-      trueIncZ = ((angZ + incZ) / Math.PI > 1)? Math.PI - angZ : ((angZ + incZ) < 0)? -angZ + 0.0001 : incZ;
+    if(moving){ //if moving the camera: camera Controls 
+      deltaMoveCam.h = (sketch.mouseX - iniMousePos.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h));
+      deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(deltaMoveCam.v));
+      trueIncX = deltaMoveCam.h; //true deltaMoveCam.h
+      trueIncZ = ((angZ + deltaMoveCam.v) / Math.PI > 1)? Math.PI - angZ : ((angZ + deltaMoveCam.v) < 0)? -angZ + 0.0001 : deltaMoveCam.v;
     }
-
     camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
     camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
     camZ =  -ampli * Math.cos(angZ + trueIncZ);
-    
-    sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1);
-    
-    //debug planes
-    let pihalf = Math.PI / 2;
-    let l = 1000;
-    // sketch.push();
-    // sketch.fill(sketch.color(200, 200, 0, 250));
-    // sketch.noStroke();
-    // sketch.push();
-    // sketch.rotateX(pihalf / 2);
-    // sketch.plane(l / 2, l);
-    // sketch.rotateX(-pihalf);
-    // sketch.plane(l / 2, l);
-    // sketch.pop();
-    // sketch.push();
-    // sketch.rotateY(pihalf / 2);
-    // sketch.plane(l, l / 2);
-    // sketch.rotateY(-pihalf);
-    // sketch.plane(l, l / 2);
-    // sketch.pop();
-    // sketch.push();
-    // sketch.rotateZ(pihalf / 2);
-    // sketch.rotateX(pihalf);
-    // sketch.plane(l, l / 2);
-    // sketch.rotateY(-pihalf);
-    // sketch.plane(l, l / 2);
-    // sketch.pop();
-    // sketch.pop();
-
-
-    // sketch.push();
-    // sketch.fill(COLORSDIC.INVERSECUBECOLOR);
-    // sketch.translate(...vector.addition(boxCoordBase, boxCoordRela.map(x => x * rubik.w)));
-    // sketch.box(rubik.w);
-    // sketch.pop();
-
-
+    sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1); //Set camera at position
     rubik.show();
-    // sketch.noLoop();
   }
-
-
+  /**
+   * Calculates the position looking to at the cube
+   * @returns {number[][]} [[Position of the center of the face facing], [Same with the increment]]
+   */
   sketch.lookingAt = function(){
     look = [];
     if(angZ / Math.PI > 0.75){
-      console.log("White");
-      look.push([0, 0, 1]);
+      look.push([0, 0, 1]); //White
     }
     else if(angZ / Math.PI < 0.25){
-      console.log("Yellow");
-      look.push([0, 0, -1]);
+      look.push([0, 0, -1]); //Yellow
     }
     else{
       if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
-        if(Math.cos(angX) > 0){
-          // console.log("Orange");
-          look.push([1, 0, 0]);
-        }
-        else{
-          // console.log("Red");
-          look.push([-1, 0, 0]);
-        }
+        look.push([(Math.cos(angZ) > 0)? 1 : -1, 0, 0]); //1 => Orange, -1 => Red
       }
       else{
-        if(Math.sin(angX) > 0){
-          // console.log("Blue");
-          look.push([0, 1, 0]);
-        }
-        else{
-          // console.log("Green");
-          look.push([0, -1, 0]);
-        }
+        look.push([0, (Math.cos(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
       }
     }
-
     let x = Math.cos(angX + trueIncX);
     let y = Math.sin(angX + trueIncX);
-    x = (Math.abs(x) > Math.abs(y))? x : 0;
+    x = (Math.abs(x) > Math.abs(y))? x : 0; //Keep only the one with the greatest magnitude
     y = (x == 0)? y : 0;
-    look.push([Math.round(x), Math.round(y), 0]);
+    look.push([Math.round(x), Math.round(y), 0]); //Where the angle tells the camera is looking with the increment
     return look;
   }
 
   //~~~~~~~~~~~~~~~~~~    CONTROLS    ~~~~~~~~~~~~~~~~~~
-  sketch.keyPressed = function(){
-    console.log(sketch.keyCode);
-    // if(keyCodes[keyCode] !== undefined){
-    //   rubik.move(keyCodes[keyCode]);
-    // }
-  }
+  /**
+   * If mouse on the canvas, start movement of the camera
+   */
   sketch.mousePressed = function(){
     if(!secondCanvas.inBounds()){
-      sketch.cursor('grab');
-      moving = true;
-      prev.x = sketch.mouseX;
-      prev.y = sketch.mouseY;
+      sketch.cursor('grab'); //Change mouse icon
+      moving = true; //Start movement of the camera
+      iniMousePos = {x: sketch.mouseX, y: sketch.mouseY}; //Get initial position
     }
   }
+  /**
+   * End camera movement. Save new position + update 2º Canvas
+   */
   sketch.mouseReleased = function(){
-    sketch.cursor();
-    moving = false;
-    angX += trueIncX;
-    angZ += trueIncZ;
-
-    incX = 0;
-    incZ = 0;
-    trueIncX = 0;
-    trueIncZ = 0;
-    // sketch.lookingAt();
-
-    secondCanvas.update();
+    sketch.cursor(); //Set cursor to normal
+    moving = false; //Stop movement
+    angX += trueIncX; //Save the increment on the angle
+    angZ += trueIncZ; //Save the increment on the angle
+    deltaMoveCam = {h: 0, v: 0}; //Reset increment
+    trueIncX = 0; //Reset increment
+    trueIncZ = 0; //Reset increment
+    secondCanvas.update(); //update the second canvas with the new position
   }
+  /**
+   * Enables to zoom in and out on the 1º Canvas
+   */
   sketch.mouseWheel = function(){
     try{
-      if(ampli > rubik.w * rubik.dim){
-        ampli += event.delta;
+      if(ampli > rubik.w * rubik.dim){ //If zoom in but far enough to not collapse with the cube
+        ampli += event.delta; 
       }
-      else if(event.delta > 0){
+      else if(event.delta > 0){ //If zoom out
         ampli += event.delta;
       }
       else{
-        ampli = rubik.w * rubik.dim;
+        ampli = rubik.w * rubik.dim; //set zoom to min possible
       }
     }
     catch(error){
+      console.log(error);
       ampli += event.delta;
     }
     return false; //prevent scrolling
@@ -348,6 +291,7 @@ var s2 = function(sketch) {
     rubik.makeMove(axis, h, inverted); //makeMove(axis, h, inverse)
   }
 
+  //~~~~~~~~~~~~~~~~~~    CONTROLS    ~~~~~~~~~~~~~~~~~~
   /**
    * Updates the canvas and stores the coord of the face facing
    */
