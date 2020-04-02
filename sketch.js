@@ -3,14 +3,9 @@
  * @see https://github.com/Jkutkut/
  */
 const mainCanvasWidth = 1920;
-// const mainCanvasWidth = 720;
 const mainCanvasHeight = 1080;
-// const mainCanvasHeight = 480;
-
-const secondCanvasWidth = 500;
-// const secondCanvasWidth = mainCanvasWidth * 0.260417;
-const secondCanvasHeight = 500;
-// const secondCanvasHeight = secondCanvasWidth;
+var secondCanvasWPercent = 0.25;
+var secondCanvasWidth = mainCanvasWidth * secondCanvasWPercent; //square Canvas
 
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
@@ -134,6 +129,9 @@ var s1 = function( sketch ) {//main canvas
    */
   sketch.mouseWheel = function(){
     try{
+      if(secondCanvas.inBounds()){
+        return false; //stop if mouse on second canvas
+      }
       if(ampli > rubik.w * rubik.dim){ //If zoom in but far enough to not collapse with the cube
         ampli += event.delta; 
       }
@@ -157,8 +155,8 @@ var s2 = function(sketch) {
    * Setup of the second sketch.
    */
    sketch.setup = function() {
-    let canvas2 = sketch.createCanvas(secondCanvasWidth, secondCanvasHeight, sketch.WEBGL); //make canvas
-    canvas2.position(mainCanvasWidth - secondCanvasWidth, mainCanvasHeight - secondCanvasHeight); //set canvas pos
+    let canvas2 = sketch.createCanvas(secondCanvasWidth, secondCanvasWidth, sketch.WEBGL); //make canvas
+    canvas2.position(mainCanvasWidth - secondCanvasWidth, mainCanvasHeight - secondCanvasWidth); //set canvas pos
     sketch.frameRate(15); //set frameRate
     sketch.update(); //Update the canvas
   }
@@ -170,7 +168,7 @@ var s2 = function(sketch) {
     if(!selectingMove){ //if not on selecting move
       if(sketch.inBounds()){ //if on bounds, get the coords of the facing piece
         let x = Math.floor(sketch.mouseX / (secondCanvasWidth / rubik.dim));
-        let y = Math.floor(sketch.mouseY / (secondCanvasHeight / rubik.dim));        
+        let y = Math.floor(sketch.mouseY / (secondCanvasWidth / rubik.dim));        
         let dX, dY, dZ;
         if(look[0][2] == 0){ //looking at horizontal face
           dX = (look[0][0] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][1] == -1)? -1 : 1) : 0;
@@ -231,7 +229,7 @@ var s2 = function(sketch) {
     //analize the move
     let m = {x: 0, y: 0}; //Mouse coordinates index (top = {0, 0}, botom = {rubik.dim - 1, rubik.dim - 1})
     m.x = Math.floor(startMove.x / secondCanvasWidth * rubik.dim);
-    m.y = Math.floor(startMove.y / secondCanvasHeight * rubik.dim);
+    m.y = Math.floor(startMove.y / secondCanvasWidth * rubik.dim);
     let moveMade = sketch.movementMade(delta.x, delta.y); //[right (1) or left (-1), up (1) or down (-1)]
     
     let axis, h, inverted;
@@ -325,7 +323,38 @@ var s2 = function(sketch) {
    * @return {boolean} (0 < mouseX < width and 0 < mouseY < height)
    */
   sketch.inBounds = function(){
-    return sketch.mouseX > 0 && sketch.mouseY > 0 && sketch.mouseX < secondCanvasWidth && sketch.mouseY < secondCanvasHeight;
+    return sketch.mouseX > 0 && sketch.mouseY > 0 && sketch.mouseX < secondCanvasWidth && sketch.mouseY < secondCanvasWidth;
+  }
+
+  /**
+   * Enables to zoom in and out on the 1º Canvas
+   */
+  sketch.mouseWheel = function(){
+    try{
+      if(!sketch.inBounds()){
+        return false; //stop if mouse on main canvas
+      }
+      let increment = -1 * event.delta / 5000;
+      console.log(secondCanvasWPercent);
+      if(secondCanvasWPercent > 0.1){ //If zoom in but far enough to not collapse with the cube
+        secondCanvasWPercent += increment; 
+      }
+      else if(increment > 0){ //If zoom out
+        secondCanvasWPercent += increment;
+      }
+      else if(secondCanvasWPercent < 0.365){ //if zoom out but less than max
+        secondCanvasWPercent += increment;
+      }
+      secondCanvasWPercent = (secondCanvasWPercent < 0.1)? 0.1 : secondCanvasWPercent; //set zoom to min possible if minor
+      secondCanvasWPercent = (secondCanvasWPercent > 0.365)? 0.365 : secondCanvasWPercent; //set zoom to min possible if minor
+
+      secondCanvasWidth = mainCanvasWidth * secondCanvasWPercent;
+      sketch.setup();
+    }
+    catch(error){
+      console.log(error);
+    }
+    return false; //prevent scrolling
   }
 };
 
