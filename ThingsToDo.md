@@ -9,9 +9,6 @@ README.MD
     -make color dicc to not depend on p5 and have colors on cube
     -smooth rotations
 
-    -Exceptions
-    
-    -Reduce redundant vars
     -Del debug code
 
     -Time
