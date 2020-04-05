@@ -55,7 +55,8 @@ var s1 = function( sketch ) {//main canvas
       INVERSECUBECOLOR: sketch.color(255 - 50),
       NULL: sketch.color(100)
     };
-    rubik = new InvisibleRubikCube(5); //create the cube
+    rubik = new RubikCube(3); //create the cube
+    // rubik = new MirrorRubikCube();
     secondCanvasWidth = mainCanvasWidth * secondCanvasWPercent; //to make the second canvas
     secondCanvas = new p5(s2); //create the second canvas
   }

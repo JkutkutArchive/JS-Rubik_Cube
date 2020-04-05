@@ -6,25 +6,25 @@ README.MD
 ## JS-RubikCube:
 
 ### GENERAL
-    -make color dicc to not depend on p5 and have colors on cube
-    -smooth rotations
+- make color dicc to not depend on p5 and have colors on cube
+- smooth rotations
 
-    -Del debug code
+- Del debug code
 
-    -Time
-    -Detect window size
+- Time
+- Detect window size
 
-    -Interface
+- Interface
 
 ### RubikSticker:
     
 ### RubikPiece:
 
 ### RubikCube:
-    -At move, invert recursive algo to boost performance
+- At move, invert recursive algo to boost performance
 
-    -Colors as var (rubikscube. proto. jfkaljfa)--> not possible right now
-    -Set and get pos -> not possible right now
+- Colors as var (rubikscube. proto. jfkaljfa)--> not possible right now
+- Set and get pos -> not possible right now
 
 
 
@@ -36,6 +36,6 @@ README.MD
 ### Matrix:
 
 ### Functions:
-    -Addition able to sum n arrays
+- Addition able to sum n arrays
 
 ### array_nD:
