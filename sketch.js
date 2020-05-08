@@ -3,6 +3,9 @@
  * @see https://github.com/Jkutkut/
  */
 // var mainCanvasWidth = 1920;
+
+var mainCanvas, secondCanvas; //here the canvas are stored
+
 var mainCanvasWidth;
 var mainCanvasHeight;
 var secondCanvasWPercent = 0.25;
@@ -10,7 +13,7 @@ var secondCanvasWidth; //square Canvas
 
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
-
+var rubikType, rubikDim;
 
 //Canvas 1
 var ampli = 1000; //Initial amplitude of the movement / distace in every axis
@@ -30,7 +33,7 @@ var look; //Double array with the axis looking to at Canvas 1 => Canvas 2
 var boxCoordBase = [0,0,0]; //Coord of the Center of that face
 var boxCoordRela = [0,0,0]; //Coord relative from there
 
-var s1 = function( sketch ) {//main canvas
+var s1 = function(sketch) {//main canvas
   /**
    * Setup of the Canvas 1
    */
@@ -55,6 +58,24 @@ var s1 = function( sketch ) {//main canvas
       INVERSECUBECOLOR: sketch.color(255 - 50),
       NULL: sketch.color(100)
     };
+    
+    //Init rubik:
+    switch(rubikType){
+      case "normal":
+        rubik = new RubikCube(rubikDim);
+        break;
+      case "stickerless":
+        rubik = new StickerlessRubikCube(rubikDim);
+        break;
+      case "invisible":
+        rubik = new InvisibleRubikCube(rubikDim);
+        break;
+      case "mirror":
+        rubik = new MirrorRubikCube();
+        break;
+    }
+
+
     rubik = new RubikCube(3); //create the cube
     // rubik = new MirrorRubikCube();
     secondCanvasWidth = mainCanvasWidth * secondCanvasWPercent; //to make the second canvas
@@ -65,7 +86,7 @@ var s1 = function( sketch ) {//main canvas
    * Draw of the Canvas 1
    */
   sketch.draw = function() { //main canvas
-    sketch.background(220);
+    sketch.background(sketch.color(0, 204, 255));
     if(moving){ //if moving the camera: camera Controls 
       deltaMoveCam.h = (sketch.mouseX - iniMousePos.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h));
       deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(deltaMoveCam.v));
@@ -154,6 +175,10 @@ var s1 = function( sketch ) {//main canvas
     }
     return false; //prevent scrolling
   }
+
+  sketch.changeDraw = function(){
+    sketch.draw = function(){sketch.background(0);}
+  }
 };
 
 var s2 = function(sketch) {
@@ -170,7 +195,7 @@ var s2 = function(sketch) {
    * Second canvas Draw.
    */
   sketch.draw = function() {
-    sketch.background(200);
+    sketch.background(sketch.color(0, 204, 255));
     if(!selectingMove){ //if not on selecting move
       if(sketch.inBounds()){ //if on bounds, get the coords of the facing piece
         let x = Math.floor(sketch.mouseX / (secondCanvasWidth / rubik.dim));
@@ -370,6 +395,12 @@ var s2 = function(sketch) {
   }
 };
 
-// create a new instance of p5 and pass in the function for sketch 1 and 2
-// var mainCanvas = new p5(s1);
-// var secondCanvas; //Defined at the end of mainCanvas.setup
+
+mainCanvas = new p5(s1);
+// var a;
+function startGame(cubeType, cubeDim){
+  rubikType = cubeType;
+  rubikDim = cubeDim;
+  a = 2;
+  mainCanvas = new p5(s1); // create a new instance of p5 and pass in the function for sketch 1 and 2
+}

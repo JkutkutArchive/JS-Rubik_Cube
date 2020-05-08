@@ -16,6 +16,7 @@ README.MD
 - Interface:
   Main:
     Logo
+    type of cube
     Author:
         name
         github
