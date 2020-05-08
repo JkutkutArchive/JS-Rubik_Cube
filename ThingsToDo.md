@@ -11,10 +11,22 @@ README.MD
 
 - Del debug code
 
-- Time
 - Detect window size
 
-- Interface
+- Interface:
+  Main:
+    Logo
+    Author:
+        name
+        github
+
+    play btn
+  
+  Play:
+    highscore
+    time
+    full screen btn
+    resize?
 
 ### RubikSticker:
     

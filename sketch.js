@@ -371,5 +371,5 @@ var s2 = function(sketch) {
 };
 
 // create a new instance of p5 and pass in the function for sketch 1 and 2
-var mainCanvas = new p5(s1);
-var secondCanvas; //Defined at the end of mainCanvas.setup
+// var mainCanvas = new p5(s1);
+// var secondCanvas; //Defined at the end of mainCanvas.setup
