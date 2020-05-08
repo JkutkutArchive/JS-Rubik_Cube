@@ -36,7 +36,9 @@ var boxCoordBase = [0,0,0]; //Coord of the Center of that face
 var boxCoordRela = [0,0,0]; //Coord relative from there
 
 function preload() {
-  canvasBackground = sketch.loadImage('https://cors-anywhere.herokuapp.com/media/img/mainBG.jpg');
+  canvasBackground = sketch.loadImage('media/img/mainBG.jpg');
+  // canvasBackground = sketch.loadImage('https://cors-anywhere.herokuapp.com/media/img/mainBG.jpg');
+  // canvasBackground = sketch.loadImage('https://cors-anywhere.herokuapp.com/https://github.com/Jkutkut/JS-Rubik_Cube/blob/v4.2/assets/img/mainBG.jpg');
 }
 
 
