@@ -429,36 +429,36 @@ class RubikCube{
    */
   static get cubeW(){ return 100;};
 
-  static get smoothAngleIncrement(){return Math.PI / 2 / 10};
+  // static get smoothAngleIncrement(){return Math.PI / 2 / 10};
   
-  startSmoothRotation(axis, h, inverse){
-    this.makeMove(axis, h, inverse, true);
+  // startSmoothRotation(axis, h, inverse){
+  //   this.makeMove(axis, h, inverse, true);
 
-    //Used at Smooth Rotation
-    // this.smoothRotationSlice = []; 
-    // this.smoothRotationAxis = axis; 
-    // this.smoothRotationAngle = 0;
-    // this.smoothRotationOri = angleOri;
+  //   //Used at Smooth Rotation
+  //   // this.smoothRotationSlice = []; 
+  //   // this.smoothRotationAxis = axis; 
+  //   // this.smoothRotationAngle = 0;
+  //   // this.smoothRotationOri = angleOri;
 
 
 
-  }
+  // }
 /** Check setup */
-  updateSmoothRotation(){
-    if(this.smoothRotationSlice.length != 0){
-      this.smoothRotationAngle += this.smoothAngleIncrement();
+  // updateSmoothRotation(){
+  //   if(this.smoothRotationSlice.length != 0){
+  //     this.smoothRotationAngle += this.smoothAngleIncrement();
 
-      if(this.smoothRotationAngle >= Math.PI / 2){
-        this.smoothRotationSlice = []; 
-        this.smoothRotationAxis = ""; 
-        this.smoothRotationAngle = -1;
-        this.smoothRotationOri = 0;
-      }
-    }
+  //     if(this.smoothRotationAngle >= Math.PI / 2){
+  //       this.smoothRotationSlice = []; 
+  //       this.smoothRotationAxis = ""; 
+  //       this.smoothRotationAngle = -1;
+  //       this.smoothRotationOri = 0;
+  //     }
+  //   }
 
-    // this.rotatePieces()
-    this.show();
-  }
+  //   // this.rotatePieces()
+  //   this.show();
+  // }
 
 }
 
