@@ -1,7 +1,14 @@
 html, body {
+  height: 1080px;
+  width: 1920px;
   margin: 0;
   padding: 0;
 }
 canvas {
   display: block;
+}
+
+body{
+  background-size: 1920px 1080px;
+  background-image: url('media/img/mainLogo.jpg');
 }
