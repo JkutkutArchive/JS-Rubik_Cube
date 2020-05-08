@@ -11,9 +11,11 @@ var mainCanvasHeight;
 var secondCanvasWPercent = 0.25;
 var secondCanvasWidth; //square Canvas
 
+var canvasBackground;
+
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
-var rubikType, rubikDim;
+// var rubikType, rubikDim;
 
 //Canvas 1
 var ampli = 1000; //Initial amplitude of the movement / distace in every axis
@@ -33,6 +35,11 @@ var look; //Double array with the axis looking to at Canvas 1 => Canvas 2
 var boxCoordBase = [0,0,0]; //Coord of the Center of that face
 var boxCoordRela = [0,0,0]; //Coord relative from there
 
+function preload() {
+  canvasBackground = sketch.loadImage('https://cors-anywhere.herokuapp.com/media/img/mainBG.jpg');
+}
+
+
 var s1 = function(sketch) {//main canvas
   /**
    * Setup of the Canvas 1
@@ -40,9 +47,13 @@ var s1 = function(sketch) {//main canvas
   sketch.setup = function() {
     mainCanvasWidth = (mainCanvasWidth)? mainCanvasWidth : sketch.windowWidth;
     mainCanvasHeight = (mainCanvasHeight)? mainCanvasHeight : mainCanvasWidth * 9 / 16;
-    let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
+    let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight); //Create the canvas
+    // let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
     canvas1.position(0,0); //Set canvas (left corner) position
     sketch.frameRate(30); //Set frameRate
+
+
+    canvasBackground = sketch.loadImage('media/img/mainBG.jpg');
 
     COLORSDIC = {
       //x
@@ -59,45 +70,13 @@ var s1 = function(sketch) {//main canvas
       NULL: sketch.color(100)
     };
     
-    //Init rubik:
-    switch(rubikType){
-      case "normal":
-        rubik = new RubikCube(rubikDim);
-        break;
-      case "stickerless":
-        rubik = new StickerlessRubikCube(rubikDim);
-        break;
-      case "invisible":
-        rubik = new InvisibleRubikCube(rubikDim);
-        break;
-      case "mirror":
-        rubik = new MirrorRubikCube();
-        break;
-    }
-
-
-    rubik = new RubikCube(3); //create the cube
-    // rubik = new MirrorRubikCube();
-    secondCanvasWidth = mainCanvasWidth * secondCanvasWPercent; //to make the second canvas
-    secondCanvas = new p5(s2); //create the second canvas
   }
 
   /**
    * Draw of the Canvas 1
    */
   sketch.draw = function() { //main canvas
-    sketch.background(sketch.color(0, 204, 255));
-    if(moving){ //if moving the camera: camera Controls 
-      deltaMoveCam.h = (sketch.mouseX - iniMousePos.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h));
-      deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(deltaMoveCam.v));
-      trueIncX = deltaMoveCam.h; //true deltaMoveCam.h
-      trueIncZ = ((angZ + deltaMoveCam.v) / Math.PI > 1)? Math.PI - angZ : ((angZ + deltaMoveCam.v) < 0)? -angZ + 0.0001 : deltaMoveCam.v;
-    }
-    camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-    camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-    camZ =  -ampli * Math.cos(angZ + trueIncZ);
-    sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1); //Set camera at position
-    rubik.show();
+    sketch.background(canvasBackground)
   }
   /**
    * Calculates the position looking to at the cube
@@ -176,8 +155,43 @@ var s1 = function(sketch) {//main canvas
     return false; //prevent scrolling
   }
 
-  sketch.changeDraw = function(){
-    sketch.draw = function(){sketch.background(0);}
+  sketch.startGame = function(rubikDim, rubikType){
+    rubikDim = (rubikDim)? rubikDim : 3;
+    rubikType = (rubikType)? rubikType : "normal";
+    //Init rubik:
+    switch(rubikType){
+      case "normal":
+        rubik = new RubikCube(rubikDim);
+        break;
+      case "stickerless":
+        rubik = new StickerlessRubikCube(rubikDim);
+        break;
+      case "invisible":
+        rubik = new InvisibleRubikCube(rubikDim);
+        break;
+      case "mirror":
+        rubik = new MirrorRubikCube();
+        break;
+    }
+    let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
+    canvas1.position(0,0); //Set canvas (left corner) position
+    sketch.frameRate(30); //Set frameRate
+    sketch.draw = function(){
+      sketch.background(sketch.color(0, 204, 255));
+      if(moving){ //if moving the camera: camera Controls 
+        deltaMoveCam.h = (sketch.mouseX - iniMousePos.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h));
+        deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(deltaMoveCam.v));
+        trueIncX = deltaMoveCam.h; //true deltaMoveCam.h
+        trueIncZ = ((angZ + deltaMoveCam.v) / Math.PI > 1)? Math.PI - angZ : ((angZ + deltaMoveCam.v) < 0)? -angZ + 0.0001 : deltaMoveCam.v;
+      }
+      camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+      camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+      camZ =  -ampli * Math.cos(angZ + trueIncZ);
+      sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1); //Set camera at position
+      rubik.show();
+    }
+    secondCanvasWidth = mainCanvasWidth * secondCanvasWPercent; //to make the second canvas
+    secondCanvas = new p5(s2); //create the second canvas
   }
 };
 
@@ -399,8 +413,9 @@ var s2 = function(sketch) {
 mainCanvas = new p5(s1);
 // var a;
 function startGame(cubeType, cubeDim){
-  rubikType = cubeType;
-  rubikDim = cubeDim;
-  a = 2;
-  mainCanvas = new p5(s1); // create a new instance of p5 and pass in the function for sketch 1 and 2
+  // rubikType = cubeType;
+  // rubikDim = cubeDim;
+  // a = 2;
+  // mainCanvas = new p5(s1); // create a new instance of p5 and pass in the function for sketch 1 and 2
+  
 }
