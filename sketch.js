@@ -92,10 +92,10 @@ var s1 = function( sketch ) {//main canvas
     }
     else{
       if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
-        look.push([(Math.cos(angZ) > 0)? 1 : -1, 0, 0]); //1 => Orange, -1 => Red
+        look.push([(Math.cos(angX) > 0)? 1 : -1, 0, 0]); //1 => Orange, -1 => Red
       }
       else{
-        look.push([0, (Math.cos(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
+        look.push([0, (Math.sin(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
       }
     }
     let x = Math.cos(angX + trueIncX);
