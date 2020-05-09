@@ -48,9 +48,9 @@ var s1 = function(sketch) {//main canvas
     canvasImg.selectTC = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/select-type-cube.png');
     
     canvasImg.normal = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-3x3.jpg');
-    canvasImg.mirror = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-mirror.png');
-    canvasImg.invisible = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-invisible.png');
-    canvasImg.stickerless = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-stickerless.png');
+    canvasImg.mirror = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-mirror.jpg');
+    canvasImg.invisible = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-invisible.jpg');
+    canvasImg.stickerless = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-stickerless.jpg');
     
     
     
@@ -94,17 +94,19 @@ var s1 = function(sketch) {//main canvas
     //select type cube
     sketch.image(canvasImg.selectTC, ...relativePos([560, 320, 800, 100]))
 
-    sketch.image(canvasImg.normal, ...relativePos([560, 420, 100, 100]))
-    sketch.image(canvasImg.mirror, ...relativePos([660, 420, 100, 100]))
-    sketch.image(canvasImg.invisible, ...relativePos([760, 420, 100, 100]))
-    sketch.image(canvasImg.stickerless, ...relativePos([860, 420, 100, 100]))
+    sketch.image(canvasImg.normal, ...relativePos([400, 480, 200, 200]))
+    sketch.image(canvasImg.mirror, ...relativePos([700, 480, 200, 200]))
+    sketch.image(canvasImg.invisible, ...relativePos([990, 480, 200, 200]))
+    sketch.image(canvasImg.stickerless, ...relativePos([1280, 480, 200, 200]))
 
 
     sketch.textFont(canvasFont);
     sketch.fill(0);
     sketch.textSize(60);
-    sketch.text("3 X 3 X 3", ...relativePos([500, 800]));
+    // sketch.size(60);
 
+    let a = sketch.text("3 X 3 X 3", ...relativePos([824, 800]));
+    console.log(sketch.textWidth("3 X 3 X 3"));
     //github Icon
     sketch.image(canvasImg.github, ...relativePos([1800, 960, 100, 100]));
   }
