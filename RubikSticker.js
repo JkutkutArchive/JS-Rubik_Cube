@@ -61,7 +61,7 @@ class RubikSticker{
      */
     setWPercent(wP){
         try{
-            if(typeof(w) != "number"){
+            if(typeof(wP) != "number"){
                 throw "it is not a number";
             }
             this.wPercent = wP;

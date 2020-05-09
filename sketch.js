@@ -11,19 +11,19 @@ var mainCanvasHeight;
 var secondCanvasWPercent = 0.25;
 var secondCanvasWidth; //square Canvas
 
-var canvasImg = {};
+var canvasImg = {}, canvasFont;
 
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
 // var rubikType, rubikDim;
 
 //Canvas 1
-var ampli = 1000; //Initial amplitude of the movement / distace in every axis
+var ampli = 700; //Initial amplitude of the movement / distace in every axis
 var camX, camY, camZ; //Coordinates of the camera.
 var moving = false; //Whenever a movement of the camera is happening.
 var iniMousePos = {x: 0, y: 0};//(x,y) initial mouse coord (used to move camera)
-var angX = 1.2 * 0.25 * Math.PI; //Angle for X and Y camCoordinates
-var angZ = 3.2 * 0.25 * Math.PI; //Angle for Z camCoordinate
+var angX = 0.25 * Math.PI; //Angle for X and Y camCoordinates
+var angZ = 3 * 0.25 * Math.PI; //Angle for Z camCoordinate
 var deltaMoveCam = {h: 0, v: 0}; //increment on the Horizontal and Vertical Axis when doing a move
 var trueIncX = 0, trueIncZ = 0; //True increment on those axis
 
@@ -40,7 +40,9 @@ var boxCoordRela = [0,0,0]; //Coord relative from there
 
 var s1 = function(sketch) {//main canvas
   sketch.preload = function() {
-    // canvasBackground = sketch.loadImage('assets/main-bg.jpg');    
+    // canvasBackground = sketch.loadImage('assets/main-bg.jpg');   
+    canvasFont = sketch.loadFont("http://www.fontsaddict.com/fontface/digitag-regular.ttf");
+
     canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/mainBG.jpg');
     canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/title.png');
     canvasImg.github = sketch.loadImage('https://image.flaticon.com/icons/svg/25/25231.svg');
@@ -51,9 +53,7 @@ var s1 = function(sketch) {//main canvas
   sketch.setup = function() {
     mainCanvasWidth = (mainCanvasWidth)? mainCanvasWidth : sketch.windowWidth;
     mainCanvasHeight = (mainCanvasHeight)? mainCanvasHeight : mainCanvasWidth * 9 / 16;
-    let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight); //Create the canvas
-    // let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
-    // canvas1.position(0,0); //Set canvas (left corner) position
+    sketch.createCanvas(mainCanvasWidth, mainCanvasHeight); //Create the canvas
     sketch.frameRate(30); //Set frameRate
 
 
@@ -71,6 +71,7 @@ var s1 = function(sketch) {//main canvas
       YELLOW: sketch.color(247, 239, 0), //yellow
       CUBECOLOR: sketch.color(50),//cubeColor
       INVERSECUBECOLOR: sketch.color(255 - 50),
+      MIRRORBODY: sketch.color(0, 0, 153),
       NULL: sketch.color(100)
     };
     
@@ -108,18 +109,22 @@ var s1 = function(sketch) {//main canvas
         rubik = new RubikCube(rubikDim);
         break;
       case "stickerless":
+        console.log(rubikDim)
         rubik = new StickerlessRubikCube(rubikDim);
         break;
       case "invisible":
         rubik = new InvisibleRubikCube(rubikDim);
         break;
       case "mirror":
-        rubik = new MirrorRubikCube();
+        rubik = new MirrorRubikCube(false, COLORSDIC.MIRRORBODY);
         break;
     }
     sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
     sketch.frameRate(30); //Set frameRate
     
+    angX = 1.0 * 0.25 * Math.PI; //Angle for X and Y camCoordinates
+    angZ = 3.0 * 0.25 * Math.PI;
+
     sketch.draw = function(){
       sketch.background(sketch.color(0, 204, 255));
       if(moving){ //if moving the camera: camera Controls 
