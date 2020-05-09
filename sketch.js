@@ -15,7 +15,7 @@ var canvasImg = {}, canvasFont;
 
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
-// var rubikType, 
+var rubikType = "normal";
 var rubikDim = 2;
 
 //Canvas 1
@@ -95,26 +95,35 @@ var s1 = function(sketch) {//main canvas
     //select type cube
     sketch.image(canvasImg.selectTC, ...relativePos([560, 320, 800, 100]));
 
+
+    sketch.fill(0);
+    if(rubikType == "normal"){
+      sketch.rect(...relativePos([455-10, 480-10, 200+20, 200+20]));
+    }
+    else if(rubikType == "mirror"){
+      sketch.rect(...relativePos([725-10, 480-10, 200+20, 200+20]));
+    }
+    else if(rubikType == "invisible"){
+      sketch.rect(...relativePos([995-10, 480-10, 200+20, 200+20]));
+    } 
+    else if(rubikType == "stickerless"){
+      sketch.rect(...relativePos([1265-10, 480-10, 200+20, 200+20]));
+    } 
+    
     sketch.image(canvasImg.normal, ...relativePos([455, 480, 200, 200]));
     sketch.image(canvasImg.mirror, ...relativePos([725, 480, 200, 200]));
     sketch.image(canvasImg.invisible, ...relativePos([995, 480, 200, 200]));
     sketch.image(canvasImg.stickerless, ...relativePos([1265, 480, 200, 200]));
 
-
-    sketch.fill(255);
-    // sketch.rect(...relativePos([854, 740, 106-1, 500]));
-    sketch.rect(...relativePos([0, 0, 959, 539]));
-
-
-    // sketch.textFont(canvasFont);
-    sketch.fill(255);
-    sketch.textSize(40);
-    let texto = rubikDim + "x" + rubikDim + "x" + rubikDim;
-    sketch.text(texto, ...relativePos([960-112, 800]));
-    // sketch.text(texto, ...relativePos([960-(sketch.textWidth(texto)/2), 562]));
+    if(rubikType != "mirror"){
+      sketch.fill(255);
+      sketch.textSize(40);
+      let texto = rubikDim + "x" + rubikDim + "x" + rubikDim;
+      sketch.text(texto, ...relativePos([960-112, 800]));
+    }
     
     
-    
+    sketch.image(canvasImg.start, ...relativePos([905, 850, 150, 150]));
     
     
     //github Icon
@@ -122,17 +131,42 @@ var s1 = function(sketch) {//main canvas
   }
 
   /**
-   * Handles when clicked on the github icon.
+   * Handles when clicked on the main menu.
    * see startGame() to see the logic on the game
    */
   sketch.mousePressed = function(){
     let gitCoord = relativePos([1800, 960, 1900, 1060]); //Coordinates of the github icon with the current window size
+    let mC = {
+      x: [455, 725, 995, 1265, 200].map(x => x * mainCanvasWidth / 1920), //modes coord + boxSize
+      y: [480, 680].map(x => x * mainCanvasHeight / 1080)
+    }
+    let startCoord = relativePos([905, 850, 1155, 1000]);
     if(sketch.mouseX >= gitCoord[0] &&
        sketch.mouseY >= gitCoord[1] &&
        sketch.mouseX <= gitCoord[2] &&
-       sketch.mouseY <= gitCoord[3] ){
+       sketch.mouseY <= gitCoord[3] ){ //Github
       window.open('https://github.com/Jkutkut');
-    }    
+    }
+    else if(sketch.mouseY >= mC.y[0] && sketch.mouseY <= mC.y[1]){ //Modes
+      if(sketch.mouseX >= mC.x[0] && sketch.mouseX <= mC.x[0] + mC.x[4]){
+        rubikType = "normal";
+      }
+      else if(sketch.mouseX >= mC.x[1] && sketch.mouseX <= mC.x[1] + mC.x[4]){
+        rubikType = "mirror";
+      }
+      else if(sketch.mouseX >= mC.x[2] && sketch.mouseX <= mC.x[2] + mC.x[4]){
+        rubikType = "invisible";
+      }
+      else if(sketch.mouseX >= mC.x[3] && sketch.mouseX <= mC.x[3] + mC.x[4]){
+        rubikType = "stickerless";
+      }
+    }
+    else if(sketch.mouseX >= startCoord[0] &&
+            sketch.mouseY >= startCoord[1] &&
+            sketch.mouseX <= startCoord[2] &&
+            sketch.mouseY <= startCoord[3] ){ //start btn
+      sketch.startGame();
+    }
   }
 
   sketch.mouseWheel = function(){
@@ -147,7 +181,7 @@ var s1 = function(sketch) {//main canvas
     }
   }
 
-  sketch.startGame = function(rubikType){
+  sketch.startGame = function(){
     // rubikDim = (rubikDim)? rubikDim : 3;
     rubikType = (rubikType)? rubikType : "normal";
     //Init rubik:
