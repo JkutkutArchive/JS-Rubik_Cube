@@ -2,16 +2,8 @@
  * @author Jkutkut
  * @see https://github.com/Jkutkut/
  */
-// var mainCanvasWidth = 1920;
 
 var mainCanvas, secondCanvas; //here the canvas are stored
-
-var mainCanvasWidth;
-var mainCanvasHeight;
-var secondCanvasWPercent = 0.25;
-var secondCanvasWidth; //square Canvas
-
-var canvasImg = {}, canvasFont;
 
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
@@ -19,6 +11,9 @@ var rubikType = "normal";
 var rubikDim = 2;
 
 //Canvas 1
+var canvasImg = {}, canvasFont; //Main menu
+var mainCanvasWidth;
+var mainCanvasHeight;
 var ampli = 700; //Initial amplitude of the movement / distace in every axis
 var camX, camY, camZ; //Coordinates of the camera.
 var moving = false; //Whenever a movement of the camera is happening.
@@ -30,6 +25,8 @@ var trueIncX = 0, trueIncZ = 0; //True increment on those axis
 
 
 //Canvas 2
+var secondCanvasWPercent = 0.25;
+var secondCanvasWidth; //square Canvas
 var selectingMove = false;
 var startMove; //diccionary to select move start coord {x: 0, y: 0}
 var look; //Double array with the axis looking to at Canvas 1 => Canvas 2
@@ -37,23 +34,21 @@ var boxCoordBase = [0,0,0]; //Coord of the Center of that face
 var boxCoordRela = [0,0,0]; //Coord relative from there
 
 
-
-
 var s1 = function(sketch) {//main canvas
   /**
    * Preload all images.
    */
   sketch.preload = function() {    
-    canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/mainBG.jpg');
+    canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/mainBG.jpg');
     
-    canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/title.png');
-    canvasImg.selectTC = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/select-type-cube.png');
+    canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/title.png');
+    canvasImg.selectTC = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/select-type-cube.png');
     
-    canvasImg.normal = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-3x3.jpg');
-    canvasImg.mirror = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-mirror.jpg');
-    canvasImg.invisible = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-invisible.jpg');
-    canvasImg.stickerless = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-stickerless.jpg');
-    canvasImg.start = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/start-icon.png')
+    canvasImg.normal = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-3x3.jpg');
+    canvasImg.mirror = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-mirror.jpg');
+    canvasImg.invisible = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-invisible.jpg');
+    canvasImg.stickerless = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-stickerless.jpg');
+    canvasImg.start = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/start-icon.png')
     
     canvasImg.github = sketch.loadImage('https://image.flaticon.com/icons/svg/25/25231.svg');
   }
@@ -190,7 +185,6 @@ var s1 = function(sketch) {//main canvas
         rubik = new RubikCube(rubikDim);
         break;
       case "stickerless":
-        console.log(rubikDim)
         rubik = new StickerlessRubikCube(rubikDim);
         break;
       case "invisible":
@@ -350,7 +344,6 @@ var s2 = function(sketch) {
       if(!sketch.mouseIsPressed){
         startMove = false;
         selectingMove = false;
-        console.log("not pressed anymore")
       }
     }
     rubik.show(secondCanvas);
@@ -363,7 +356,6 @@ var s2 = function(sketch) {
     if(sketch.inBounds()){ //Only if mouse on bounds
       sketch.cursor('grab'); //Change mouse icon
       selectingMove = true; //Start the movement mode
-      console.log("move started");
       startMove = {x: sketch.mouseX, y: sketch.mouseY}; //Save the initial coordinates of the mouse
       }
   }
@@ -373,7 +365,6 @@ var s2 = function(sketch) {
    */
   sketch.mouseReleased = function(){
     sketch.cursor(); //Reset mouse icon
-    console.log(startMove);
     if(!selectingMove || typeof(startMove.x) != "number" || typeof(startMove.x) != "number"){
       return; //if not selecting a move or not correct array, do not continue
     }
@@ -494,7 +485,6 @@ var s2 = function(sketch) {
         return false; //stop if mouse on main canvas
       }
       let increment = -1 * event.delta / 5000;
-      console.log(secondCanvasWPercent);
       if(secondCanvasWPercent > 0.1){ //If zoom in but far enough to not collapse with the cube
         secondCanvasWPercent += increment; 
       }
@@ -516,6 +506,5 @@ var s2 = function(sketch) {
     return false; //prevent scrolling
   }
 };
-
 
 mainCanvas = new p5(s1);

@@ -8,15 +8,7 @@ README.MD
 ### GENERAL
 - smooth rotations
 
-- Del debug code
-
-- link to credits.md
-
-- Interface:
-  Main:
-    Author:
-        name
-  
+- Interface:  
   Play:
     highscore
     time
