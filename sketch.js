@@ -11,7 +11,7 @@ var mainCanvasHeight;
 var secondCanvasWPercent = 0.25;
 var secondCanvasWidth; //square Canvas
 
-var canvasBackground;
+var canvasImg = {};
 
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
@@ -35,14 +35,16 @@ var look; //Double array with the axis looking to at Canvas 1 => Canvas 2
 var boxCoordBase = [0,0,0]; //Coord of the Center of that face
 var boxCoordRela = [0,0,0]; //Coord relative from there
 
-function preload() {
-  canvasBackground = sketch.loadImage('media/img/mainBG.jpg');
-  // canvasBackground = sketch.loadImage('https://cors-anywhere.herokuapp.com/media/img/mainBG.jpg');
-  // canvasBackground = sketch.loadImage('https://cors-anywhere.herokuapp.com/https://github.com/Jkutkut/JS-Rubik_Cube/blob/v4.2/assets/img/mainBG.jpg');
-}
+
 
 
 var s1 = function(sketch) {//main canvas
+  sketch.preload = function() {
+    // canvasBackground = sketch.loadImage('assets/main-bg.jpg');    
+    canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/mainBG.jpg');
+    canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/title.png');
+    canvasImg.github = sketch.loadImage('https://image.flaticon.com/icons/svg/25/25231.svg');
+  }
   /**
    * Setup of the Canvas 1
    */
@@ -51,11 +53,11 @@ var s1 = function(sketch) {//main canvas
     mainCanvasHeight = (mainCanvasHeight)? mainCanvasHeight : mainCanvasWidth * 9 / 16;
     let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight); //Create the canvas
     // let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
-    canvas1.position(0,0); //Set canvas (left corner) position
+    // canvas1.position(0,0); //Set canvas (left corner) position
     sketch.frameRate(30); //Set frameRate
 
 
-    canvasBackground = sketch.loadImage('media/img/mainBG.jpg');
+    // canvasBackground = sketch.loadImage('assets/img/mainBG.jpg');
 
     COLORSDIC = {
       //x
@@ -75,86 +77,26 @@ var s1 = function(sketch) {//main canvas
   }
 
   /**
-   * Draw of the Canvas 1
+   * Draw of the Canvas 1, see startGame() to see the logic on the game
    */
   sketch.draw = function() { //main canvas
-    sketch.background(canvasBackground)
-  }
-  /**
-   * Calculates the position looking to at the cube
-   * @returns {number[][]} [[Position of the center of the face facing], [Same with the increment]]
-   */
-  sketch.lookingAt = function(){
-    look = [];
-    if(angZ / Math.PI > 0.75){
-      look.push([0, 0, 1]); //White
-    }
-    else if(angZ / Math.PI < 0.25){
-      look.push([0, 0, -1]); //Yellow
-    }
-    else{
-      if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
-        look.push([(Math.cos(angX) > 0)? 1 : -1, 0, 0]); //1 => Orange, -1 => Red
-      }
-      else{
-        look.push([0, (Math.sin(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
-      }
-    }
-    let x = Math.cos(angX + trueIncX);
-    let y = Math.sin(angX + trueIncX);
-    x = (Math.abs(x) > Math.abs(y))? x : 0; //Keep only the one with the greatest magnitude
-    y = (x == 0)? y : 0;
-    look.push([Math.round(x), Math.round(y), 0]); //Where the angle tells the camera is looking with the increment
-    return look;
+    sketch.background(canvasImg.bg);
+    sketch.image(canvasImg.title, ...relativePos([70, 60, 800, 250]))
+    sketch.image(canvasImg.github, ...relativePos([1800, 960, 100, 100]));
   }
 
-  //~~~~~~~~~~~~~~~~~~    CONTROLS    ~~~~~~~~~~~~~~~~~~
   /**
-   * If mouse on the canvas, start movement of the camera
+   * Handles when clicked on the github icon.
+   * see startGame() to see the logic on the game
    */
   sketch.mousePressed = function(){
-    if(!secondCanvas.inBounds()){
-      sketch.cursor('grab'); //Change mouse icon
-      moving = true; //Start movement of the camera
-      iniMousePos = {x: sketch.mouseX, y: sketch.mouseY}; //Get initial position
-    }
-  }
-  /**
-   * End camera movement. Save new position + update 2º Canvas
-   */
-  sketch.mouseReleased = function(){
-    sketch.cursor(); //Set cursor to normal
-    moving = false; //Stop movement
-    angX += trueIncX; //Save the increment on the angle
-    angZ += trueIncZ; //Save the increment on the angle
-    deltaMoveCam = {h: 0, v: 0}; //Reset increment
-    trueIncX = 0; //Reset increment
-    trueIncZ = 0; //Reset increment
-    secondCanvas.update(); //update the second canvas with the new position
-  }
-  /**
-   * Enables to zoom in and out on the 1º Canvas
-   */
-  sketch.mouseWheel = function(){
-    try{
-      if(secondCanvas.inBounds()){
-        return false; //stop if mouse on second canvas
-      }
-      if(ampli > rubik.w * rubik.dim){ //If zoom in but far enough to not collapse with the cube
-        ampli += event.delta; 
-      }
-      else if(event.delta > 0){ //If zoom out
-        ampli += event.delta;
-      }
-      else{
-        ampli = rubik.w * rubik.dim; //set zoom to min possible
-      }
-    }
-    catch(error){
-      console.log(error);
-      ampli += event.delta;
-    }
-    return false; //prevent scrolling
+    let gitCoord = relativePos([1800, 960, 1900, 1060]); //Coordinates of the github icon with the current window size
+    if(sketch.mouseX >= gitCoord[0] &&
+       sketch.mouseY >= gitCoord[1] &&
+       sketch.mouseX <= gitCoord[2] &&
+       sketch.mouseY <= gitCoord[3] ){
+      window.open('https://github.com/Jkutkut');
+    }    
   }
 
   sketch.startGame = function(rubikDim, rubikType){
@@ -175,9 +117,9 @@ var s1 = function(sketch) {//main canvas
         rubik = new MirrorRubikCube();
         break;
     }
-    let canvas1 = sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
-    canvas1.position(0,0); //Set canvas (left corner) position
+    sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
     sketch.frameRate(30); //Set frameRate
+    
     sketch.draw = function(){
       sketch.background(sketch.color(0, 204, 255));
       if(moving){ //if moving the camera: camera Controls 
@@ -192,6 +134,84 @@ var s1 = function(sketch) {//main canvas
       sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1); //Set camera at position
       rubik.show();
     }
+
+    /**
+     * Calculates the position looking to at the cube
+     * @returns {number[][]} [[Position of the center of the face facing], [Same with the increment]]
+     */
+    sketch.lookingAt = function(){
+      look = [];
+      if(angZ / Math.PI > 0.75){
+        look.push([0, 0, 1]); //White
+      }
+      else if(angZ / Math.PI < 0.25){
+        look.push([0, 0, -1]); //Yellow
+      }
+      else{
+        if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
+          look.push([(Math.cos(angX) > 0)? 1 : -1, 0, 0]); //1 => Orange, -1 => Red
+        }
+        else{
+          look.push([0, (Math.sin(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
+        }
+      }
+      let x = Math.cos(angX + trueIncX);
+      let y = Math.sin(angX + trueIncX);
+      x = (Math.abs(x) > Math.abs(y))? x : 0; //Keep only the one with the greatest magnitude
+      y = (x == 0)? y : 0;
+      look.push([Math.round(x), Math.round(y), 0]); //Where the angle tells the camera is looking with the increment
+      return look;
+    }
+
+    //~~~~~~~~~~~~~~~~~~    CONTROLS    ~~~~~~~~~~~~~~~~~~
+    /**
+     * If mouse on the canvas, start movement of the camera
+     */
+    sketch.mousePressed = function(){
+      if(!secondCanvas.inBounds()){
+        sketch.cursor('grab'); //Change mouse icon
+        moving = true; //Start movement of the camera
+        iniMousePos = {x: sketch.mouseX, y: sketch.mouseY}; //Get initial position
+      }
+    }
+    /**
+     * End camera movement. Save new position + update 2º Canvas
+     */
+    sketch.mouseReleased = function(){
+      sketch.cursor(); //Set cursor to normal
+      moving = false; //Stop movement
+      angX += trueIncX; //Save the increment on the angle
+      angZ += trueIncZ; //Save the increment on the angle
+      deltaMoveCam = {h: 0, v: 0}; //Reset increment
+      trueIncX = 0; //Reset increment
+      trueIncZ = 0; //Reset increment
+      secondCanvas.update(); //update the second canvas with the new position
+    }
+    /**
+     * Enables to zoom in and out on the 1º Canvas
+     */
+    sketch.mouseWheel = function(){
+      try{
+        if(secondCanvas.inBounds()){
+          return false; //stop if mouse on second canvas
+        }
+        if(ampli > rubik.w * rubik.dim){ //If zoom in but far enough to not collapse with the cube
+          ampli += event.delta; 
+        }
+        else if(event.delta > 0){ //If zoom out
+          ampli += event.delta;
+        }
+        else{
+          ampli = rubik.w * rubik.dim; //set zoom to min possible
+        }
+      }
+      catch(error){
+        console.log(error);
+        ampli += event.delta;
+      }
+      return false; //prevent scrolling
+    }
+
     secondCanvasWidth = mainCanvasWidth * secondCanvasWPercent; //to make the second canvas
     secondCanvas = new p5(s2); //create the second canvas
   }
@@ -413,11 +433,3 @@ var s2 = function(sketch) {
 
 
 mainCanvas = new p5(s1);
-// var a;
-function startGame(cubeType, cubeDim){
-  // rubikType = cubeType;
-  // rubikDim = cubeDim;
-  // a = 2;
-  // mainCanvas = new p5(s1); // create a new instance of p5 and pass in the function for sketch 1 and 2
-  
-}

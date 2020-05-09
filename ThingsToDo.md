@@ -13,6 +13,8 @@ README.MD
 
 - Detect window size
 
+- Fix mirror secondCanvas
+
 - Interface:
   Main:
     Logo
