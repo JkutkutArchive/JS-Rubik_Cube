@@ -41,10 +41,21 @@ var boxCoordRela = [0,0,0]; //Coord relative from there
 var s1 = function(sketch) {//main canvas
   sketch.preload = function() {
     canvasFont = sketch.loadFont("https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/grafitti.ttf");
+    
     canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/mainBG.jpg');
+    
     canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/title.png');
     canvasImg.selectTC = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/select-type-cube.png');
+    
+    canvasImg.normal = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-3x3.jpg');
+    canvasImg.mirror = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-mirror.png');
+    canvasImg.invisible = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-invisible.png');
+    canvasImg.stickerless = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-stickerless.png');
+    
+    
+    
     canvasImg.github = sketch.loadImage('https://image.flaticon.com/icons/svg/25/25231.svg');
+    
   }
   /**
    * Setup of the Canvas 1
@@ -78,14 +89,24 @@ var s1 = function(sketch) {//main canvas
    */
   sketch.draw = function() { //main canvas
     sketch.background(canvasImg.bg);
-    sketch.image(canvasImg.title, ...relativePos([70, 60, 800, 250]))
-    sketch.image(canvasImg.selectTC, ...relativePos([500, 600, 800, 250]))
-    sketch.image(canvasImg.github, ...relativePos([1800, 960, 100, 100]));
+    //title
+    sketch.image(canvasImg.title, ...relativePos([510, 60, 900, 230]))
+    //select type cube
+    sketch.image(canvasImg.selectTC, ...relativePos([560, 320, 800, 100]))
+
+    sketch.image(canvasImg.normal, ...relativePos([560, 420, 100, 100]))
+    sketch.image(canvasImg.mirror, ...relativePos([660, 420, 100, 100]))
+    sketch.image(canvasImg.invisible, ...relativePos([760, 420, 100, 100]))
+    sketch.image(canvasImg.stickerless, ...relativePos([860, 420, 100, 100]))
+
 
     sketch.textFont(canvasFont);
     sketch.fill(0);
     sketch.textSize(60);
-    sketch.text("3 X 3 X 3", ...relativePos([500, 500]));
+    sketch.text("3 X 3 X 3", ...relativePos([500, 800]));
+
+    //github Icon
+    sketch.image(canvasImg.github, ...relativePos([1800, 960, 100, 100]));
   }
 
   /**
