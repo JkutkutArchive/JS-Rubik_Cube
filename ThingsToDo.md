@@ -6,12 +6,9 @@ README.MD
 ## JS-RubikCube:
 
 ### GENERAL
-- make color dicc to not depend on p5 and have colors on cube
 - smooth rotations
 
 - Del debug code
-
-- Detect window size
 
 - link to credits.md
 
@@ -19,12 +16,10 @@ README.MD
   Main:
     Author:
         name
-        github
   
   Play:
     highscore
     time
-    full screen btn
     resize?
 
 ### RubikSticker:
