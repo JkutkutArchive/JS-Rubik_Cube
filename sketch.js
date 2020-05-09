@@ -40,11 +40,10 @@ var boxCoordRela = [0,0,0]; //Coord relative from there
 
 var s1 = function(sketch) {//main canvas
   sketch.preload = function() {
-    // canvasBackground = sketch.loadImage('assets/main-bg.jpg');   
-    canvasFont = sketch.loadFont("http://www.fontsaddict.com/fontface/digitag-regular.ttf");
-
+    canvasFont = sketch.loadFont("https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/grafitti.ttf");
     canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/mainBG.jpg');
     canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/title.png');
+    canvasImg.selectTC = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/select-type-cube.png');
     canvasImg.github = sketch.loadImage('https://image.flaticon.com/icons/svg/25/25231.svg');
   }
   /**
@@ -56,9 +55,6 @@ var s1 = function(sketch) {//main canvas
     sketch.createCanvas(mainCanvasWidth, mainCanvasHeight); //Create the canvas
     sketch.frameRate(30); //Set frameRate
 
-
-    // canvasBackground = sketch.loadImage('assets/img/mainBG.jpg');
-
     COLORSDIC = {
       //x
       RED: sketch.color(255,0,0),//red
@@ -69,12 +65,12 @@ var s1 = function(sketch) {//main canvas
       //z
       WHITE: sketch.color(255),//white
       YELLOW: sketch.color(247, 239, 0), //yellow
+
       CUBECOLOR: sketch.color(50),//cubeColor
       INVERSECUBECOLOR: sketch.color(255 - 50),
       MIRRORBODY: sketch.color(0, 0, 153),
       NULL: sketch.color(100)
     };
-    
   }
 
   /**
@@ -83,7 +79,13 @@ var s1 = function(sketch) {//main canvas
   sketch.draw = function() { //main canvas
     sketch.background(canvasImg.bg);
     sketch.image(canvasImg.title, ...relativePos([70, 60, 800, 250]))
+    sketch.image(canvasImg.selectTC, ...relativePos([500, 600, 800, 250]))
     sketch.image(canvasImg.github, ...relativePos([1800, 960, 100, 100]));
+
+    sketch.textFont(canvasFont);
+    sketch.fill(0);
+    sketch.textSize(60);
+    sketch.text("3 X 3 X 3", ...relativePos([500, 500]));
   }
 
   /**

@@ -14,6 +14,7 @@ README.MD
 - Detect window size
 
 - Fix mirror secondCanvas
+- link to credits.md
 
 - Interface:
   Main:
