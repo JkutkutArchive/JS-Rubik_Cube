@@ -71,12 +71,6 @@ class RubikCube{
       
     ];
 
-    //Used at Smooth Rotation
-    this.smoothRotationSlice = []; 
-    this.smoothRotationAxis = ""; 
-    this.smoothRotationAngle = -1;
-    this.smoothRotationOri = 0;
-
     //~~~~~~~~~~~~~~~~~~~~~~~   this.pieces initialization  ~~~~~~~~~~~~~~~~~~~~~~~
     let index; //index in the z axis
     let xGood, yGood; //conditions of the x and y axis
@@ -348,7 +342,7 @@ class RubikCube{
    * @param {number} h - The height of the slice to rotate 
    * @param {*} inverse 
    */
-  makeMove(axis, h, inverse, smoothRotation){
+  makeMove(axis, h, inverse){
     let angleOri = 1;
     let highH = h + 1 > this.dim / 2; //if on the second half of the cube
     inverse = (inverse)? inverse : false;
@@ -360,15 +354,7 @@ class RubikCube{
     }
     let movedPieces = array_nD.o.permutation_3D(this.pieces, axis, h);
 
-    if(smoothRotation){ //If doing a smooth rotation
-      this.smoothRotationSlice = movedPieces;
-      this.smoothRotationAxis = axis;
-      this.smoothRotationAngle = 0;
-      this.smoothRotationOri = angleOri;
-    }
-    else{
-      this.rotatePieces(axis, -Math.PI / 2 * angleOri, movedPieces);//normal rotation
-    }
+    this.rotatePieces(axis, -Math.PI / 2 * angleOri, movedPieces);//normal rotation
 
     this.movesMade.push([axis, h, inverse]); //Store the movement made at the end
   }
@@ -428,38 +414,6 @@ class RubikCube{
    * @returns {number} - The default piece size.
    */
   static get cubeW(){ return 100;};
-
-  // static get smoothAngleIncrement(){return Math.PI / 2 / 10};
-  
-  // startSmoothRotation(axis, h, inverse){
-  //   this.makeMove(axis, h, inverse, true);
-
-  //   //Used at Smooth Rotation
-  //   // this.smoothRotationSlice = []; 
-  //   // this.smoothRotationAxis = axis; 
-  //   // this.smoothRotationAngle = 0;
-  //   // this.smoothRotationOri = angleOri;
-
-
-
-  // }
-/** Check setup */
-  // updateSmoothRotation(){
-  //   if(this.smoothRotationSlice.length != 0){
-  //     this.smoothRotationAngle += this.smoothAngleIncrement();
-
-  //     if(this.smoothRotationAngle >= Math.PI / 2){
-  //       this.smoothRotationSlice = []; 
-  //       this.smoothRotationAxis = ""; 
-  //       this.smoothRotationAngle = -1;
-  //       this.smoothRotationOri = 0;
-  //     }
-  //   }
-
-  //   // this.rotatePieces()
-  //   this.show();
-  // }
-
 }
 
 /**
