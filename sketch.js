@@ -40,9 +40,10 @@ var boxCoordRela = [0,0,0]; //Coord relative from there
 
 
 var s1 = function(sketch) {//main canvas
-  sketch.preload = function() {
-    canvasFont = sketch.loadFont("https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/grafitti.ttf");
-    
+  /**
+   * Preload all images.
+   */
+  sketch.preload = function() {    
     canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/mainBG.jpg');
     
     canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/title.png');
@@ -54,9 +55,7 @@ var s1 = function(sketch) {//main canvas
     canvasImg.stickerless = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-stickerless.jpg');
     canvasImg.start = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/start-icon.png')
     
-    
     canvasImg.github = sketch.loadImage('https://image.flaticon.com/icons/svg/25/25231.svg');
-    
   }
   /**
    * Setup of the Canvas 1
@@ -90,12 +89,12 @@ var s1 = function(sketch) {//main canvas
    */
   sketch.draw = function() { //main canvas
     sketch.background(canvasImg.bg);
-    //title
+    //title label
     sketch.image(canvasImg.title, ...relativePos([510, 60, 900, 230]));
-    //select type cube
+    //select type cube label
     sketch.image(canvasImg.selectTC, ...relativePos([560, 320, 800, 100]));
 
-
+    // mode selector frame
     sketch.fill(0);
     if(rubikType == "normal"){
       sketch.rect(...relativePos([455-10, 480-10, 200+20, 200+20]));
@@ -110,11 +109,13 @@ var s1 = function(sketch) {//main canvas
       sketch.rect(...relativePos([1265-10, 480-10, 200+20, 200+20]));
     } 
     
+    //modes imgs
     sketch.image(canvasImg.normal, ...relativePos([455, 480, 200, 200]));
     sketch.image(canvasImg.mirror, ...relativePos([725, 480, 200, 200]));
     sketch.image(canvasImg.invisible, ...relativePos([995, 480, 200, 200]));
     sketch.image(canvasImg.stickerless, ...relativePos([1265, 480, 200, 200]));
 
+    //dim label
     if(rubikType != "mirror"){
       sketch.fill(255);
       sketch.textSize(40);
@@ -122,9 +123,8 @@ var s1 = function(sketch) {//main canvas
       sketch.text(texto, ...relativePos([960-112, 800]));
     }
     
-    
+    //start btn
     sketch.image(canvasImg.start, ...relativePos([905, 850, 150, 150]));
-    
     
     //github Icon
     sketch.image(canvasImg.github, ...relativePos([1800, 960, 100, 100]));
@@ -454,7 +454,7 @@ var s2 = function(sketch) {
    */
   sketch.update = function(){ 
     let look = mainCanvas.lookingAt();
-    let cameraCoord = vector.addition(look[0].map(x => x * rubik.w * rubik.dim * 1.4), look[1]); //camera Coordinates
+    let cameraCoord = vector.addition(look[0].map(x => x * rubik.w * rubik.dim * 1.4 * ((rubik.constructor.name == "MirrorRubikCube")? 2.2 : 1)), look[1]); //camera Coordinates
     sketch.camera(...cameraCoord, 0, 0, 0, 0, 0, -1);
     boxCoordBase = look[0].map(x => x * rubik.w * Math.floor(rubik.dim / 2)); //coordinates of the center of the face facing
   }

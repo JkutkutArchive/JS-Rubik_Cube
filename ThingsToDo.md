@@ -13,18 +13,13 @@ README.MD
 
 - Detect window size
 
-- Fix mirror secondCanvas
 - link to credits.md
 
 - Interface:
   Main:
-    Logo
-    type of cube
     Author:
         name
         github
-
-    play btn
   
   Play:
     highscore
