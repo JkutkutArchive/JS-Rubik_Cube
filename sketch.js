@@ -15,7 +15,8 @@ var canvasImg = {}, canvasFont;
 
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
-// var rubikType, rubikDim;
+// var rubikType, 
+var rubikDim = 2;
 
 //Canvas 1
 var ampli = 700; //Initial amplitude of the movement / distace in every axis
@@ -51,7 +52,7 @@ var s1 = function(sketch) {//main canvas
     canvasImg.mirror = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-mirror.jpg');
     canvasImg.invisible = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-invisible.jpg');
     canvasImg.stickerless = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/cube-stickerless.jpg');
-    
+    canvasImg.start = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/v4.2/assets/img/start-icon.png')
     
     
     canvasImg.github = sketch.loadImage('https://image.flaticon.com/icons/svg/25/25231.svg');
@@ -90,23 +91,32 @@ var s1 = function(sketch) {//main canvas
   sketch.draw = function() { //main canvas
     sketch.background(canvasImg.bg);
     //title
-    sketch.image(canvasImg.title, ...relativePos([510, 60, 900, 230]))
+    sketch.image(canvasImg.title, ...relativePos([510, 60, 900, 230]));
     //select type cube
-    sketch.image(canvasImg.selectTC, ...relativePos([560, 320, 800, 100]))
+    sketch.image(canvasImg.selectTC, ...relativePos([560, 320, 800, 100]));
 
-    sketch.image(canvasImg.normal, ...relativePos([400, 480, 200, 200]))
-    sketch.image(canvasImg.mirror, ...relativePos([700, 480, 200, 200]))
-    sketch.image(canvasImg.invisible, ...relativePos([990, 480, 200, 200]))
-    sketch.image(canvasImg.stickerless, ...relativePos([1280, 480, 200, 200]))
+    sketch.image(canvasImg.normal, ...relativePos([455, 480, 200, 200]));
+    sketch.image(canvasImg.mirror, ...relativePos([725, 480, 200, 200]));
+    sketch.image(canvasImg.invisible, ...relativePos([995, 480, 200, 200]));
+    sketch.image(canvasImg.stickerless, ...relativePos([1265, 480, 200, 200]));
 
 
-    sketch.textFont(canvasFont);
-    sketch.fill(0);
-    sketch.textSize(60);
-    // sketch.size(60);
+    sketch.fill(255);
+    // sketch.rect(...relativePos([854, 740, 106-1, 500]));
+    sketch.rect(...relativePos([0, 0, 959, 539]));
 
-    let a = sketch.text("3 X 3 X 3", ...relativePos([824, 800]));
-    console.log(sketch.textWidth("3 X 3 X 3"));
+
+    // sketch.textFont(canvasFont);
+    sketch.fill(255);
+    sketch.textSize(40);
+    let texto = rubikDim + "x" + rubikDim + "x" + rubikDim;
+    sketch.text(texto, ...relativePos([960-112, 800]));
+    // sketch.text(texto, ...relativePos([960-(sketch.textWidth(texto)/2), 562]));
+    
+    
+    
+    
+    
     //github Icon
     sketch.image(canvasImg.github, ...relativePos([1800, 960, 100, 100]));
   }
@@ -125,8 +135,20 @@ var s1 = function(sketch) {//main canvas
     }    
   }
 
-  sketch.startGame = function(rubikDim, rubikType){
-    rubikDim = (rubikDim)? rubikDim : 3;
+  sketch.mouseWheel = function(){
+    if(event.delta < 0){
+      rubikDim++;
+    }
+    else{
+      rubikDim--;
+    }
+    if(rubikDim < 2){
+      rubikDim = 2;
+    }
+  }
+
+  sketch.startGame = function(rubikType){
+    // rubikDim = (rubikDim)? rubikDim : 3;
     rubikType = (rubikType)? rubikType : "normal";
     //Init rubik:
     switch(rubikType){
