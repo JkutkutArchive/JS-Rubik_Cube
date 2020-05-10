@@ -3,7 +3,7 @@ This project will provide all the logic in order to create a represent a fully f
 
 ![Cube](https://cdn.jsdelivr.net/gh/Jkutkut/JS-Rubik_Cube@master/assets/img/cube-3x3.jpg)
 
-## *[Play Now!](https://jkutkut.memoriadeelefante.com/github/JS-Rubik_Cube/index.html)*
+### *[Play Now!](https://jkutkut.memoriadeelefante.com/github/JS-Rubik_Cube/index.html)*
 
 ## Controls:
 
