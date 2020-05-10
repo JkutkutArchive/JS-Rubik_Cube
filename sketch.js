@@ -8,7 +8,7 @@ var mainCanvas, secondCanvas; //here the canvas are stored
 var rubik; //Here the cube will be stored
 var COLORSDIC = {}; //Diccionary with the colors used at this project
 var rubikType = "normal";
-var rubikDim = 2;
+var rubikDim = 3;
 
 //Canvas 1
 var canvasImg = {}; //Main menu imgs 
