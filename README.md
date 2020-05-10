@@ -17,7 +17,7 @@ Once the parametres are correct, press the start button in order to launch the g
 
 ### Game:
 Once the start button is pressed, the game will start. 
-- Camera movement: Use the mouse to drag the camera around the cube.
+- Camera movement: Use the mouse to drag the camera around the cube. Use the mouse wheel to zoom in and out.
 - When the camera moves over a cube's face, the second canvas will show the face on the bottom right corner. Make the desired move using the mouse, dragging the desired piece.
 - Whenever you want to take a screenshot, just press right click on the canvas and select "save image" 
 

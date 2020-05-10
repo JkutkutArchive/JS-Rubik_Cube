@@ -115,11 +115,12 @@ var s1 = function(sketch) {//main canvas
       sketch.fill(255);
       sketch.textSize(40);
       let texto = rubikDim + "x" + rubikDim + "x" + rubikDim;
-      sketch.text(texto, ...sketch.relativePos([960-112, 800]));
+      let diff = 1.1 * 100000 / mainCanvasWidth;
+      sketch.text(texto, ...sketch.relativePos([960-diff, 800]));
     }
     
     //start btn
-    sketch.image(canvasImg.start, ...sketch.relativePos([905, 850, 150, 150]));
+    sketch.image(canvasImg.start, ...sketch.relativePos([885, 850, 150, 150]));
     
     //github Icon
     sketch.image(canvasImg.github, ...sketch.relativePos([1800, 960, 100, 100]));
@@ -222,6 +223,7 @@ var s1 = function(sketch) {//main canvas
 
     sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
     sketch.frameRate(30); //Set frameRate
+    ampli = Math.pow(2, 0.25*rubik.dim) * 300;
 
     //-------------------   Addition of the code to run the game   -------------------
     sketch.draw = function(){
