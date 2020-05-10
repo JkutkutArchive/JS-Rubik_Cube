@@ -8,6 +8,7 @@ README.MD
 ### GENERAL
 - smooth rotations
 
+- Fix text centered on dimension selector
 
 - Interface:  
   Play:
