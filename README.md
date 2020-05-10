@@ -1,6 +1,8 @@
 # JS Rubik Cube:
 This project will provide all the logic in order to create a represent a fully functional Rubik's Cube.
 
+![Cube](https://cdn.jsdelivr.net/gh/Jkutkut/JS-Rubik_Cube@master/assets/img/cube-3x3.jpg)
+
 ## Controls:
 
 ### Main menu:
@@ -23,7 +25,7 @@ Once the start button is pressed, the game will start.
 
 ## Important note:
 This project uses a repository named [JS-tools](https://github.com/Jkutkut/JS-tools), a custom library that provides different tools to simplify the sintax and the logic.
-In order for the HTML file to use this library, make sure it is loaded on index.html or follow this format (and change the script tags):
+In order for the HTML file to use this library, make sure it is loaded on index.html or ensure to link all these files (and change the script tags):
    
     .
     └── JS-Rubik_Cube
