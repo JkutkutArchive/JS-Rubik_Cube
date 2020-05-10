@@ -8,8 +8,6 @@ README.MD
 ### GENERAL
 - smooth rotations
 
-- Fix text centered on dimension selector
-
 - Interface:  
   Play:
     highscore
@@ -29,13 +27,3 @@ README.MD
 
 
 -------------------------------------------------------------------------------------
-## JS-Tools:
-
-### Matrix Representation:
-
-### Matrix:
-
-### Functions:
-- Addition able to sum n arrays
-
-### array_nD:
