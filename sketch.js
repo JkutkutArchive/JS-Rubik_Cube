@@ -119,11 +119,8 @@ var s1 = function(sketch) {//main canvas
       sketch.text(texto, ...sketch.relativePos([960-diff, 800]));
     }
     
-    //start btn
-    sketch.image(canvasImg.start, ...sketch.relativePos([885, 850, 150, 150]));
-    
-    //github Icon
-    sketch.image(canvasImg.github, ...sketch.relativePos([1800, 960, 100, 100]));
+    sketch.image(canvasImg.start, ...sketch.relativePos([885, 850, 150, 150]));//start btn
+    sketch.image(canvasImg.github, ...sketch.relativePos([1800, 960, 100, 100]));//github Icon
   }
 
   /**
