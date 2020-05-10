@@ -115,7 +115,7 @@ var s1 = function(sketch) {//main canvas
       sketch.fill(255);
       sketch.textSize(40);
       let texto = rubikDim + "x" + rubikDim + "x" + rubikDim;
-      let diff = 1.1 * 100000 / mainCanvasWidth;
+      let diff = 110000 / mainCanvasWidth;
       sketch.text(texto, ...sketch.relativePos([960-diff, 800]));
     }
     
