@@ -40,10 +40,8 @@ var s1 = function(sketch) {//main canvas
    */
   sketch.preload = function() {    
     canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/mainBG.jpg');
-    
     canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/title.png');
     canvasImg.selectTC = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/select-type-cube.png');
-    
     canvasImg.normal = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-3x3.jpg');
     canvasImg.mirror = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-mirror.jpg');
     canvasImg.invisible = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-invisible.jpg');
