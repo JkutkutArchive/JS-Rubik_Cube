@@ -11,7 +11,7 @@ var rubikType = "normal";
 var rubikDim = 2;
 
 //Canvas 1
-var canvasImg = {}, canvasFont; //Main menu
+var canvasImg = {}; //Main menu imgs 
 var mainCanvasWidth;
 var mainCanvasHeight;
 var ampli = 700; //Initial amplitude of the movement / distace in every axis
@@ -85,61 +85,58 @@ var s1 = function(sketch) {//main canvas
   sketch.draw = function() { //main canvas
     sketch.background(canvasImg.bg);
     //title label
-    sketch.image(canvasImg.title, ...relativePos([510, 60, 900, 230]));
+    sketch.image(canvasImg.title, ...sketch.relativePos([510, 60, 900, 230]));
     //select type cube label
-    sketch.image(canvasImg.selectTC, ...relativePos([560, 320, 800, 100]));
+    sketch.image(canvasImg.selectTC, ...sketch.relativePos([560, 320, 800, 100]));
 
     // mode selector frame
     sketch.fill(0);
     if(rubikType == "normal"){
-      sketch.rect(...relativePos([455-10, 480-10, 200+20, 200+20]));
+      sketch.rect(...sketch.relativePos([455-10, 480-10, 200+20, 200+20]));
     }
     else if(rubikType == "mirror"){
-      sketch.rect(...relativePos([725-10, 480-10, 200+20, 200+20]));
+      sketch.rect(...sketch.relativePos([725-10, 480-10, 200+20, 200+20]));
     }
     else if(rubikType == "invisible"){
-      sketch.rect(...relativePos([995-10, 480-10, 200+20, 200+20]));
+      sketch.rect(...sketch.relativePos([995-10, 480-10, 200+20, 200+20]));
     } 
     else if(rubikType == "stickerless"){
-      sketch.rect(...relativePos([1265-10, 480-10, 200+20, 200+20]));
+      sketch.rect(...sketch.relativePos([1265-10, 480-10, 200+20, 200+20]));
     } 
     
     //modes imgs
-    sketch.image(canvasImg.normal, ...relativePos([455, 480, 200, 200]));
-    sketch.image(canvasImg.mirror, ...relativePos([725, 480, 200, 200]));
-    sketch.image(canvasImg.invisible, ...relativePos([995, 480, 200, 200]));
-    sketch.image(canvasImg.stickerless, ...relativePos([1265, 480, 200, 200]));
+    sketch.image(canvasImg.normal, ...sketch.relativePos([455, 480, 200, 200]));
+    sketch.image(canvasImg.mirror, ...sketch.relativePos([725, 480, 200, 200]));
+    sketch.image(canvasImg.invisible, ...sketch.relativePos([995, 480, 200, 200]));
+    sketch.image(canvasImg.stickerless, ...sketch.relativePos([1265, 480, 200, 200]));
 
     //dim label
     if(rubikType != "mirror"){
       sketch.fill(255);
       sketch.textSize(40);
       let texto = rubikDim + "x" + rubikDim + "x" + rubikDim;
-      sketch.text(texto, ...relativePos([960-112, 800]));
+      sketch.text(texto, ...sketch.relativePos([960-112, 800]));
     }
     
     //start btn
-    sketch.image(canvasImg.start, ...relativePos([905, 850, 150, 150]));
+    sketch.image(canvasImg.start, ...sketch.relativePos([905, 850, 150, 150]));
     
     //github Icon
-    sketch.image(canvasImg.github, ...relativePos([1800, 960, 100, 100]));
+    sketch.image(canvasImg.github, ...sketch.relativePos([1800, 960, 100, 100]));
   }
 
   /**
    * Handles when clicked on the main menu.
-   * see startGame() to see the logic on the game
    */
   sketch.mousePressed = function(){
-    let gitCoord = relativePos([1800, 960, 1900, 1060]); //Coordinates of the github icon with the current window size
+    let gitCoord = sketch.relativePos([1800, 960, 1900, 1060]); //Coordinates of the github icon with the current window size
     let mC = {
       x: [455, 725, 995, 1265, 200].map(x => x * mainCanvasWidth / 1920), //modes coord + boxSize
       y: [480, 680].map(x => x * mainCanvasHeight / 1080)
     }
-    let startCoord = relativePos([905, 850, 1155, 1000]);
-    if(sketch.mouseX >= gitCoord[0] &&
-       sketch.mouseY >= gitCoord[1] &&
-       sketch.mouseX <= gitCoord[2] &&
-       sketch.mouseY <= gitCoord[3] ){ //Github
+    let startCoord = sketch.relativePos([905, 850, 1155, 1000]);
+    if(sketch.mouseX >= gitCoord[0] && sketch.mouseY >= gitCoord[1] &&
+       sketch.mouseX <= gitCoord[2] && sketch.mouseY <= gitCoord[3] ){ //Github
       window.open('https://github.com/Jkutkut');
     }
     else if(sketch.mouseY >= mC.y[0] && sketch.mouseY <= mC.y[1]){ //Modes
@@ -156,14 +153,15 @@ var s1 = function(sketch) {//main canvas
         rubikType = "stickerless";
       }
     }
-    else if(sketch.mouseX >= startCoord[0] &&
-            sketch.mouseY >= startCoord[1] &&
-            sketch.mouseX <= startCoord[2] &&
-            sketch.mouseY <= startCoord[3] ){ //start btn
+    else if(sketch.mouseX >= startCoord[0] && sketch.mouseY >= startCoord[1] &&
+            sketch.mouseX <= startCoord[2] && sketch.mouseY <= startCoord[3] ){ //start btn
       sketch.startGame();
     }
   }
 
+  /**
+   * Changes the cube's dimension (3x3x3, 4x4x4...).
+   */
   sketch.mouseWheel = function(){
     if(event.delta < 0){
       rubikDim++;
@@ -176,11 +174,32 @@ var s1 = function(sketch) {//main canvas
     }
   }
 
+  /**
+   * Get the equivalent coordinates of a 1920x1080 canvas with the current window size.
+   * @param {number[]} arr - array with 2n elements.
+   * @returns {number[]} array with the fixed coordinates.
+   */
+  sketch.relativePos = function(arr){
+    let newArr = [];
+    for(let i = 0; i < arr.length; i += 2){
+        newArr.push(arr[i] * mainCanvasWidth / 1920);
+        newArr.push(arr[i + 1] * mainCanvasHeight / 1080);
+    }
+    return newArr;
+  }
+
+  /**
+   * This function starts the game:
+   * - Create the rubik object based on the parametres.
+   * @see rubikType and rubikDim
+   * 
+   * - Shuffle the cube.
+   * - Create the new 3DCanvas with the desired framerate.
+   * - Add the functions to make the game work: draw, lookingAt, mousePressed, mouseReleased and mouseWheel.
+   * - Create the second canvas for controls.
+   */
   sketch.startGame = function(){
-    // rubikDim = (rubikDim)? rubikDim : 3;
-    rubikType = (rubikType)? rubikType : "normal";
-    //Init rubik:
-    switch(rubikType){
+    switch(rubikType){ //Init rubik:
       case "normal":
         rubik = new RubikCube(rubikDim);
         break;
@@ -194,12 +213,17 @@ var s1 = function(sketch) {//main canvas
         rubik = new MirrorRubikCube(false, COLORSDIC.MIRRORBODY);
         break;
     }
+
+    // Shuffle:
+    for(let i = 0; i < rubik.dim * 8; i++){
+      //Move a random axis, at a random level/height, on a random direction of rotation.
+      rubik.makeMove(Math.floor(Math.random() * 3), Math.floor(Math.random() * rubik.dim), Math.random() >= 0.5);
+    }
+
     sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
     sketch.frameRate(30); //Set frameRate
-    
-    angX = 1.0 * 0.25 * Math.PI; //Angle for X and Y camCoordinates
-    angZ = 3.0 * 0.25 * Math.PI;
 
+    //-------------------   Addition of the code to run the game   -------------------
     sketch.draw = function(){
       sketch.background(sketch.color(0, 204, 255));
       if(moving){ //if moving the camera: camera Controls 
