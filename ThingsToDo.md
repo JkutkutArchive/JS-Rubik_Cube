@@ -7,6 +7,8 @@ README.MD
 
 ### GENERAL
 - smooth rotations
+- Infinite rotation:
+  - (Orientation vector?)
 
 - Interface:  
   Play:
