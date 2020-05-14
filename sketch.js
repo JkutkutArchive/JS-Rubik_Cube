@@ -224,8 +224,8 @@ var s1 = function(sketch) {//main canvas
     sketch.draw = function(){
       sketch.background(sketch.color(0, 204, 255));
       if(moving){ //if moving the camera: camera Controls 
-        deltaMoveCam.h = (sketch.mouseX - iniMousePos.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h));
-        deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(deltaMoveCam.v));
+        deltaMoveCam.h = (sketch.mouseX - iniMousePos.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h)) * 2;
+        deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(deltaMoveCam.v)) * 2;
         trueIncX = deltaMoveCam.h; //true deltaMoveCam.h
         trueIncZ = ((angZ + deltaMoveCam.v) / Math.PI > 1)? Math.PI - angZ : ((angZ + deltaMoveCam.v) < 0)? -angZ + 0.0001 : deltaMoveCam.v;
       }
