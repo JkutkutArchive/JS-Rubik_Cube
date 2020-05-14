@@ -3,6 +3,11 @@ This project will provide all the logic in order to create a represent a fully f
 
 ![Cube](https://cdn.jsdelivr.net/gh/Jkutkut/JS-Rubik_Cube@master/assets/img/cube-3x3.jpg)
 
+## How to play:
+There are 2 options:
+-Download the repository (See the top right corner) as a .zip file. Once finnished, unzip it and open on your browser the file called "index.html"
+-Follow the link "Play now". It will show a message similar to "Conection is not secure". Press "advance settings" and then "proceed to page" 
+
 ### *[Play Now!](https://jkutkut.memoriadeelefante.com/github/JS-Rubik_Cube/index.html)*
 
 ## Controls:
