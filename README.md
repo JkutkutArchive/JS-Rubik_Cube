@@ -10,7 +10,7 @@ There are 2 options:
 
 - Follow the link "Play now". It will show a message similar to "Conection is not secure". Press "advance settings" and then "proceed to page" 
 
-### *[Play Now!](https://jkutkut.memoriadeelefante.com/github/JS-Rubik_Cube/index.html)*
+### *[Play Now!](https://jkutkut.github.io/JS-Rubik_Cube/)*
 
 ## Controls:
 
