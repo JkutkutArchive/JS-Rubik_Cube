@@ -307,73 +307,33 @@ var s1 = function(sketch) {//main canvas
       }
       else { // Horizontal
         inverted = sector.v < 0 || sector.v > 4;
-
-        // if (inverted){
-        //   // sector.h = ((Math.abs(sector.h) + 4) * Math.sign(sector.h)) % 8
-        //   // sector.h = (sector.h + 4) % 8;
-        //   sector.h = (angX / (Math.PI / 4) + 4) % 8;
-        // }
-        // else {
-        //   sector.h = angX / (Math.PI / 4);
-        // }
-        
-        
         sector.h = angX / (Math.PI / 4); // Normal situation
 
-        if (sector.h < 0) { // if sector inverted
-          sector.h = 8 + sector.h;
+        if (sector.h < 0) { // if sector negative
+          sector.h = 8 + sector.h; // Reverse it
         }
-        if (inverted) {
+        if (inverted) { // If inverted, is the oposite
           sector.h = (sector.h + 4) % 8;
         }
-        
-
-
 
         if (Math.abs(sector.h - 2) < 1) { // Blue
-          // look.push([0, (inverted)? -1 : 1, 0]); //1 => Blue
           look.push([0, 1, 0]); //1 => Blue
         }
         else if(Math.abs((sector.h - 6) % 8) < 1) { //Green
-          // look.push([0, (inverted)? 1 : -1, 0]); //-1 => Blue
           look.push([0, -1, 0]); //-1 => Blue
         }
-        
         else if (Math.abs(sector.h - 4) < 1) { //Red
-          // look.push([(inverted)? 1 : -1, 0, 0]); //-1 => Red
           look.push([-1, 0, 0]); //-1 => Red
         }
-        // else if(Math.abs(sector.h) < 1) { //Orange
         else { //Orange
-          // look.push([(inverted)? -1 : 1, 0, 0]); //1 => Orange
           look.push([1, 0, 0]); //1 => Orange
         }
-
-
-        // if (inverted) {
-        //   look[0] = look[0].map(x => x * (-1))
-        // }
-
-
-
-        // if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
-        // let value = ((Math.cos(angX) > 0 && !inverted) || (!Math.cos(angX) > 0 && inverted))? 1 : -1;
-        // look.push([value, 0, 0]); //1 => Orange, -1 => Red
-        // }
-        // else{
-        // let value = ((Math.sin(angX) > 0 && !inverted) || (!Math.sin(angX) > 0 && inverted))? 1 : -1;
-        // look.push([0, value, 0]); //1 => Blue, -1 => Green
-        //   // look.push([0, (Math.sin(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
-        // }
       }
 
       let x = Math.cos(angX + trueIncX);
       let y = Math.sin(angX + trueIncX);
       x = (Math.abs(x) > Math.abs(y))? x : 0; //Keep only the one with the greatest magnitude
       y = (x == 0)? y : 0;
-
-      // console.log("(" + angX + ") -> (" + sector.h + ") and inverted = " + inverted)
-      console.log("(" + angX + ", " + angZ + ") -> (" + sector.h + ", " + sector.v + ") and inverted = " + inverted)
       
       look.push([Math.round(x), Math.round(y), 0]); //Where the angle tells the camera is looking with the increment
       return look;
