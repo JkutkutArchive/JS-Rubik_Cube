@@ -6,9 +6,6 @@ README.MD
 ## JS-RubikCube:
 
 ### GENERAL
-- smooth rotations
-- Infinite rotation:
-  - (Orientation vector?)
 
 - Interface:  
   Play:
