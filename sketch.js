@@ -300,7 +300,7 @@ var s1 = function(sketch) {//main canvas
           look.push([0, 1, 0]); //1 => Blue
         }
         else if(Math.abs((sector.h - 6) % 8) < 1) { //Green
-          look.push([0, -1, 0]); //-1 => Blue
+          look.push([0, -1, 0]); //-1 => Green
         }
         else if (Math.abs(sector.h - 4) < 1) { //Red
           look.push([-1, 0, 0]); //-1 => Red
@@ -469,17 +469,34 @@ var s2 = function(sketch) {
     preInverted = (isHoriMove)? moveMade[0] == 1 : moveMade[1] == 1; //used to calc inverted
     let v = (isHoriMove)? m.y : m.x; //Used later to calc h
 
+    let sectorVertical = angZ / (Math.PI/4)
+    let invertedAxis = sectorVertical < 0 || sectorVertical > 4;
+
     if(look[0][2] == 0){ //horizontal faces
       if(isHoriMove){ //Right or left (1, -1) move of the mouse
         axis = "z";
         h = v;
         inverted = hSmall(h) == (moveMade[0] == 1);//xnor(hSmall, moveMade[0] == 1)
+
+        if (!invertedAxis) {
+          h = rubik.dim - 1 - v;
+          if (rubik.dim % 2 == 1 && h == (rubik.dim - 1) / 2) {
+            inverted = !inverted;
+          }
+        }
       }
       else{ //moveMade[1] != 0 => Up or down (1, -1) move of the mouse
         axis = (look[0][0] != 0)? "y" : "x";
         h = (look[0][0] == 1 || look[0][1] == -1)? v : rubik.dim - 1 - v; //if rotation on y axis, index is inverted
         inverted = hSmall(h) != (moveMade[1] == -1);// XOR (hSmall, (moveMade[1] == -1))
         inverted = (look[0][0] == 1 || look[0][1] == -1) != inverted;//XOR(special cases, inverted)
+
+        if (!invertedAxis) {
+          h = (h == v)? rubik.dim - 1 - v : v;
+          if (rubik.dim % 2 == 1 && h == (rubik.dim - 1) / 2) {
+            inverted = !inverted;
+          }
+        }
       }
     }
     else if(look[0][2] == 1){ //White face
@@ -497,8 +514,7 @@ var s2 = function(sketch) {
         inverted = (isOrange == hSmall(h)) != preInverted; //XOR(XNOR(isOrange, hSmall), preInverted);
       }
     }
-    else{ //Yellow face   
-      console.log("YELLOW")   
+    else{ //Yellow face
       if(look[1][1] != 0){ //under blue or green
         isBlue = look[1][1] == -1; //is under blue face
         axis = (isHoriMove)? "y" : "x"; //axis of movement
@@ -525,7 +541,12 @@ var s2 = function(sketch) {
   sketch.update = function(){ 
     let look = mainCanvas.lookingAt();
     let cameraCoord = vector.addition(look[0].map(x => x * rubik.w * rubik.dim * 1.4 * ((rubik.constructor.name == "MirrorRubikCube")? 2.2 : 1)), look[1]); //camera Coordinates
-    sketch.camera(...cameraCoord, 0, 0, 0, 0, 0, 1);
+
+    let sectorVertical = angZ / (Math.PI/4);
+    let invertedAxis = sectorVertical < 0 || sectorVertical > 4;
+    let currentAxis = (invertedAxis)? -1 : 1;
+
+    sketch.camera(...cameraCoord, 0, 0, 0, 0, 0, currentAxis);
     boxCoordBase = look[0].map(x => x * rubik.w * Math.floor(rubik.dim / 2)); //coordinates of the center of the face facing
   }
 
