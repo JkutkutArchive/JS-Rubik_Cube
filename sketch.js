@@ -223,31 +223,12 @@ var s1 = function(sketch) {//main canvas
     //-------------------   Addition of the code to run the game   -------------------
     sketch.draw = function(){
       sketch.background(sketch.color(0, 204, 255));
-      
-      // if(moving){ //if moving the camera: camera Controls 
-      //   // deltaMoveCam.h = (iniMousePos.mouseX - sketch.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h)) * 2;
-      //   deltaMoveCam.h = (sketch.mouseX - iniMousePos.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h)) * 2;
-      //   deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(deltaMoveCam.v)) * 2;
-        
-      //   trueIncX = deltaMoveCam.h; //true deltaMoveCam.h
-      //   trueIncZ = ((angZ + deltaMoveCam.v) / Math.PI > 1)? Math.PI - angZ : ((angZ + deltaMoveCam.v) < 0)? -angZ + 0.0001 : deltaMoveCam.v;
-      // }
-
-      // camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-      // camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-      // camZ =  ampli * Math.cos(angZ + trueIncZ);
-      
-      // upX = 0;
-      // upY = 0;
-      // upZ = 1;
 
       let multiplier
       let invertedView = 0;
-      // if(true){ //if moving the camera: camera Controls 
-      // if(moving){ //if moving the camera: camera Controls 
+
       let scaleFactorCameraMovement = {h:  Math.pow(1.005, Math.abs(deltaMoveCam.h)) * 2, v: Math.pow(1.001, Math.abs(deltaMoveCam.v)) * 2};
-      
-      // scaleFactorCameraMovement = {x: 1, y: 1};
+
       if(moving){ //if moving the camera: camera Controls 
         deltaMoveCam.h = (iniMousePos.x - sketch.mouseX) / mainCanvasWidth  * scaleFactorCameraMovement.h;
         deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * scaleFactorCameraMovement.v;
@@ -258,47 +239,26 @@ var s1 = function(sketch) {//main canvas
       let theoryAngZ = deltaMoveCam.v + angZ;
       
       if (theoryAngZ >= 0){
-        // let halfTurns = Math.floor((theoryAngZ + Math.PI / 2) / Math.PI);
-        // let halfTurns = Math.floor((theoryAngZ + Math.PI / 2)/ Math.PI)
         let halfTurns = Math.floor((theoryAngZ)/ Math.PI)
         multiplier = Math.pow(-1, halfTurns);
       }
       else {
-        // let halfTurns = Math.floor((Math.abs(theoryAngZ - Math.PI / 2)) / Math.PI);
         let halfTurns = Math.floor((Math.abs(theoryAngZ)) / Math.PI);
         multiplier = Math.pow(-1, halfTurns + 1);
       }
-      // console.log((theoryAngZ >= 0) + " -> " + (Math.floor((theoryAngZ + Math.PI / 2)/ Math.PI)) + " -> " + multiplier)
-      // trueIncZ = ((angZ + deltaMoveCam.v) / Math.PI > 1)? Math.PI - angZ : ((angZ + deltaMoveCam.v) < 0)? -angZ + 0.0001 : deltaMoveCam.v;
       trueIncZ = deltaMoveCam.v;
-
-
-
-      // camX = ampli
-      // camY = ampli
-      // camZ = ampli
-      // camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-      // camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-      // camZ =  -ampli * Math.cos(angZ + trueIncZ);
-
-      // camX =  ampli * Math.cos(angX + deltaMoveCam.h * multiplier + invertedView) * Math.sin(angZ + trueIncZ)// * multiplier;
-      // camY =  ampli * Math.sin(angX + deltaMoveCam.h * multiplier + invertedView) * Math.sin(angZ + trueIncZ)// * multiplier;
 
       invertedView = (multiplier == 1)? 0 : 2 * Math.PI;
       trueIncX = deltaMoveCam.h * multiplier + invertedView;
 
 
       camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ)// * multiplier;
-      // camX =  ampli * Math.cos(angX + deltaMoveCam.h * multiplier + invertedView) * Math.sin(angZ + trueIncZ)// * multiplier;
-      // camY =  ampli * Math.sin(angX + deltaMoveCam.h * multiplier + invertedView) * Math.sin(angZ + trueIncZ)// * multiplier;
       camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ)// * multiplier;
       camZ =  ampli * Math.cos(angZ + trueIncZ);
 
       let upX = 0;
       let upY = 0;
-      // let upZ = 1;
       let upZ = multiplier;
-
 
       sketch.camera(camX, camY, camZ, 0, 0, 0, upX, upY, upZ); //Set camera at position
 
@@ -311,24 +271,81 @@ var s1 = function(sketch) {//main canvas
      */
     sketch.lookingAt = function(){
       look = [];
-      if(angZ / Math.PI > 0.75){
+      // console.logs(angZ / Math.PI)
+      // if(angZ / Math.PI > 0.75 && angZ / Math.PI < 1.25){
+        // look.push([0, 0, -1]); //White
+      // }
+      // else if(angZ / Math.PI < 0.25 && angZ / Math.PI > -0.25){
+      //   look.push([0, 0, +1]); //Yellow
+      // }
+      // else{
+      //   if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
+      //     look.push([(Math.cos(angX) > 0)? 1 : -1, 0, 0]); //1 => Orange, -1 => Red
+      //   }
+      //   else{
+      //     look.push([0, (Math.sin(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
+      //   }
+      // }
+      // let x = Math.cos(angX + trueIncX);
+      // let y = Math.sin(angX + trueIncX);
+      // x = (Math.abs(x) > Math.abs(y))? x : 0; //Keep only the one with the greatest magnitude
+      // y = (x == 0)? y : 0;
+      
+      // let sector = Math.floor(angZ / Math.PI * 0.25); // angZ / (Math.PI / 4)
+      let sector = {h: 0, v: angZ / (Math.PI/4)}; // angZ / (Math.PI / 4)
+      if (Math.abs(sector.v) < 0){
+        sector.v = 8 + sector.v;
+      }
+
+      // let inverted = false;
+      let inverted = sector < 0 || sector > 4;
+      // let inverted = sector > 6;
+
+
+      if (Math.abs(sector.v - 4) < 1) { //Yellow
         look.push([0, 0, -1]); //White
       }
-      else if(angZ / Math.PI < 0.25){
+      else if (Math.abs(sector.v) < 1) { // White
         look.push([0, 0, +1]); //Yellow
       }
-      else{
-        if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
-          look.push([(Math.cos(angX) > 0)? 1 : -1, 0, 0]); //1 => Orange, -1 => Red
+      else { // Horizontal
+        sector.h = angX / (Math.PI / 4);
+        if (Math.abs(sector.h) < 0) {
+          sector.h = 8 + sector.h;
         }
-        else{
-          look.push([0, (Math.sin(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
+
+        if (Math.abs(sector.h - 2) < 1) { // Blue
+          look.push([0, 1, 0]); //1 => Blue
         }
+        else if(Math.abs((sector.h - 6) % 8) < 1) { //Green
+          look.push([0, -1, 0]); //-1 => Blue
+        }
+        else if(Math.abs(sector.h) < 1) { //Orange
+          look.push([1, 0, 0]); //1 => Orange
+        }
+        else { //Red
+          look.push([-1, 0, 0]); //-1 => Red
+        }
+
+
+        // if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
+        // let value = ((Math.cos(angX) > 0 && !inverted) || (!Math.cos(angX) > 0 && inverted))? 1 : -1;
+        // look.push([value, 0, 0]); //1 => Orange, -1 => Red
+        // }
+        // else{
+        // let value = ((Math.sin(angX) > 0 && !inverted) || (!Math.sin(angX) > 0 && inverted))? 1 : -1;
+        // look.push([0, value, 0]); //1 => Blue, -1 => Green
+        //   // look.push([0, (Math.sin(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
+        // }
       }
+
       let x = Math.cos(angX + trueIncX);
       let y = Math.sin(angX + trueIncX);
       x = (Math.abs(x) > Math.abs(y))? x : 0; //Keep only the one with the greatest magnitude
       y = (x == 0)? y : 0;
+
+      console.log("(" + angX + ", " + angZ + ") -> (" + sector.h + ", " + sector.v + ") and inverted = " + inverted)
+      
       look.push([Math.round(x), Math.round(y), 0]); //Where the angle tells the camera is looking with the increment
       return look;
     }
@@ -352,6 +369,8 @@ var s1 = function(sketch) {//main canvas
       moving = false; //Stop movement
       angX += trueIncX; //Save the increment on the angle
       angZ += trueIncZ; //Save the increment on the angle
+      angX %= (2 * Math.PI);
+      angZ %= (2 * Math.PI);
       deltaMoveCam = {h: 0, v: 0}; //Reset increment
       trueIncX = 0; //Reset increment
       trueIncZ = 0; //Reset increment
