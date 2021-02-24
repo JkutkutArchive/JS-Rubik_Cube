@@ -312,10 +312,10 @@ var s1 = function(sketch) {//main canvas
     sketch.lookingAt = function(){
       look = [];
       if(angZ / Math.PI > 0.75){
-        look.push([0, 0, 1]); //White
+        look.push([0, 0, -1]); //White
       }
       else if(angZ / Math.PI < 0.25){
-        look.push([0, 0, -1]); //Yellow
+        look.push([0, 0, +1]); //Yellow
       }
       else{
         if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
@@ -509,16 +509,17 @@ var s2 = function(sketch) {
         inverted = (isOrange == hSmall(h)) != preInverted; //XOR(XNOR(isOrange, hSmall), preInverted);
       }
     }
-    else{ //Yellow face      
+    else{ //Yellow face   
+      console.log("YELLOW")   
       if(look[1][1] != 0){ //under blue or green
-        isBlue = look[1][1] == 1; //is under blue face
+        isBlue = look[1][1] == -1; //is under blue face
         axis = (isHoriMove)? "y" : "x"; //axis of movement
         h = (isBlue != isHoriMove)? rubik.dim - 1 - v : v;
         hBigOrSmall = isBlue != hSmall(h);
         inverted = hBigOrSmall != preInverted; //Invert preInverted if hBigOrSmall is true
       }
       else{ //under orange or red face (look[1][0] != 0)
-        isOrange = look[1][0] == 1; //if under orange face
+        isOrange = look[1][0] == -1; //if under orange face
         axis = (isHoriMove)? "x" : "y"; //axis of movement
         h = (isOrange)? v : rubik.dim - 1 - v;
         hBigOrSmall = (isOrange == isHoriMove) != hSmall(h);
