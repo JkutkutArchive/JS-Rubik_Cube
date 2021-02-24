@@ -496,14 +496,14 @@ var s2 = function(sketch) {
     }
     else if(look[0][2] == 1){ //White face
       if(look[1][1] != 0){ //over blue or green
-        isBlue = look[1][1] == 1; //is over blue face
+        isBlue = look[1][1] == -1; //is over blue face
         h = (isBlue)? rubik.dim - 1 - v : v;
         hBigOrSmall = (isBlue == isHoriMove) != hSmall(h); //xOr(xnOr(isBlue, isHoriMove), hSmall)
         axis = (isHoriMove)? "y" : "x"; //axis of movement
         inverted = !(hBigOrSmall != preInverted); //Invert preInverted if hBigOrSmall is true (it is inverted because inverted works :S)
       }
       else{ //over orange or red face (look[1][0] != 0)
-        isOrange = look[1][0] == 1; //if over orange face
+        isOrange = look[1][0] == -1; //if over orange face
         h = (isHoriMove == isOrange)? rubik.dim - 1 - v : v;//xnor condition
         axis = (isHoriMove)? "x" : "y"; //axis of movement
         inverted = (isOrange == hSmall(h)) != preInverted; //XOR(XNOR(isOrange, hSmall), preInverted);
