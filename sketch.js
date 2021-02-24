@@ -271,27 +271,7 @@ var s1 = function(sketch) {//main canvas
      */
     sketch.lookingAt = function(){
       look = [];
-      // console.logs(angZ / Math.PI)
-      // if(angZ / Math.PI > 0.75 && angZ / Math.PI < 1.25){
-        // look.push([0, 0, -1]); //White
-      // }
-      // else if(angZ / Math.PI < 0.25 && angZ / Math.PI > -0.25){
-      //   look.push([0, 0, +1]); //Yellow
-      // }
-      // else{
-      //   if(Math.abs(Math.cos(angX)) > Math.abs(Math.sin(angX))){
-      //     look.push([(Math.cos(angX) > 0)? 1 : -1, 0, 0]); //1 => Orange, -1 => Red
-      //   }
-      //   else{
-      //     look.push([0, (Math.sin(angX) > 0)? 1 : -1, 0]); //1 => Blue, -1 => Green
-      //   }
-      // }
-      // let x = Math.cos(angX + trueIncX);
-      // let y = Math.sin(angX + trueIncX);
-      // x = (Math.abs(x) > Math.abs(y))? x : 0; //Keep only the one with the greatest magnitude
-      // y = (x == 0)? y : 0;
-      
-      // let sector = Math.floor(angZ / Math.PI * 0.25); // angZ / (Math.PI / 4)
+
       let inverted;
       let sector = {h: 0, v: angZ / (Math.PI/4)}; // angZ / (Math.PI / 4)
       if (Math.abs(sector.v) < 0){
