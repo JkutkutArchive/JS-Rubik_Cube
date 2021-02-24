@@ -211,10 +211,10 @@ var s1 = function(sketch) {//main canvas
     }
 
     // Shuffle:
-    for(let i = 0; i < rubik.dim * 8; i++){
-      //Move a random axis, at a random level/height, on a random direction of rotation.
-      rubik.makeMove(Math.floor(Math.random() * 3), Math.floor(Math.random() * rubik.dim), Math.random() >= 0.5);
-    }
+    // for(let i = 0; i < rubik.dim * 8; i++){
+    //   //Move a random axis, at a random level/height, on a random direction of rotation.
+    //   rubik.makeMove(Math.floor(Math.random() * 3), Math.floor(Math.random() * rubik.dim), Math.random() >= 0.5);
+    // }
 
     sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
     sketch.frameRate(30); //Set frameRate
@@ -223,16 +223,85 @@ var s1 = function(sketch) {//main canvas
     //-------------------   Addition of the code to run the game   -------------------
     sketch.draw = function(){
       sketch.background(sketch.color(0, 204, 255));
+      
+      // if(moving){ //if moving the camera: camera Controls 
+      //   // deltaMoveCam.h = (iniMousePos.mouseX - sketch.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h)) * 2;
+      //   deltaMoveCam.h = (sketch.mouseX - iniMousePos.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h)) * 2;
+      //   deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(deltaMoveCam.v)) * 2;
+        
+      //   trueIncX = deltaMoveCam.h; //true deltaMoveCam.h
+      //   trueIncZ = ((angZ + deltaMoveCam.v) / Math.PI > 1)? Math.PI - angZ : ((angZ + deltaMoveCam.v) < 0)? -angZ + 0.0001 : deltaMoveCam.v;
+      // }
+
+      // camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+      // camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+      // camZ =  ampli * Math.cos(angZ + trueIncZ);
+      
+      // upX = 0;
+      // upY = 0;
+      // upZ = 1;
+
+      let multiplier
+      let invertedView = 0;
+      // if(true){ //if moving the camera: camera Controls 
+      // if(moving){ //if moving the camera: camera Controls 
+      let scaleFactorCameraMovement = {h:  Math.pow(1.005, Math.abs(deltaMoveCam.h)) * 2, v: Math.pow(1.001, Math.abs(deltaMoveCam.v)) * 2};
+      
+      // scaleFactorCameraMovement = {x: 1, y: 1};
       if(moving){ //if moving the camera: camera Controls 
-        deltaMoveCam.h = (sketch.mouseX - iniMousePos.x) / mainCanvasWidth * Math.pow(1.005, Math.abs(deltaMoveCam.h)) * 2;
-        deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * Math.pow(1.001, Math.abs(deltaMoveCam.v)) * 2;
-        trueIncX = deltaMoveCam.h; //true deltaMoveCam.h
-        trueIncZ = ((angZ + deltaMoveCam.v) / Math.PI > 1)? Math.PI - angZ : ((angZ + deltaMoveCam.v) < 0)? -angZ + 0.0001 : deltaMoveCam.v;
+        deltaMoveCam.h = (iniMousePos.x - sketch.mouseX) / mainCanvasWidth  * scaleFactorCameraMovement.h;
+        deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * scaleFactorCameraMovement.v;
       }
-      camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-      camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
-      camZ =  -ampli * Math.cos(angZ + trueIncZ);
-      sketch.camera(camX, camY, camZ, 0, 0, 0, 0, 0, -1); //Set camera at position
+
+      trueIncX = deltaMoveCam.h; //true deltaMoveCam.h
+
+      let theoryAngZ = deltaMoveCam.v + angZ;
+      
+      if (theoryAngZ >= 0){
+        // let halfTurns = Math.floor((theoryAngZ + Math.PI / 2) / Math.PI);
+        // let halfTurns = Math.floor((theoryAngZ + Math.PI / 2)/ Math.PI)
+        let halfTurns = Math.floor((theoryAngZ)/ Math.PI)
+        multiplier = Math.pow(-1, halfTurns);
+      }
+      else {
+        // let halfTurns = Math.floor((Math.abs(theoryAngZ - Math.PI / 2)) / Math.PI);
+        let halfTurns = Math.floor((Math.abs(theoryAngZ)) / Math.PI);
+        multiplier = Math.pow(-1, halfTurns + 1);
+      }
+      // console.log((theoryAngZ >= 0) + " -> " + (Math.floor((theoryAngZ + Math.PI / 2)/ Math.PI)) + " -> " + multiplier)
+      // trueIncZ = ((angZ + deltaMoveCam.v) / Math.PI > 1)? Math.PI - angZ : ((angZ + deltaMoveCam.v) < 0)? -angZ + 0.0001 : deltaMoveCam.v;
+      trueIncZ = deltaMoveCam.v;
+
+
+
+      // camX = ampli
+      // camY = ampli
+      // camZ = ampli
+      // camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+      // camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+      // camZ =  -ampli * Math.cos(angZ + trueIncZ);
+
+      // camX =  ampli * Math.cos(angX + deltaMoveCam.h * multiplier + invertedView) * Math.sin(angZ + trueIncZ)// * multiplier;
+      // camY =  ampli * Math.sin(angX + deltaMoveCam.h * multiplier + invertedView) * Math.sin(angZ + trueIncZ)// * multiplier;
+
+      invertedView = (multiplier == 1)? 0 : 2 * Math.PI;
+      trueIncX = deltaMoveCam.h * multiplier + invertedView;
+
+
+      camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ)// * multiplier;
+      // camX =  ampli * Math.cos(angX + deltaMoveCam.h * multiplier + invertedView) * Math.sin(angZ + trueIncZ)// * multiplier;
+      // camY =  ampli * Math.sin(angX + deltaMoveCam.h * multiplier + invertedView) * Math.sin(angZ + trueIncZ)// * multiplier;
+      camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ)// * multiplier;
+      camZ =  ampli * Math.cos(angZ + trueIncZ);
+
+      let upX = 0;
+      let upY = 0;
+      // let upZ = 1;
+      let upZ = multiplier;
+
+
+      sketch.camera(camX, camY, camZ, 0, 0, 0, upX, upY, upZ); //Set camera at position
+
       rubik.show();
     }
 
@@ -467,7 +536,7 @@ var s2 = function(sketch) {
   sketch.update = function(){ 
     let look = mainCanvas.lookingAt();
     let cameraCoord = vector.addition(look[0].map(x => x * rubik.w * rubik.dim * 1.4 * ((rubik.constructor.name == "MirrorRubikCube")? 2.2 : 1)), look[1]); //camera Coordinates
-    sketch.camera(...cameraCoord, 0, 0, 0, 0, 0, -1);
+    sketch.camera(...cameraCoord, 0, 0, 0, 0, 0, 1);
     boxCoordBase = look[0].map(x => x * rubik.w * Math.floor(rubik.dim / 2)); //coordinates of the center of the face facing
   }
 
