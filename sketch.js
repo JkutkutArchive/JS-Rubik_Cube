@@ -211,10 +211,10 @@ var s1 = function(sketch) {//main canvas
     }
 
     // Shuffle:
-    // for(let i = 0; i < rubik.dim * 8; i++){
-    //   //Move a random axis, at a random level/height, on a random direction of rotation.
-    //   rubik.makeMove(Math.floor(Math.random() * 3), Math.floor(Math.random() * rubik.dim), Math.random() >= 0.5);
-    // }
+    for(let i = 0; i < rubik.dim * 8; i++){
+      //Move a random axis, at a random level/height, on a random direction of rotation.
+      rubik.makeMove(Math.floor(Math.random() * 3), Math.floor(Math.random() * rubik.dim), Math.random() >= 0.5);
+    }
 
     sketch.createCanvas(mainCanvasWidth, mainCanvasHeight, sketch.WEBGL); //Create the canvas
     sketch.frameRate(30); //Set frameRate
