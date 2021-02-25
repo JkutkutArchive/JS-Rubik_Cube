@@ -252,8 +252,8 @@ var s1 = function(sketch) {//main canvas
       trueIncX = deltaMoveCam.h * multiplier + invertedView;
 
 
-      camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ)// * multiplier;
-      camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ)// * multiplier;
+      camX =  ampli * Math.cos(angX + trueIncX) * Math.sin(angZ + trueIncZ);
+      camY =  ampli * Math.sin(angX + trueIncX) * Math.sin(angZ + trueIncZ);
       camZ =  ampli * Math.cos(angZ + trueIncZ);
 
       let upX = 0;
