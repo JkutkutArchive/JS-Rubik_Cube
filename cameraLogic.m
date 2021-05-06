@@ -27,19 +27,27 @@ for p1 = pieces
     end
 end
 
-m = 0.5 : rubikDim / 2;
+m = 0.5 : rubikDim / 2 - 0.5;
+colors = [["b", "g"]; ["m", "r"]; ["k", "y"]];
+i = 1;
 for p1 = pieces
     for mm = m
         pieces2 = [-1, 1] .* (mm * cubeW);
         for p2 = pieces2
-            plot3([p1, p1], [p2, p2], pieces, "g")
-            plot3([p2, p2], [p1, p1], pieces, "g")
-            plot3([p1, p1], pieces, [p2, p2], "g")
-            plot3([p2, p2], pieces, [p1, p1], "g")
-            plot3(pieces, [p1, p1], [p2, p2], "g")
-            plot3(pieces, [p2, p2], [p1, p1], "g")
+            % Blue and green
+            plot3([p1, p1], [p2, p2], pieces, colors(1, i + 1))
+            plot3([p1, p1], pieces, [p2, p2], colors(1, i + 1))
+            
+            % Orange and red
+            plot3([p2, p2], [p1, p1], pieces, colors(2, i + 1))
+            plot3(pieces, [p1, p1], [p2, p2], colors(2, i + 1))
+            
+            % White and yellow
+            plot3([p2, p2], pieces, [p1, p1], colors(3, i + 1))
+            plot3(pieces, [p2, p2], [p1, p1], colors(3, i + 1))
         end
     end
+    i = mod(i + 1, 2);
 end
 
 
@@ -63,4 +71,7 @@ p = plot3(camX, camY, camZ, "b*");
 mult = 1;
 axis([-ampli * mult, ampli * mult, -ampli * mult, ampli * mult, -ampli * mult, ampli * mult])
 hold off;
+xlabel("X")
+ylabel("Y")
+zlabel("Z")
 grid;
