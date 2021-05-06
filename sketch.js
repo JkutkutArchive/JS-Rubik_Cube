@@ -38,16 +38,20 @@ var s1 = function(sketch) {//main canvas
   /**
    * Preload all images.
    */
-  sketch.preload = function() {    
-    canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/mainBG.jpg');
-    canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/title.png');
-    canvasImg.selectTC = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/select-type-cube.png');
-    canvasImg.normal = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-3x3.jpg');
-    canvasImg.mirror = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-mirror.jpg');
-    canvasImg.invisible = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-invisible.jpg');
-    canvasImg.stickerless = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-stickerless.jpg');
-    canvasImg.start = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/start-icon.png')
-    
+  sketch.preload = function() {
+    imgs = [
+      ["bg", "mainBG.jpg"],
+      ["title", "title.png"],
+      ["selectTC", "select-type-cube.png"],
+      ["normal", "cube-3x3.jpg"],
+      ["mirror", "cube-mirror.jpg"],
+      ["invisible", "cube-invisible.jpg"],
+      ["stickerless", "cube-stickerless.jpg"],
+      ["start", "start-icon.png"]
+    ]
+    for (let img of imgs) {
+      canvasImg[img[0]] = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/' + img[1]);
+    }    
     canvasImg.github = sketch.loadImage('https://image.flaticon.com/icons/svg/25/25231.svg');
   }
   /**
