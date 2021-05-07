@@ -3,7 +3,7 @@ clc;
 cla reset;
 
 % Cube settings
-rubikDim = 3;
+rubikDim = 5;
 cubeW = 100;
 
 % Code
@@ -27,7 +27,12 @@ for p1 = pieces
     end
 end
 
-m = 0.5 : rubikDim / 2 - 0.5;
+if mod(rubikDim, 2) == 0
+    m = 0 : rubikDim / 2 - 1;
+else
+    m = 0.5 : rubikDim / 2 - 0.5;
+end
+
 colors = [["b", "g"]; ["m", "r"]; ["k", "y"]];
 i = 1;
 for p1 = pieces
