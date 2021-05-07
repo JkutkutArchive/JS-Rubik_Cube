@@ -3,7 +3,7 @@ clc;
 cla reset;
 
 % Cube settings
-rubikDim = 5;
+rubikDim = 3;
 cubeW = 100;
 
 % Code
@@ -59,19 +59,21 @@ end
 
 
 % Camera
-angle = pi / 6 * 0.5;
-aspectRatio = 16/9;
+% aspectRatio = 16/9;
+aspectRatio = 1.7777777777;
+camFOV = 1.0471976;
+camFar = 4462.1959;
+camNear = 44.621959;
+% angle = pi / 6 * 0.5;
+angle = camFOV * 0.5;
 
-ampli = 700;
+ampli = 2^(0.25 * rubikDim) * 300;
 angX = 0.25 * pi;
 angZ = 0.25 * pi;
 
 trueIncX = -0.25 * pi;
 trueIncZ = 0;
 
-% camX =  ampli * cos(angX + trueIncX) * sin(angZ + trueIncZ);
-% camY =  ampli * sin(angX + trueIncX) * sin(angZ + trueIncZ);
-% camZ =  ampli * cos(angZ + trueIncZ);
 
 camRotationMatrix = rotationMatrix3D("Z", angX) * rotationMatrix3D("Y", angZ);
 
@@ -81,15 +83,15 @@ camY = camCoord(2);
 camZ = camCoord(3);
 plot3([camX, 0], [camY, 0], [camZ, 0], "b-*");
 
-planeV = ampli * sin(angle);
+planeV = ampli * tan(angle);
 planeH = planeV * aspectRatio;
 
 planeVectors = [ ...
-    camRotationMatrix * [0;  planeH;  planeH], ...
-    camRotationMatrix * [0;  planeH; -planeH], ...
-    camRotationMatrix * [0; -planeH; -planeH], ...
-    camRotationMatrix * [0; -planeH;  planeH] ...
-]
+    camRotationMatrix * [0;  planeH;  planeV], ...
+    camRotationMatrix * [0;  planeH; -planeV], ...
+    camRotationMatrix * [0; -planeH; -planeV], ...
+    camRotationMatrix * [0; -planeH;  planeV] ...
+];
 
 for i = 1:4
     p1 = planeVectors(:, i)';
@@ -98,15 +100,16 @@ for i = 1:4
         index = 1;
     end
     p2 = planeVectors(:, index)';
+    % Print visual plane
     plot3([p1(1), p2(1)], [p1(2), p2(2)], [p1(3), p2(3)], "g-*");
-    
+    % Connection camera - visual plane
     plot3([p1(1), camX], [p1(2), camY], [p1(3), camZ], "k-");
 end
 
 
 hold off;
 
-mult = 1;
+mult = 1.1;
 axis([-ampli * mult, ampli * mult, -ampli * mult, ampli * mult, -ampli * mult, ampli * mult])
 xlabel("X"); ylabel("Y"); zlabel("Z");
 view(135, 45)
