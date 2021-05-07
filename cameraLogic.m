@@ -54,7 +54,7 @@ end
 
 
 % Camera
-angle = pi / 6;
+angle = pi / 6 * 0.5;
 aspectRatio = 16/9;
 
 ampli = 700;
@@ -68,20 +68,35 @@ trueIncZ = 0;
 % camY =  ampli * sin(angX + trueIncX) * sin(angZ + trueIncZ);
 % camZ =  ampli * cos(angZ + trueIncZ);
 
-camCoord = rotationMatrix3D("Z", angX) * rotationMatrix3D("Y", angZ) * [ampli, 0, 0]';
+camRotationMatrix = rotationMatrix3D("Z", angX) * rotationMatrix3D("Y", angZ);
+
+camCoord = camRotationMatrix * [ampli, 0, 0]';
 camX = camCoord(1);
 camY = camCoord(2);
 camZ = camCoord(3);
-
 plot3([camX, 0], [camY, 0], [camZ, 0], "b-*");
-
 
 planeV = ampli * sin(angle);
 planeH = planeV * aspectRatio;
-plot3([0, 0], [planeH, -planeH], [planeV, planeV], "g-*");
-plot3([0, 0], [planeH, -planeH], [-planeV, -planeV], "g-*");
-plot3([0, 0], [planeH, planeH], [planeV, -planeV], "g-*");
-plot3([0, 0], [-planeH, -planeH], [planeV, -planeV], "g-*");
+
+planeVectors = [ ...
+    camRotationMatrix * [0;  planeH;  planeH], ...
+    camRotationMatrix * [0;  planeH; -planeH], ...
+    camRotationMatrix * [0; -planeH; -planeH], ...
+    camRotationMatrix * [0; -planeH;  planeH] ...
+]
+
+for i = 1:4
+    p1 = planeVectors(:, i)';
+    index = i + 1;
+    if index == 5
+        index = 1;
+    end
+    p2 = planeVectors(:, index)';
+    plot3([p1(1), p2(1)], [p1(2), p2(2)], [p1(3), p2(3)], "g-*");
+    
+    plot3([p1(1), camX], [p1(2), camY], [p1(3), camZ], "k-");
+end
 
 
 hold off;
