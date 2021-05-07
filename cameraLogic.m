@@ -10,12 +10,12 @@ cubeW = 100;
 hold on;
 
 % Draw visual help
-ejesX = [[1, -1]; [1, -1]; [0, 0]];
-ejesY = [[1, -1]; [-1, 1]; [0, 0]];
-ejesZ = [[0,  0]; [0,  0]; [sqrt(2), -sqrt(2)]];
-for x = 1:3
-    plot3(ejesX(x, :) .* cubeW, ejesY(x, :) .* cubeW, ejesZ(x, :) .* cubeW, "k-");
-end
+% ejesX = [[1, -1]; [1, -1]; [0, 0]];
+% ejesY = [[1, -1]; [-1, 1]; [0, 0]];
+% ejesZ = [[0,  0]; [0,  0]; [sqrt(2), -sqrt(2)]];
+% for x = 1:3
+%     plot3(ejesX(x, :) .* cubeW, ejesY(x, :) .* cubeW, ejesZ(x, :) .* cubeW, "k-");
+% end
 
 % draw Cube border
 pieces = [-rubikDim / 2, rubikDim / 2] .* cubeW;
@@ -54,24 +54,40 @@ end
 
 
 % Camera
+angle = pi / 6;
+aspectRatio = 16/9;
+
 ampli = 700;
 angX = 0.25 * pi;
 angZ = 0.25 * pi;
 
-trueIncX = 0;
+trueIncX = -0.25 * pi;
 trueIncZ = 0;
 
-camX =  ampli * cos(angX + trueIncX) * sin(angZ + trueIncZ);
-camY =  ampli * sin(angX + trueIncX) * sin(angZ + trueIncZ);
-camZ =  ampli * cos(angZ + trueIncZ);
+% camX =  ampli * cos(angX + trueIncX) * sin(angZ + trueIncZ);
+% camY =  ampli * sin(angX + trueIncX) * sin(angZ + trueIncZ);
+% camZ =  ampli * cos(angZ + trueIncZ);
 
-% [camX, camY, camZ]
-p = plot3(camX, camY, camZ, "b*");
+camCoord = rotationMatrix3D("Z", angX) * rotationMatrix3D("Y", angZ) * [ampli, 0, 0]';
+camX = camCoord(1);
+camY = camCoord(2);
+camZ = camCoord(3);
+
+plot3([camX, 0], [camY, 0], [camZ, 0], "b-*");
+
+
+planeV = ampli * sin(angle);
+planeH = planeV * aspectRatio;
+plot3([0, 0], [planeH, -planeH], [planeV, planeV], "g-*");
+plot3([0, 0], [planeH, -planeH], [-planeV, -planeV], "g-*");
+plot3([0, 0], [planeH, planeH], [planeV, -planeV], "g-*");
+plot3([0, 0], [-planeH, -planeH], [planeV, -planeV], "g-*");
+
+
+hold off;
 
 mult = 1;
 axis([-ampli * mult, ampli * mult, -ampli * mult, ampli * mult, -ampli * mult, ampli * mult])
-hold off;
-xlabel("X")
-ylabel("Y")
-zlabel("Z")
-grid;
+xlabel("X"); ylabel("Y"); zlabel("Z");
+view(135, 45)
+grid MINOR;
