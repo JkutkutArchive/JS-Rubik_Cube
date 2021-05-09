@@ -267,6 +267,71 @@ var s1 = function(sketch) {//main canvas
       sketch.camera(camX, camY, camZ, 0, 0, 0, upX, upY, upZ); //Set camera at position
 
       rubik.show();
+
+      let aspectRatio = 1.7777777777;
+      let camFOV = 1.0471976;
+      let camFar = 4462.1959;
+      let camNear = 44.621959;
+      
+      let angle = camFOV * 0.5;
+
+
+      let planeV = (ampli * 1) * Math.tan(angle);
+      let planeH = planeV * aspectRatio;
+
+      let corners = [
+        matrix.make.translation(0,  planeH,  planeV),
+        matrix.make.translation(0,  planeH, -planeV),
+        matrix.make.translation(0, -planeH, -planeV),
+        matrix.make.translation(0, -planeH,  planeV)
+      ];
+
+      let cornersRotation = [
+        matrix.make.identity(4),
+        matrix.make.identity(4),
+        matrix.make.identity(4),
+        matrix.make.identity(4)
+      ]
+      for(let i = 0; i < corners.length; i++) {
+        // console.log(cornersRotation);
+
+        // let angleHMatrix = matrix.make.rotationOrigin("Y", 0, corners[i]);
+        // let angleHMatrix = matrix.make.rotationOrigin("Y", angZ, corners[i]);
+        // let angleHMatrix = matrix.make.rotationOrigin("Y", Math.PI/2, cornersRotation[i]);
+        // let angleHMatrix = matrix.make.rotationOrigin("Y", 0, cornersRotation[i]);
+        let angleHMatrix = matrix.make.rotationOrigin("Y", -angZ + Math.PI / 2, cornersRotation[i]);
+        
+        // let angleVMatrix = matrix.make.rotationOrigin("Z", 0, corners[i]);
+        // let angleVMatrix = matrix.make.rotationOrigin("Z", -angX, corners[i]);
+
+
+        
+        // let angleMatrix = matrix.o.mult(angleVMatrix, angleHMatrix);
+        // let angleMatrix = matrix.o.mult(angleHMatrix, angleVMatrix);
+        // let angleMatrix = angleHMatrix
+        cornersRotation[i] = matrix.o.mult(angleHMatrix, cornersRotation[i]);
+
+
+        // if(multiplier != -1) {
+        //  angleMatrix = matrix.o.mult(matrix.make.rotationOrigin("Z", Math.PI, corners[i]), angleMatrix);
+        // }
+        
+        // corners[i] = matrix.o.mult(corners[i], angleMatrix);
+        corners[i] = matrix.o.mult(corners[i], cornersRotation[i]);
+      }
+
+      let cc = 0;
+      for (c of corners) {
+        sketch.push();
+          sketch.fill(cc);
+          sketch.stroke(cc);
+          cc += 50;
+          sketch.applyMatrix(...matrix.p.applyRotation(c));
+          sketch.sphere(10);
+        sketch.pop();
+      }
+      // console.log(corners);
+      // sketch.noLoop();
     }
 
     /**
