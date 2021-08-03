@@ -295,21 +295,15 @@ var s1 = function(sketch) {//main canvas
       for(let i = 0; i < corners.length; i++) {
         // console.log(cornersRotation);
 
-        // let angleHMatrix = matrix.make.rotationOrigin("Y", 0, corners[i]);
-        // let angleHMatrix = matrix.make.rotationOrigin("Y", angZ, corners[i]);
-        // let angleHMatrix = matrix.make.rotationOrigin("Y", Math.PI/2, cornersRotation[i]);
-        // let angleHMatrix = matrix.make.rotationOrigin("Y", 0, cornersRotation[i]);
         let angleHMatrix = matrix.make.rotationOrigin("Y", -angZ + Math.PI / 2, cornersRotation[i]);
-        
-        // let angleVMatrix = matrix.make.rotationOrigin("Z", 0, corners[i]);
-        // let angleVMatrix = matrix.make.rotationOrigin("Z", -angX, corners[i]);
-
-
-        
-        // let angleMatrix = matrix.o.mult(angleVMatrix, angleHMatrix);
-        // let angleMatrix = matrix.o.mult(angleHMatrix, angleVMatrix);
-        // let angleMatrix = angleHMatrix
         cornersRotation[i] = matrix.o.mult(angleHMatrix, cornersRotation[i]);
+
+
+        // let angleVMatrix = matrix.make.rotationOrigin("Z", 0, corners[i]);
+        // let angleVMatrix = matrix.make.rotationOrigin("Z", -angX, cornersRotation[i]);
+        // let angleVMatrix = matrix.make.rotationOrigin("Z", 0, cornersRotation[i]);
+
+        // cornersRotation[i] = matrix.o.mult(angleVMatrix, cornersRotation[i]);
 
 
         // if(multiplier != -1) {
