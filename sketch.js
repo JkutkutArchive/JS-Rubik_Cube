@@ -39,16 +39,16 @@ var s1 = function(sketch) {//main canvas
    * Preload all images.
    */
   sketch.preload = function() {    
-    canvasImg.bg = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/mainBG.jpg');
-    canvasImg.title = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/title.png');
-    canvasImg.selectTC = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/select-type-cube.png');
-    canvasImg.normal = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-3x3.jpg');
-    canvasImg.mirror = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-mirror.jpg');
-    canvasImg.invisible = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-invisible.jpg');
-    canvasImg.stickerless = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/cube-stickerless.jpg');
-    canvasImg.start = sketch.loadImage('https://raw.githubusercontent.com/Jkutkut/JS-Rubik_Cube/master/assets/img/start-icon.png')
-    
-    canvasImg.github = sketch.loadImage('https://image.flaticon.com/icons/svg/25/25231.svg');
+    canvasImg.bg = sketch.loadImage('assets/img/mainBG.jpg');
+    canvasImg.title = sketch.loadImage('assets/img/title.png');
+    canvasImg.selectTC = sketch.loadImage('assets/img/select-type-cube.png');
+    canvasImg.normal = sketch.loadImage('assets/img/cube-3x3.jpg');
+    canvasImg.mirror = sketch.loadImage('assets/img/cube-mirror.jpg');
+    canvasImg.invisible = sketch.loadImage('assets/img/cube-invisible.jpg');
+    canvasImg.stickerless = sketch.loadImage('assets/img/cube-stickerless.jpg');
+    canvasImg.start = sketch.loadImage('assets/img/start-icon.png')
+
+    canvasImg.github = sketch.loadImage('assets/img/github-mark.svg');
   }
   /**
    * Setup of the Canvas 1
