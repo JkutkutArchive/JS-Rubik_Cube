@@ -39,16 +39,16 @@ var s1 = function(sketch) {//main canvas
    * Preload all images.
    */
   sketch.preload = function() {
-    canvasImg.bg = sketch.loadImage('assets/img/mainBG.jpg');
-    canvasImg.title = sketch.loadImage('assets/img/title.png');
-    canvasImg.selectTC = sketch.loadImage('assets/img/select-type-cube.png');
-    canvasImg.normal = sketch.loadImage('assets/img/cube-3x3.jpg');
-    canvasImg.mirror = sketch.loadImage('assets/img/cube-mirror.jpg');
-    canvasImg.invisible = sketch.loadImage('assets/img/cube-invisible.jpg');
-    canvasImg.stickerless = sketch.loadImage('assets/img/cube-stickerless.jpg');
-    canvasImg.start = sketch.loadImage('assets/img/start-icon.png')
+    canvasImg.bg = sketch.loadImage('src/assets/img/mainBG.jpg');
+    canvasImg.title = sketch.loadImage('src/assets/img/title.png');
+    canvasImg.selectTC = sketch.loadImage('src/assets/img/select-type-cube.png');
+    canvasImg.normal = sketch.loadImage('src/assets/img/cube-3x3.jpg');
+    canvasImg.mirror = sketch.loadImage('src/assets/img/cube-mirror.jpg');
+    canvasImg.invisible = sketch.loadImage('src/assets/img/cube-invisible.jpg');
+    canvasImg.stickerless = sketch.loadImage('src/assets/img/cube-stickerless.jpg');
+    canvasImg.start = sketch.loadImage('src/assets/img/start-icon.png')
 
-    canvasImg.github = sketch.loadImage('assets/img/github-mark.svg');
+    canvasImg.github = sketch.loadImage('src/assets/img/github-mark.svg');
   }
   /**
    * Setup of the Canvas 1
