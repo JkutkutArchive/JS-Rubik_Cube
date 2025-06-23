@@ -15,7 +15,7 @@ function printArray_nD(m, delimeter, round){
 }
 /**
  * Way to get the toString() method of a array of (arrays of...) of order n.
- * @param {array[]} m - array of (arrays of...) of order n. 
+ * @param {array[]} m - array of (arrays of...) of order n.
  * @param {string} delimeter - delimiter to separate the elements of m.
  * @param {boolean} round - If the elements of m should be printed using Math.round().
  * @returs {string} the string representation of the matrix m.

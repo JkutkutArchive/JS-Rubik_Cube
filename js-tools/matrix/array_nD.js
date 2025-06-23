@@ -1,6 +1,6 @@
 /**
  * Diccionary with some funcionalities to work with nD arrays.
- * 
+ *
  * @see Some functions here are designed for a 3D array, so check the functions' names.
  * @property make - Diccionary to generate this type of arrays.
  * @property p - Dicctionary to get properties of this arrays.
@@ -48,7 +48,7 @@ array_nD = {
                 let d = array_nD.p.size(arrND);
                 let copy = [];
                 if(d.length == 2){
-                    return matrix.make.copy(arrND); 
+                    return matrix.make.copy(arrND);
                 }
                 for(let i = 0; i < d.length; i++){
                     copy.push(array_nD.make.copy(arrND[i]));
@@ -63,7 +63,7 @@ array_nD = {
     },
     /**
      * Dicctionary to get properties of this arrays.
-     * @property {function} size - Returns a 1D array with the dimensions of the given nD array. 
+     * @property {function} size - Returns a 1D array with the dimensions of the given nD array.
      */
     p: {
         /**
@@ -96,7 +96,7 @@ array_nD = {
          * Enables to rotate the elements of the 3D array in any direction.
          * @param {any[][]} arr3D - 3D array with all the elements (The length of this array could be any).
          * @param {string} axis - string denoting the axis of rotation. It must match vector.re.AXIS regex expressions in order to work.
-         * @param {number} h - (0 based) the height of the rotation (if axis = "x" and h = 1, rotate on the X axis the second layer). 
+         * @param {number} h - (0 based) the height of the rotation (if axis = "x" and h = 1, rotate on the X axis the second layer).
          * @returns {any[][]} 2D array with the rotated slice.
          * @see due to the nature of JavaScript, this function makes 2 acctions: return the rotated slice and the native arr3D modified with this rotation.
          * @see This function is based on http://jsfiddle.net/FloydPink/0fg4rLf9/.
@@ -133,7 +133,7 @@ array_nD = {
                 let size = array_nD.p.size(arr3D);
                 let m;
                 switch(true){
-                    case vector.re.X.test(axis)://x = cte = h 
+                    case vector.re.X.test(axis)://x = cte = h
                         m = matrix.make.empty(size[1], size[2]);
                         for(let j = 0; j < size[1]; j++){
                             for(let k = 0; k < size[2]; k++){

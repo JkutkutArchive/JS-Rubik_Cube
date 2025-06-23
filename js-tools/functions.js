@@ -1,8 +1,8 @@
 /**
  * Vector diccionary with some funcionalities:
- * @property {function} arrSum - Returns the sum of the elements of the array. 
+ * @property {function} arrSum - Returns the sum of the elements of the array.
  * @property {function} escalar - Returns the result of applying the scalar operation between 2 vectors.
- * @property {function} toVector - Transforms a row or col vector (matrix) to a array/vector. 
+ * @property {function} toVector - Transforms a row or col vector (matrix) to a array/vector.
  * @property {diccionary} re - Diccionary with some regex expressions related to vectors.
  */
 var vector = {
@@ -98,7 +98,7 @@ var vector = {
   /**
    * Transforms a row or col vector (matrix) to a array / vector.
    * @param {any[][]} m - matrix / array[array[any]].
-   * @param {string} [type] - The type of desired output. 
+   * @param {string} [type] - The type of desired output.
    * @param {boolean} [round] - If the elements should be rounded.
    */
   toVector: function(m, round, type){ //col vector or row vector to true vector;

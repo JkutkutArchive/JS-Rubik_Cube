@@ -68,7 +68,7 @@ class RubikCube{
           [COLORSDIC.RED, COLORSDIC.GREEN, COLORSDIC.YELLOW],//Z = 2
         ],
       ]
-      
+
     ];
 
     //~~~~~~~~~~~~~~~~~~~~~~~   this.pieces initialization  ~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,15 +82,15 @@ class RubikCube{
         xGood = (i == 0) || (i == this.dim - 1); //if true, on the edge of the x axis
         yGood = (j == 0) || (j == this.dim - 1); //if true, on the edge of the y axis
         if(xGood && yGood){ //if both true => This is a corner col
-          this.pieces[i][j][index++] = new RubikPieceCorner(this.color, this.w); //now, index = 1    
+          this.pieces[i][j][index++] = new RubikPieceCorner(this.color, this.w); //now, index = 1
           for(; index < this.dim - 1; index++){
             this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w); //Create edges pieces between corners
           }
           this.pieces[i][j][index] = new RubikPieceCorner(this.color, this.w); //end of this iteration so no need for index++.
         }
         else if(xGood || yGood){ //if one true, we are on a side of the cube. So same logic but with edge, center(s), edge.
-          this.pieces[i][j][index++] = new RubikPieceEdge(this.color, this.w);   
-          for(; index < this.dim - 1; index++){      
+          this.pieces[i][j][index++] = new RubikPieceEdge(this.color, this.w);
+          for(; index < this.dim - 1; index++){
             this.pieces[i][j][index] = new RubikPieceCenter(this.color, this.w);
           }
           this.pieces[i][j][index] = new RubikPieceEdge(this.color, this.w);
@@ -104,7 +104,7 @@ class RubikCube{
         }
       }
     }
-    
+
     //  ~~~~~~~~~~~~~~~~~~~~~~~   Corners   ~~~~~~~~~~~~~~~~~~~~~~~
     let coV = [ //corner coordinates (x,z)
       [0, 0],
@@ -151,10 +151,10 @@ class RubikCube{
             let x = cen[i][0] + j * dX;                               //index of the center in the X axis
             let y = cen[i][1] + ((cen[i][0] == 1)? k * dY : j * dY);  //index of the center in the Y axis
             let z = cen[i][2] + k * dZ;                               //index of the center in the Z axis
-            
+
             //initial pos
             this.pieces[x][y][z].setPos(((i == 4)? -1 : 1) * offset, ((i == 2 || i == 3)? -1 : 1) * offset, this.w * (this.dim - 1) / 2);
-            
+
             let l = - (Math.floor(this.dim / 2) - 1);//used to move to correct position (see rotation)
             //Rotatation
             if(i == 5 || i == 4){ // if orange or red centers
@@ -167,7 +167,7 @@ class RubikCube{
               this.pieces[x][y][z].move(-(j + l) * this.w, -((ori)? -1 : 1) * (k + l) * this.w, 0);
               this.pieces[x][y][z].rotateOrigin("x", -Math.PI / 2 * i);
             }
-            
+
             //Stickers
             let cX = (cen[i][0] > 1)? 2 : cen[i][0];
             let cY = (cen[i][1] > 1)? 2 : cen[i][1];
@@ -176,8 +176,8 @@ class RubikCube{
           }
         }
       }
-    
-      //~~~~~~~~~~~~~~~~~~~~~~~   Edges   ~~~~~~~~~~~~~~~~~~~~~~~    
+
+      //~~~~~~~~~~~~~~~~~~~~~~~   Edges   ~~~~~~~~~~~~~~~~~~~~~~~
       let eG = [//blue and green edges
         [1, 0],
         [this.dim - 1, 1],
@@ -194,7 +194,7 @@ class RubikCube{
       for(let i = 0; i < 4; i++){
         let dX = (eG[i][0] == 1)? 1 : 0;
         let dZ = (eG[i][1] == 1)? 1 : 0;
-        
+
         for(let j = 0; j < this.dim - 2; j++){ //for each edge-piece in edge line
           //******  Blue and green  ******
           trueX = eG[i][0] + dX * j; //index position at x coord
@@ -204,11 +204,11 @@ class RubikCube{
           x = ((i > 1)? -1 : 1) * offset; //initial x pos
           let x2 = ((i < 2)? -1 : 1) * this.w * k; //final move in the x axis
           y = this.w * (this.dim - 1) / 2; //edges at beging are at same y, z pos (z = y) (then rotation changes this)
-          
+
           //move to initial pos (x,y,z) and from then to true pos (x2, y2, z2) => (x,y,x2)
           this.pieces[trueX][0][trueZ].setPos(x + x2, y, y);
           this.pieces[trueX][this.dim - 1][trueZ].setPos(-(x + x2), y, y);
-          
+
           //Rotation
           this.pieces[trueX][0][trueZ].rotateOrigin("y", Math.PI / 2 * i);
           this.pieces[trueX][this.dim - 1][trueZ].rotateOrigin("z", Math.PI);
@@ -243,7 +243,7 @@ class RubikCube{
       }
     }
   }
-  
+
   /**
    * Display the cube on the selected canvas.
    * @param {P5Canvas} canvas - Canvas to print the cube into.
@@ -252,7 +252,7 @@ class RubikCube{
     for(let i = 0; i < this.dim; i++){
       for(let j = 0; j < this.dim; j++){
         for(let k = 0; k < this.dim; k++){
-          this.pieces[i][j][k].show(canvas); 
+          this.pieces[i][j][k].show(canvas);
         }
       }
     }
@@ -261,7 +261,7 @@ class RubikCube{
   /**
    * Analize the given move and makes it.
    * @param {string} move - String with the desired move
-   * @param {number} prevCube? - used for internal iteration. Defines the dim of (dim - prevCube) of the cube to search the movement 
+   * @param {number} prevCube? - used for internal iteration. Defines the dim of (dim - prevCube) of the cube to search the movement
    * @see Rubik's cube notation.
    * @throws Error if move not defined or not implemented yet.
    */
@@ -337,10 +337,10 @@ class RubikCube{
   }
 
   /**
-   * 
+   *
    * @param {string} axis - String with the desired axis
-   * @param {number} h - The height of the slice to rotate 
-   * @param {*} inverse 
+   * @param {number} h - The height of the slice to rotate
+   * @param {*} inverse
    */
   makeMove(axis, h, inverse){
     let angleOri = 1;
@@ -395,16 +395,16 @@ class RubikCube{
   }
 
   //getters and setters
-  
+
   /**
-   * Changes the % of the size of the stickers related to the pieces itself. 
-   * @param {number} wP - percent of the size of the stickers (over 1) 
+   * Changes the % of the size of the stickers related to the pieces itself.
+   * @param {number} wP - percent of the size of the stickers (over 1)
    */
   changeStickersWPercent(wP){
     for(let i = 0; i < this.dim; i++){
       for(let j = 0; j < this.dim; j++){
         for(let k = 0; k < this.dim; k++){
-          this.pieces[i][j][k].changeStickersWPercent(wP); 
+          this.pieces[i][j][k].changeStickersWPercent(wP);
         }
       }
     }
@@ -437,7 +437,7 @@ class InvisibleRubikCube extends RubikCube{
     for(let i = 0; i < this.dim; i++){
       for(let j = 0; j < this.dim; j++){
         for(let k = 0; k < this.dim; k++){
-          this.pieces[i][j][k].w = 0; 
+          this.pieces[i][j][k].w = 0;
         }
       }
     }

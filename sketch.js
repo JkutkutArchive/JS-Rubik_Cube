@@ -11,7 +11,7 @@ var rubikType = "normal";
 var rubikDim = 3;
 
 //Canvas 1
-var canvasImg = {}; //Main menu imgs 
+var canvasImg = {}; //Main menu imgs
 var mainCanvasWidth;
 var mainCanvasHeight;
 var ampli = 700; //Initial amplitude of the movement / distace in every axis
@@ -38,7 +38,7 @@ var s1 = function(sketch) {//main canvas
   /**
    * Preload all images.
    */
-  sketch.preload = function() {    
+  sketch.preload = function() {
     canvasImg.bg = sketch.loadImage('assets/img/mainBG.jpg');
     canvasImg.title = sketch.loadImage('assets/img/title.png');
     canvasImg.selectTC = sketch.loadImage('assets/img/select-type-cube.png');
@@ -97,11 +97,11 @@ var s1 = function(sketch) {//main canvas
     }
     else if(rubikType == "invisible"){
       sketch.rect(...sketch.relativePos([995-10, 480-10, 200+20, 200+20]));
-    } 
+    }
     else if(rubikType == "stickerless"){
       sketch.rect(...sketch.relativePos([1265-10, 480-10, 200+20, 200+20]));
-    } 
-    
+    }
+
     //modes imgs
     sketch.image(canvasImg.normal, ...sketch.relativePos([455, 480, 200, 200]));
     sketch.image(canvasImg.mirror, ...sketch.relativePos([725, 480, 200, 200]));
@@ -116,7 +116,7 @@ var s1 = function(sketch) {//main canvas
       let diff = 110000 / mainCanvasWidth;
       sketch.text(texto, ...sketch.relativePos([960-diff, 800]));
     }
-    
+
     sketch.image(canvasImg.start, ...sketch.relativePos([885, 850, 150, 150]));//start btn
     sketch.image(canvasImg.github, ...sketch.relativePos([1800, 960, 100, 100]));//github Icon
   }
@@ -188,7 +188,7 @@ var s1 = function(sketch) {//main canvas
    * This function starts the game:
    * - Create the rubik object based on the parametres.
    * @see rubikType and rubikDim
-   * 
+   *
    * - Shuffle the cube.
    * - Create the new 3DCanvas with the desired framerate.
    * - Add the functions to make the game work: draw, lookingAt, mousePressed, mouseReleased and mouseWheel.
@@ -229,7 +229,7 @@ var s1 = function(sketch) {//main canvas
 
       let scaleFactorCameraMovement = {h:  Math.pow(1.005, Math.abs(deltaMoveCam.h)) * 2, v: Math.pow(1.001, Math.abs(deltaMoveCam.v)) * 2};
 
-      if(moving){ //if moving the camera: camera Controls 
+      if(moving){ //if moving the camera: camera Controls
         deltaMoveCam.h = (iniMousePos.x - sketch.mouseX) / mainCanvasWidth  * scaleFactorCameraMovement.h;
         deltaMoveCam.v = (sketch.mouseY - iniMousePos.y) / mainCanvasHeight * scaleFactorCameraMovement.v;
       }
@@ -237,7 +237,7 @@ var s1 = function(sketch) {//main canvas
       trueIncX = deltaMoveCam.h; //true deltaMoveCam.h
 
       let theoryAngZ = deltaMoveCam.v + angZ;
-      
+
       if (theoryAngZ >= 0){
         let halfTurns = Math.floor((theoryAngZ)/ Math.PI)
         multiplier = Math.pow(-1, halfTurns);
@@ -314,7 +314,7 @@ var s1 = function(sketch) {//main canvas
       let y = Math.sin(angX + trueIncX);
       x = (Math.abs(x) > Math.abs(y))? x : 0; //Keep only the one with the greatest magnitude
       y = (x == 0)? y : 0;
-      
+
       look.push([Math.round(x), Math.round(y), 0]); //Where the angle tells the camera is looking with the increment
       return look;
     }
@@ -354,7 +354,7 @@ var s1 = function(sketch) {//main canvas
           return false; //stop if mouse on second canvas
         }
         if(ampli > rubik.w * rubik.dim){ //If zoom in but far enough to not collapse with the cube
-          ampli += event.delta; 
+          ampli += event.delta;
         }
         else if(event.delta > 0){ //If zoom out
           ampli += event.delta;
@@ -393,7 +393,7 @@ var s2 = function(sketch) {
     if(!selectingMove){ //if not on selecting move
       if(sketch.inBounds()){ //if on bounds, get the coords of the facing piece
         let x = Math.floor(sketch.mouseX / (secondCanvasWidth / rubik.dim));
-        let y = Math.floor(sketch.mouseY / (secondCanvasWidth / rubik.dim));        
+        let y = Math.floor(sketch.mouseY / (secondCanvasWidth / rubik.dim));
         let dX, dY, dZ;
         if(look[0][2] == 0){ //looking at horizontal face
           dX = (look[0][0] == 0)? (x - Math.floor(rubik.dim / 2)) * ((look[0][1] == -1)? -1 : 1) : 0;
@@ -459,11 +459,11 @@ var s2 = function(sketch) {
     m.x = Math.floor(startMove.x / secondCanvasWidth * rubik.dim);
     m.y = Math.floor(startMove.y / secondCanvasWidth * rubik.dim);
     let moveMade = sketch.movementMade(delta.x, delta.y); //[right (1) or left (-1), up (1) or down (-1)]
-    
+
     let axis, h, inverted;
     let isBlue, isOrange;
     let isHoriMove, hSmall, hBigOrSmall, preInverted;
-    
+
     isHoriMove = moveMade[0] != 0; //true => Right or left (1, -1) move of the mouse. false => Up or down (1, -1) move of the mouse
     hSmall = function(h){return h < (rubik.dim - rubik.dim % 2) / 2};
     preInverted = (isHoriMove)? moveMade[0] == 1 : moveMade[1] == 1; //used to calc inverted
@@ -538,7 +538,7 @@ var s2 = function(sketch) {
   /**
    * Updates the canvas and stores the coord of the face facing
    */
-  sketch.update = function(){ 
+  sketch.update = function(){
     let look = mainCanvas.lookingAt();
     let cameraCoord = vector.addition(look[0].map(x => x * rubik.w * rubik.dim * 1.4 * ((rubik.constructor.name == "MirrorRubikCube")? 2.2 : 1)), look[1]); //camera Coordinates
 
@@ -586,7 +586,7 @@ var s2 = function(sketch) {
       }
       let increment = -1 * event.delta / 5000;
       if(secondCanvasWPercent > 0.1){ //If zoom in but far enough to not collapse with the cube
-        secondCanvasWPercent += increment; 
+        secondCanvasWPercent += increment;
       }
       else if(increment > 0){ //If zoom out
         secondCanvasWPercent += increment;

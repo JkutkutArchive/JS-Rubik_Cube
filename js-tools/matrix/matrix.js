@@ -1,6 +1,6 @@
 /**
  * Matrix diccionary with multiple functionalities
- * 
+ *
  * @see X Row = arr.length
  * @see Y Rol = arr[0].length
  * @property make - Dictionary with some functions to generate matrices.
@@ -105,24 +105,24 @@ var matrix = {
       let m = matrix.make.zero(4);
       let c = Math.cos(o);
       let s = Math.sin(o);
-      
+
       m[0][0] = v.x * v.x + (1 - v.x * v.x) * c;
       m[1][0] = v.x * v.y * (1 - c) - v.z * s;
       m[2][0] = v.x * v.z * (1 - c) + v.y * s;
-      
+
       m[0][1] = v.x * v.y * (1 - c) + v.z * s;
       m[1][1] = v.y * v.y + (1 - v.y * v.y) * c;
       m[2][1] = v.y * v.z * (1 - c) - v.x * s;
-      
+
       m[0][2] = v.x * v.z * (1 - c) - v.y * s;
       m[1][2] = v.y * v.z * (1 - c) + v.x * s;
       m[2][2] = v.z * v.z + (1 - v.z * v.z) * c;
-      
+
       m[3][3] = 1;
       return m;
     },
     /**
-     * Generates rotation matrices from the origin's axis. 
+     * Generates rotation matrices from the origin's axis.
      * @param {string} axis - The axis of rotation (Regex sensitive): X:[xXi], Y:[yYj], Z:[zZk]
      * @param {number} o - Angle of rotation (radians)
      * @param {number[][]} rMatrix - Current rotation matrix to select the equivalent axis.
@@ -155,7 +155,7 @@ var matrix = {
     /**
      * Generates translation matrices
      * @param {number|P5Vector} x - The x coordinate or the P5Vector if given.
-     * @param {number} y - y coordinate. 
+     * @param {number} y - y coordinate.
      * @param {number} z - z coordinate.
      * @returns {number[][]} 3D translation matrix to the input coordinates.
      */
@@ -201,14 +201,14 @@ var matrix = {
       let m = matrix.make.identity(4);
       switch(true){
         case vector.re.X.test(axis):
-          
+
           break;
         case vector.re.Y.test(axis):
-          
-          break;  
+
+          break;
         case vector.re.Z.test(axis):
 
-          break;           
+          break;
         case true:
           console.log("Not correct axis");
           return null;
@@ -306,14 +306,14 @@ var matrix = {
     },
     /**
      * Returns the sub-matrix of order dimSubMx-dimSubMy starting at (posI.x, posI,y) of the matrix
-     * @param {any[][]} m - matrix 
+     * @param {any[][]} m - matrix
      * @param {Object} posI - P5 vector with the starting position (also works with diccionary {x: i, y: j}; i and j being numbers).
-     * @param {number} dimSubMx - nº of elements in a row 
+     * @param {number} dimSubMx - nº of elements in a row
      * @param {number} dimSubMy - nº of elements in a col
      * @return {any[][]} matrix of order dimSubMx-dimSubMy starting at (posI.x, posI,y) of the matrix
      */
     subMatrix(m, posI, dimSubMx, dimSubMy){
-      try{ 
+      try{
         dimSubMy = (dimSubMy)? dimSubMy : dimSubMx;
         let n = matrix.make.empty(dimSubMx, dimSubMy);
         for(let i = 0; i < dimSubMx; i++){
@@ -330,7 +330,7 @@ var matrix = {
     },
     /**
      * Returns an array in order to use the applyMatrix() function from P5.
-     * @param {any[][]} m - matrix 
+     * @param {any[][]} m - matrix
      * @returns {any[]} array with all the elements of the matrix following the WHATWG specification naming
      */
     applyRotation(m){
@@ -382,7 +382,7 @@ var matrix = {
           }
           return detValue;
         }
-    
+
       }
       catch(error){
         console.log(error);
@@ -491,7 +491,7 @@ var matrix = {
     */
     removeRow: function(m, row){
       try{
-        let size = matrix.p.size(m); 
+        let size = matrix.p.size(m);
         let n = matrix.make.empty(size.x - 1, size.y);
         for(let i = 0, iN = 0; i < size.x; i++){
           if(i != row){
@@ -515,7 +515,7 @@ var matrix = {
      */
     removeCol: function(m, col){
       try{
-        let size = matrix.p.size(m); 
+        let size = matrix.p.size(m);
         let n = matrix.make.empty(size.x, size.y - 1);
         for(let i = 0; i < size.x; i++){
           for(let j = 0, jN = 0; j < size.y; j++){
@@ -569,7 +569,7 @@ var matrix = {
       // (b) Multiply a row by a scalar
       // (c) Add 2 rows
       try{
-        let dim = matrix.p.size(m);    
+        let dim = matrix.p.size(m);
         //if the matrix isn't square: exit (error)
         if(!matrix.p.isSquare(m)){throw "Error, not same dimension";}
         dim = dim.x;//square mtrix => dim.x == dim.y
