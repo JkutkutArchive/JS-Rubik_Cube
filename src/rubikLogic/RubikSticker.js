@@ -29,7 +29,7 @@ class RubikSticker{
         canvas.rotateX(this.rX); //Rotate on the X axis
         canvas.rotateY(this.rY); //Rotate on the Y axis
         canvas.translate(0,0, this.width * 0.52); //Translate to the face of the cube (width * (0.5 + offset to see the sticker)).
-        
+
         canvas.plane(this.width * this.wPercent); //Draw the sticker a bit smaller than the piece
         canvas.pop();
     }

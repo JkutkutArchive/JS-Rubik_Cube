@@ -4,7 +4,7 @@
 class RubikPiece{
   /**
    * Initialize and store all properties
-   * @param {P5Color} [c=COLORSDIC.NULL] - Color of the piece (P5Color) 
+   * @param {P5Color} [c=COLORSDIC.NULL] - Color of the piece (P5Color)
    * @param {number} [w=cubeW] - Size of the piece
    */
   constructor(c, w){
@@ -24,7 +24,7 @@ class RubikPiece{
   /**
    * Changes the color of the stickers.
    * @param {P5color[]} colorArray - array of colors to the stickers.
-   * @throws error if not correct lenght of array (number of stickers). 
+   * @throws error if not correct lenght of array (number of stickers).
    */
   changeStickers(colorArray){};
   /**
@@ -46,7 +46,7 @@ class RubikPiece{
   rotateOrigin(axis, angle){};
   /**
    * Moves the piece relative to the current position (the new vector is added).
-   * 
+   *
    * Input: p5 vector or coordinates
    * @param {P5vector|number} posiOrX - P5Vector or diccionary ({x: 100, y: 0, z: 0}) with the coord.
    * @param {number} [y] - y coord.
@@ -68,7 +68,7 @@ class RubikPiece{
   //Setters and getters:
   /**
    * Set the position of the piece.
-   * 
+   *
    * Input: p5 vector or coordinates
    * @param {P5vector|number} posiOrX - P5Vector or diccionary ({x: 100, y: 0, z: 0}) with the coord.
    * @param {number} [y] - y coord.
@@ -113,7 +113,7 @@ class RubikPieceCenter extends RubikPiece{
     }
     else{
       canvas.box(this.w);
-    }    
+    }
     for(let i = 0; i < this.stickers.length; i++){
       this.stickers[i].show(canvas);
     }
@@ -142,7 +142,7 @@ class RubikPieceCenter extends RubikPiece{
       this.stickers[i].setWPercent(wP);
     }
   }
-  
+
   //Matrix operations:
   rotateOrigin(axis, angle){
     let m = matrix.make.rotationOrigin(axis, angle, this.rMatrix);
@@ -162,7 +162,7 @@ class RubikPieceCenter extends RubikPiece{
     this.rMatrix = matrix.o.mult(m,this.rMatrix);
     this.updateMatrix();
   }
-  
+
   //Setters and getters:
   setPos(posi, y, z){
     this.posMatrix = matrix.make.translation(posi, y, z);
